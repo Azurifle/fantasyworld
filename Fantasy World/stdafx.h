@@ -7,7 +7,7 @@
 
 #include "targetver.h"
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <tchar.h>
 
 
@@ -15,4 +15,6 @@
 // TODO: reference additional headers your program requires here
 #include <vector>
 #include <iostream>
+#include <ctime>
+#include <conio.h>
 using namespace std;

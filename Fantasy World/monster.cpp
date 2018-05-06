@@ -1,15 +1,25 @@
 #include "stdafx.h"
 #include "monster.h"
 
-monster::monster(player player_to_attack)
+monster::monster()
 {
-	player_to_attack_ = player_to_attack;
 	name_ = "Monster";
 	damage_ = 0;
 }
 
-void monster::update() const
+monster::~monster()
 {
-	cout << name_.c_str() << " attack " << player_to_attack_.get_name() << " " << damage_ << " points." << endl;
-	player_to_attack_.attacked(damage_);
+	target_ = nullptr;
+	name_ = nullptr;
+}
+
+void monster::set_target(player* target)
+{
+	target_ = target;
+}
+
+void monster::on_update() const
+{
+	cout << name_ << " attacks " << target_->get_name() << " with Normal Attack." << endl;
+	target_->attacked(damage_);
 }

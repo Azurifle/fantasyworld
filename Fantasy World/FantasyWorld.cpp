@@ -6,10 +6,17 @@
 
 int main()
 {
-	auto* world = new fantasy_world(120);
-	world->create_player("Luka the hero", 500);
-	world->update();
-	delete world;
+	puts("=== Fantasy World =======================");
+	fantasy_world world(120);//Stack Overflow people suggest using stack over heap
+	puts("world created.\n");
+	world.print_monster_list();
+	world.create_player("NoOne the hero", 500);
+	puts("NoOne the hero has loged in.");
+	cout << endl << "press any key to update ";
+	_getch();
+	cout << endl;
+	world.update();
+	_getch();
     return 0;
 }
 

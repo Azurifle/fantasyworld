@@ -1,18 +1,20 @@
 #ifndef MONSTER
 #define MONSTER
 #pragma once
+#include "player.h"
 class monster
 {
 public:
-	explicit monster(player player_to_attack);
-	virtual ~monster() = default;
+	monster();
+	virtual ~monster();
 
-	void update() const;
+	void set_target(player* target);
+	virtual void on_update() const;
 
-private:
-	player player_to_attack_;
-	string name_;
-	int damage_;
+protected:
+	player* target_ = nullptr;
+	const char* name_ = nullptr;
+	int damage_ = 0;
 };
 
 #endif //MONSTER

@@ -1,14 +1,13 @@
-#ifndef ORC
-#define ORC
+#ifndef DOREMON
+#define DOREMON
 #pragma once
 #include "monster.h"
-class orc :
-	public monster
+class doremon : public monster
 {
 public:
-	orc();
+	doremon();
 	//use monster deconstructor
 	void on_update() const override;
 };
 
-#endif //ORC
+#endif //DOREMON
