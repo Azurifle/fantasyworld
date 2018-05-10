@@ -24,22 +24,10 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fantasy_world.h">
+    <ClInclude Include="fantasy_world_2_d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="monster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zombie.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="orc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="doremon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,25 +35,13 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FantasyWorld.cpp">
+    <ClCompile Include="FantasyWorld2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fantasy_world.cpp">
+    <ClCompile Include="fantasy_world_2_d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="monster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zombie.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="orc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="doremon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
