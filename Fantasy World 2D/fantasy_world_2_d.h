@@ -3,6 +3,8 @@
 #pragma once
 #include "monster.h"
 
+class monster;
+
 class fantasy_world_2_d
 {
 public:

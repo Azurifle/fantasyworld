@@ -3,6 +3,7 @@
 
 void fantasy_world_2_d::spawn(monster* a_monster)
 {
+	srand(unsigned int(time(nullptr)));
 	int x = rand()%grid_.size(), y = rand()%grid_[0]->size();
 	while(true)
 	{
@@ -29,11 +30,10 @@ fantasy_world_2_d::fantasy_world_2_d(const int rows, const int columns, const in
 		}
 	}
 
-	srand(unsigned int(time(nullptr)));
 	for(auto i = 0; i < monsters; ++i)
 	{
 		monsters_.push_back(new monster(i, this));
-		spawn(monsters_[0]);
+		spawn(monsters_[i]);
 	}
 }
 
@@ -47,7 +47,7 @@ void fantasy_world_2_d::print_grid() const
 			if (column)
 				column->print();
 			else
-				cout << "--:-";
+				cout << "|__|";
 		}
 		cout << endl;
 	}
@@ -61,7 +61,7 @@ void fantasy_world_2_d::update()
 	}
 }
 
-void fantasy_world_2_d::despawn(const int row, const int column)
+void fantasy_world_2_d::despawn(const int x, const int y)
 {
-	grid_[row]->at(column) = nullptr;
+	grid_[x]->at(y) = nullptr;
 }
