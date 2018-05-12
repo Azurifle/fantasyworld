@@ -3,6 +3,8 @@
 
 monster::monster(const int id, fantasy_world_2_d* world)
 {
+	REQUIRE(world);
+
 	id_ = id;
 	world_ = world;
 }
@@ -30,5 +32,5 @@ void monster::respawn(const int x, const int y)
 		world_->despawn(x_, y_);
 	x_ = x;
 	y_ = y;
-	hp_ = 3;
+	hp_ = MAX_HP;
 }
