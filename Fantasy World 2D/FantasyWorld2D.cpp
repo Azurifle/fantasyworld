@@ -29,6 +29,7 @@ void assignment2_fantasy_world()
 	puts(" === Assignment 2: Fantasy World 2D. =======================");
 	auto world = make_unique<fantasy_world_2_d>(30, 30, 10);
 	puts("World 30x30 grid created with 10 monsters spawn randomly.");
+	puts("<id><type>:<HP>. z = Zombie (HP 2-3), o = Orc (HP 5-6), d = Doramon (HP 8-9).");
 
 	auto choice = -1;
 	while (true)
@@ -49,6 +50,7 @@ void assignment2_fantasy_world()
 		}
 		puts(" === Assignment 2: Fantasy World 2D. =======================");
 		puts("World 30x30 grid with 10 monsters spawn randomly.");
+		puts("<id><type>:<HP>. z = Zombie (HP 2-3), o = Orc (HP 5-6), d = Doramon (HP 8-9).");
 	}
 }
 

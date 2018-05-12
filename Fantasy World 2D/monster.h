@@ -8,11 +8,12 @@ class fantasy_world_2_d;
 class monster
 {
 public:
-	static const int MAX_HP = 3;
-
 	monster() = default;
 	explicit monster(int id, fantasy_world_2_d* world);
 	virtual ~monster() = default;
+
+	virtual int get_max_hp() const;
+	virtual char get_type() const;
 
 	void print() const;
 	void update();

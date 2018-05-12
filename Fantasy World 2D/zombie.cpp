@@ -1,5 +1,18 @@
 #include "stdafx.h"
 #include "zombie.h"
+
+zombie::zombie(const int id, fantasy_world_2_d* world) : monster(id, world) {}
+
+int zombie::get_max_hp() const
+{
+	return 2;
+}
+
+char zombie::get_type() const
+{
+	return 'z';
+}
+
 /*
 zombie::zombie()
 {

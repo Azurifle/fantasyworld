@@ -42,13 +42,13 @@ fantasy_world_2_d::fantasy_world_2_d(const int rows, const int columns, const in
 	{
 		switch (rand() % 3)
 		{
-		case 0: monsters_.push_back(new zombie());
+		case 0: monsters_.push_back(new zombie(i, this));
 			++zombie_count_;
 			break;
-		case 1: monsters_.push_back(new orc());
+		case 1: monsters_.push_back(new orc(i, this));
 			++orc_count_;
 			break;
-		default: monsters_.push_back(new doremon());
+		default: monsters_.push_back(new doremon(i, this));
 			++doremon_count_;
 			break;
 		}
@@ -73,15 +73,15 @@ void fantasy_world_2_d::print_grid() const
 {
 	for (auto row : grid_)
 	{
-		cout << " ";
 		for(auto column : *row)
 		{
+			cout << '|';
 			if (column)
 				column->print();
 			else
-				cout << "|__|";
+				cout << "____";
 		}
-		cout << endl;
+		cout << '|' << endl;
 	}
 }
 

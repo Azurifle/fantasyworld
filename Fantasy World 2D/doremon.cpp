@@ -1,5 +1,21 @@
 #include "stdafx.h"
 #include "doremon.h"
+
+doremon::doremon(const int id, fantasy_world_2_d* world) : monster(id, world)
+{
+
+}
+
+int doremon::get_max_hp() const
+{
+	return 8;
+}
+
+char doremon::get_type() const
+{
+	return 'd';
+}
+
 /*
 doremon::doremon()
 {

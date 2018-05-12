@@ -9,12 +9,19 @@ monster::monster(const int id, fantasy_world_2_d* world)
 	world_ = world;
 }
 
+int monster::get_max_hp() const
+{
+	return 3;
+}
+
+char monster::get_type() const
+{
+	return 'm';
+}
+
 void monster::print() const
 {
-	if(id_ < 10)
-		cout << "0";
-
-	cout << id_ << ":" << hp_;
+	cout << id_ << get_type() << ':' << hp_;
 }
 
 void monster::update()
@@ -32,5 +39,5 @@ void monster::respawn(const int x, const int y)
 		world_->despawn(x_, y_);
 	x_ = x;
 	y_ = y;
-	hp_ = MAX_HP;
+	hp_ = rand()%2+get_max_hp();
 }

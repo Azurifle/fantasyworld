@@ -6,7 +6,11 @@
 class zombie : public monster
 {
 public:
-	//zombie();
+	zombie(int id, fantasy_world_2_d* world);
+
+	int get_max_hp() const override;
+	char get_type() const override;
+
 	//use monster deconstructor
 	//void update() override;
 };

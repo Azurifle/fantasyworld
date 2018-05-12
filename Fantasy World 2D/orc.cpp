@@ -1,5 +1,21 @@
 #include "stdafx.h"
 #include "orc.h"
+
+orc::orc(const int id, fantasy_world_2_d* world) : monster(id, world)
+{
+
+}
+
+int orc::get_max_hp() const
+{
+	return 5;
+}
+
+char orc::get_type() const
+{
+	return 'o';
+}
+
 /*
 orc::orc()
 {
