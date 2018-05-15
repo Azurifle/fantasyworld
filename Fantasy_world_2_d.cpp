@@ -1,4 +1,4 @@
-#include "stdafx.hpp"
+#include "stdafx.h"
 #include "Fantasy_world_2_d.hpp"
 #include "Zombie.hpp"
 #include "Orc.hpp"

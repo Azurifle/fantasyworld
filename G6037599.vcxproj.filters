@@ -7,7 +7,7 @@
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
@@ -15,16 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Doremon.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.hpp">
+    <ClInclude Include="Fantasy_world_2_d.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Fantasy_world_2_d.hpp">
+    <ClInclude Include="Monster.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Orc.hpp">
@@ -33,16 +36,10 @@
     <ClInclude Include="Player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.hpp">
+    <ClInclude Include="Unit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,10 +47,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FantasyWorld2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Doremon.cpp">
+    <ClCompile Include="G6037599.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Fantasy_world_2_d.cpp">
@@ -69,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Zombie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Doremon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
