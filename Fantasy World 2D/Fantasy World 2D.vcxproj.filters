@@ -18,28 +18,31 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="Doremon.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="Monster.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fantasy_world_2_d.h">
+    <ClInclude Include="Fantasy_world_2_d.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="monster.h">
+    <ClInclude Include="Orc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="doremon.h">
+    <ClInclude Include="Player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="orc.h">
+    <ClInclude Include="targetver.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
+    <ClInclude Include="Zombie.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="zombie.h">
+    <ClInclude Include="stdafx.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,22 +53,22 @@
     <ClCompile Include="FantasyWorld2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fantasy_world_2_d.cpp">
+    <ClCompile Include="Doremon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="monster.cpp">
+    <ClCompile Include="Fantasy_world_2_d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="doremon.cpp">
+    <ClCompile Include="Monster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="orc.cpp">
+    <ClCompile Include="Orc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="player.cpp">
+    <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="zombie.cpp">
+    <ClCompile Include="Zombie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

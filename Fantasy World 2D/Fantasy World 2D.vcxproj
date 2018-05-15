@@ -89,6 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,6 +118,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,29 +148,30 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="doremon.h" />
-    <ClInclude Include="fantasy_world_2_d.h" />
-    <ClInclude Include="monster.h" />
-    <ClInclude Include="orc.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="zombie.h" />
+    <ClInclude Include="Doremon.hpp" />
+    <ClInclude Include="Fantasy_world_2_d.hpp" />
+    <ClInclude Include="Monster.hpp" />
+    <ClInclude Include="Orc.hpp" />
+    <ClInclude Include="Player.hpp" />
+    <ClInclude Include="stdafx.hpp" />
+    <ClInclude Include="targetver.hpp" />
+    <ClInclude Include="Unit.hpp" />
+    <ClInclude Include="Zombie.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="doremon.cpp" />
+    <ClCompile Include="Doremon.cpp" />
     <ClCompile Include="FantasyWorld2D.cpp" />
-    <ClCompile Include="fantasy_world_2_d.cpp" />
-    <ClCompile Include="monster.cpp" />
-    <ClCompile Include="orc.cpp" />
-    <ClCompile Include="player.cpp" />
+    <ClCompile Include="Fantasy_world_2_d.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Orc.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="zombie.cpp" />
+    <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

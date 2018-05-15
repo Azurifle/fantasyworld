@@ -1,28 +1,32 @@
-#include "stdafx.h"
-#include "zombie.h"
+#include "stdafx.hpp"
+#include "Zombie.hpp"
 
-zombie::zombie(const int id, fantasy_world_2_d* world) : monster(id, world) {}
-
-int zombie::get_max_hp() const
+namespace G6037599
 {
-	return 2;
-}
+  //___ public const _________________________________________________
+  const char* Zombie::get_attack_name() const
+  {
+    return "Bitting Attack !";
+  }
 
-char zombie::get_type() const
-{
-	return 'z';
-}
+  const char* Zombie::get_name() const
+  {
+    return "Zombie";
+  }
 
-/*
-zombie::zombie()
-{
-	name_ = "Zombie";
-	damage_ = rand() % 30 + 5;
-}
+  int Zombie::get_attack_damage() const
+  {
+    const auto BASE_DAMAGE = 5, RANDOM_0_29 = 30;
+    return BASE_DAMAGE + rand() % RANDOM_0_29;
+  }
 
-void zombie::on_update() const
-{
-	cout << name_ << " attacks " << target_->get_name() << " with Bitting Attack !" << endl;
-	target_->damaged(damage_);
+  char Zombie::get_type() const
+  {
+    return 'z';
+  }
+
+  int Zombie::get_max_hp() const
+  {
+    return 2;
+  }
 }
-*/

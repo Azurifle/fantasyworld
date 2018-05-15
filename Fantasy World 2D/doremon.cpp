@@ -1,31 +1,32 @@
-#include "stdafx.h"
-#include "doremon.h"
+#include "stdafx.hpp"
+#include "Doremon.hpp"
 
-doremon::doremon(const int id, fantasy_world_2_d* world) : monster(id, world)
+namespace G6037599
 {
+  //___ public const _________________________________________________
+  const char* Doremon::get_attack_name() const
+  {
+    return "Magical Device Attack !!";
+  }
 
-}
+  const char* Doremon::get_name() const
+  {
+    return "Doremon";
+  }
 
-int doremon::get_max_hp() const
-{
-	return 8;
-}
+  int Doremon::get_attack_damage() const
+  {
+    const auto BASE_DAMAGE = 50, RANDOM_0_4 = 5;
+    return BASE_DAMAGE + rand() % RANDOM_0_4;
+  }
 
-char doremon::get_type() const
-{
-	return 'd';
-}
+  char Doremon::get_type() const
+  {
+    return 'd';
+  }
 
-/*
-doremon::doremon()
-{
-	name_ = "Doremon";
-	damage_ = rand() % 5+50;
+  int Doremon::get_max_hp() const
+  {
+    return 8;
+  }
 }
-
-void doremon::on_update() const
-{
-	cout << name_ << " attacks " << target_->get_name() << " with Magical Device Attack." << endl;
-	target_->damaged(damage_);
-}
-*/

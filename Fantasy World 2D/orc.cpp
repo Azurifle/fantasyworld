@@ -1,31 +1,32 @@
-#include "stdafx.h"
-#include "orc.h"
+#include "stdafx.hpp"
+#include "Orc.hpp"
 
-orc::orc(const int id, fantasy_world_2_d* world) : monster(id, world)
+namespace G6037599
 {
+  //___ public const _________________________________________________
+  const char* Orc::get_attack_name() const
+  {
+    return "Orc Slash !";
+  }
 
-}
+  const char* Orc::get_name() const
+  {
+    return "Orc";
+  }
 
-int orc::get_max_hp() const
-{
-	return 5;
-}
+  int Orc::get_attack_damage() const
+  {
+    const auto BASE_DAMAGE = 25, RANDOM_0_24 = 25;
+    return BASE_DAMAGE + rand() % RANDOM_0_24;
+  }
 
-char orc::get_type() const
-{
-	return 'o';
-}
+  char Orc::get_type() const
+  {
+    return 'o';
+  }
 
-/*
-orc::orc()
-{
-	name_ = "Orc";
-	damage_ = rand() % 5 + 25;
+  int Orc::get_max_hp() const
+  {
+    return 5;
+  }
 }
-
-void orc::on_update() const
-{
-	cout << name_ << " attacks " << target_->get_name() << " with Orc Slash !" << endl;
-	target_->damaged(damage_);
-}
-*/
