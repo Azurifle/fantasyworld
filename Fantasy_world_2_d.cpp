@@ -130,13 +130,17 @@ namespace G6037599
 	//___ private _______________________________________________________
 	void Fantasy_world_2_d::add_random_monsters(const int t_id)
 	{
-		const auto TYPES = 3;
+    const enum Type
+    {
+      TYPE_1 = 1, TYPE_2, TYPES
+    };
+
 		switch (rand() % TYPES)
 		{
-		case 0: m_monsters_.push_back(std::make_shared<Zombie>(*this, t_id) );
+		case TYPE_1: m_monsters_.push_back(std::make_shared<Zombie>(*this, t_id) );
 			++m_zombie_count_;
 			break;
-		case 1: m_monsters_.push_back(std::make_shared<Orc>(*this, t_id));
+		case TYPE_2: m_monsters_.push_back(std::make_shared<Orc>(*this, t_id));
 			++m_orc_count_;
 			break;
 		default: m_monsters_.push_back(std::make_shared<Doremon>(*this, t_id));
