@@ -27,6 +27,7 @@ namespace G6037599
 
   int Zombie::get_max_hp() const
   {
-    return 2;
+    const auto ZOMBIE_MAX_HP = 2;
+    return ZOMBIE_MAX_HP;
   }
 }

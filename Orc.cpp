@@ -27,6 +27,7 @@ namespace G6037599
 
   int Orc::get_max_hp() const
   {
-    return 5;
+    const auto ORC_MAX_HP = 5;
+    return ORC_MAX_HP;
   }
 }

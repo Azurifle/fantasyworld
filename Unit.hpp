@@ -7,7 +7,10 @@ namespace G6037599
   class Unit
   {
   public:
-    static const int NOT_ASSIGN = -1;
+    enum Status
+    {
+      NOT_ASSIGN = -1, DEAD
+    };
 
     virtual const char* get_name() const = 0;
     virtual int get_max_hp() const = 0;

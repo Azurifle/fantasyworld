@@ -8,14 +8,14 @@ namespace G6037599
 	Monster::Monster(Fantasy_world_2_d& t_world, const int t_id)
     : m_world_(t_world), m_id_(t_id)
 	{
-    REQUIRE(t_id >= 0);
+    REQUIRE(t_id > NOT_ASSIGN);
 	}
 
   //___ public _______________________________________________________
   void Monster::damaged(const int t_damage)
   {
     hp_ -= t_damage;
-    if(hp_ <= 0)
+    if(hp_ <= DEAD)
     {
       m_world_.spawn(m_id_);
     }
@@ -25,7 +25,8 @@ namespace G6037599
   {
     if (m_target_.expired())
     {
-      damaged(1);
+      const auto SLOW_DYING = 1;
+      damaged(SLOW_DYING);
     }
     else
     {
@@ -33,14 +34,14 @@ namespace G6037599
     }
   }
 
-  void Monster::set_target(const std::weak_ptr<Unit>& t_target)
+  void Monster::set_target(const std::weak_ptr<Unit> t_target)
 	{
     m_target_ = t_target;
 	}
 
 	void Monster::respawns(const int t_x, const int t_y)
 	{
-    REQUIRE(t_x >= 0 && t_y >= 0);
+    REQUIRE(t_x > NOT_ASSIGN && t_y > NOT_ASSIGN);
 
 		if (m_x_ != NOT_ASSIGN)
 		{
@@ -53,7 +54,7 @@ namespace G6037599
 		const auto RANDOM_0_1 = 2;
 		hp_ = get_max_hp() + rand() % RANDOM_0_1;
 
-    PROMISE(hp_ > 0);
+    PROMISE(hp_ > DEAD);
 	}
 
   //___ public const _________________________________________________
