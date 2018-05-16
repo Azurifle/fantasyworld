@@ -3,26 +3,30 @@
 
 namespace G6037599
 {
-  //___ public const _________________________________________________
-  const char* Doremon::get_attack_name() const
+  //___ (de)constructors _____________________________________________
+  Doremon::Doremon(Fantasy_world_2_d& t_world, const int t_id): Monster(t_world, t_id) {} 
+  
+  //___ public _________________________________________________
+  void Doremon::print_character() const
   {
-    return "Magical Device Attack !!";
+    std::cout << 'D';
   }
 
+  //___ protected _________________________________________________
   const char* Doremon::get_name() const
   {
     return "Doremon";
   }
 
-  int Doremon::get_attack_damage() const
+  const char* Doremon::get_attack_name() const
+  {
+    return "Magical Device Attack !!";
+  }
+  
+  int Doremon::get_attack_power() const
   {
     const auto BASE_DAMAGE = 50, RANDOM_0_4 = 5;
     return BASE_DAMAGE + rand() % RANDOM_0_4;
-  }
-
-  char Doremon::get_type() const
-  {
-    return 'd';
   }
 
   int Doremon::get_max_hp() const

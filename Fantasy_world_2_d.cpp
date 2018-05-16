@@ -14,7 +14,7 @@ namespace G6037599
 
 		srand(unsigned int(time(nullptr)));
 
-		for (auto i = FIRST_INDEX; i < t_monsters; ++i)
+		for (int i = FIRST_INDEX; i < t_monsters; ++i)
 		{
 			add_random_monsters(i);
 		}
@@ -28,7 +28,7 @@ namespace G6037599
 	{
 		REQUIRE(t_rows > NONE && t_columns > NONE && t_monsters >= NONE);
 
-		for (auto i = FIRST_INDEX; i < t_rows; ++i)
+		for (int i = FIRST_INDEX; i < t_rows; ++i)
 		{
 			m_grid_.push_back(std::make_unique<std::vector<std::weak_ptr<Unit> >>
 				(t_columns, std::weak_ptr<Unit>()));
@@ -36,7 +36,7 @@ namespace G6037599
 
 		srand(unsigned int(time(nullptr)));
 
-		for (auto i = FIRST_INDEX; i < t_monsters; ++i)
+		for (int i = FIRST_INDEX; i < t_monsters; ++i)
 		{
 			add_random_monsters(i);
 			spawn(i);
@@ -56,6 +56,11 @@ namespace G6037599
 	//___ public _______________________________________________________
 	void Fantasy_world_2_d::update()
 	{
+    if(m_player_)
+    {
+      m_player_->update();
+    }
+
 		for (auto it = m_monsters_.begin(); it != m_monsters_.end(); ++it)
 		{
 			(*it)->update();
@@ -64,17 +69,33 @@ namespace G6037599
 
 	void Fantasy_world_2_d::create_player(const char* t_name, const int t_hp)
 	{
-		m_player_ = std::make_shared<Player>(t_name, t_hp);
+		m_player_ = std::make_shared<Player>(*this, FIRST_INDEX, t_name, t_hp);
 
 		for (auto it = m_monsters_.begin(); it != m_monsters_.end(); ++it)
 		{
       (*it)->set_target(m_player_);
 		}
 
-    std::cout << "NoOne the hero has logged in with " << t_hp << " health." << std::endl;
+    std::cout << t_name << " has logged in with " << t_hp << " health." << std::endl;
 	}
 
-	void Fantasy_world_2_d::spawn(const int t_id)
+  void Fantasy_world_2_d::create_player(const char* t_name, const int t_hp
+    , const char* t_weapon, const int t_attack_power)
+  {
+    m_player_ = std::make_shared<Player>(*this, FIRST_INDEX, t_name, t_hp
+      , t_weapon, t_attack_power);
+    spawn_player();
+
+    for (auto it = m_monsters_.begin(); it != m_monsters_.end(); ++it)
+    {
+      (*it)->set_target(m_player_);
+    }
+
+    std::cout << t_name << " has logged in with " << t_hp << " health and "
+      << t_weapon << " attack power: " << t_attack_power << " as weapon." << std::endl;
+  }
+
+  void Fantasy_world_2_d::spawn(const int t_id)
 	{
 		REQUIRE(FIRST_INDEX <= t_id && t_id < static_cast<int>( m_monsters_.size() ) );
     
@@ -84,7 +105,8 @@ namespace G6037599
 			if (m_grid_[x]->at(y).expired())//the tile is free
 			{
 				m_grid_[x]->at(y) = m_monsters_[t_id];
-        m_monsters_[t_id]->respawns(x, y);
+        m_monsters_[t_id]->set_position(x, y);
+        m_monsters_[t_id]->set_full_hp();
 				break;
 			}
 			x = rand() % m_grid_.size();
@@ -99,7 +121,26 @@ namespace G6037599
 		PROMISE(m_grid_[t_x]->at(t_y).expired());
 	}
 
-	//___ public const _________________________________________________
+  void Fantasy_world_2_d::spawn_player()
+  {
+    REQUIRE(m_player_);
+
+    int x = rand() % m_grid_.size(), y = rand() % m_grid_[FIRST_INDEX]->size();
+    while (true)
+    {
+      if (m_grid_[x]->at(y).expired())//the tile is free
+      {
+        m_grid_[x]->at(y) = m_player_;
+        m_player_->set_position(x, y);
+        m_player_->set_full_hp();
+        break;
+      }
+      x = rand() % m_grid_.size();
+      y = rand() % m_grid_[FIRST_INDEX]->size();
+    }
+  }
+
+  //___ public const _________________________________________________
 	void Fantasy_world_2_d::print_grid() const
 	{
 		std::cout << "<id><type>:<HP>. z = Zombie (HP 2-3), o = Orc (HP 5-6), d = Doramon (HP 8-9)." << std::endl;
@@ -108,14 +149,16 @@ namespace G6037599
 		{
 			for (auto column = (*row)->begin(); column != (*row)->end(); ++column)
 			{
-				std::cout << '|';
-				if ((*column).expired())
-					std::cout << "____";
-				else
-					(*column).lock()->print();
+				std::cout << ' ';
+			  switch ((*column).expired())
+			  {
+        case true: std::cout << ". "; break;
+        default: (*column).lock()->print_character();
+          std::cout << ' ';
+			  }
 			}
-			std::cout << '|' << std::endl;
-		}
+      puts("");
+		}//row
 	}
 
 	void Fantasy_world_2_d::print_monster_list() const

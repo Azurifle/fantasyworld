@@ -10,24 +10,14 @@ namespace G6037599
 	class Monster: public Unit
 	{
 	public:
-    virtual const char* get_attack_name() const = 0;
-    virtual int get_attack_damage() const = 0;
-    virtual char get_type() const = 0;
+	  Monster(Fantasy_world_2_d& t_world, int t_id);
 
-		explicit Monster(Fantasy_world_2_d& t_world, int t_id);
-
+    void set_full_hp() override
+      , update() override;
+  protected:
     void damaged(int t_damage) override;
-    void print() const override;
 
-		void update();
-	  void set_target(std::weak_ptr<Unit> t_target);
-		void respawns(int t_x, int t_y);
-	private:
-		Fantasy_world_2_d& m_world_;
-		std::weak_ptr<Unit> m_target_ = std::weak_ptr<Unit>();
-		int m_id_ = NOT_ASSIGN, m_x_ = NOT_ASSIGN, m_y_ = NOT_ASSIGN;
-
-    void attacks() const;
+    virtual int get_max_hp() const = 0;
 	};
 }
 
