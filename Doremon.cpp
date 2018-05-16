@@ -27,6 +27,7 @@ namespace G6037599
 
   int Doremon::get_max_hp() const
   {
-    return 8;
+    const auto DOREMON_MAX_HP = 8;
+    return DOREMON_MAX_HP;
   }
 }

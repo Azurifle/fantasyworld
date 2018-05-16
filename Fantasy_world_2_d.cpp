@@ -10,11 +10,11 @@ namespace G6037599
 	//___ (de)constructors _____________________________________________
 	Fantasy_world_2_d::Fantasy_world_2_d(const int t_monsters)
 	{
-		REQUIRE(t_monsters > 0);
+		REQUIRE(t_monsters > NONE);
 
 		srand(unsigned int(time(nullptr)));
 
-		for (auto i = 0; i < t_monsters; ++i)
+		for (auto i = FIRST_INDEX; i < t_monsters; ++i)
 		{
 			add_random_monsters(i);
 		}
@@ -26,9 +26,9 @@ namespace G6037599
 
 	Fantasy_world_2_d::Fantasy_world_2_d(const int t_rows, const int t_columns, const int t_monsters)
 	{
-		REQUIRE(t_rows > 0 && t_columns > 0 && t_monsters >= 0);
+		REQUIRE(t_rows > NONE && t_columns > NONE && t_monsters >= NONE);
 
-		for (auto i = 0; i < t_rows; ++i)
+		for (auto i = FIRST_INDEX; i < t_rows; ++i)
 		{
 			m_grid_.push_back(std::make_unique<std::vector<std::weak_ptr<Unit> >>
 				(t_columns, std::weak_ptr<Unit>()));
@@ -36,7 +36,7 @@ namespace G6037599
 
 		srand(unsigned int(time(nullptr)));
 
-		for (auto i = 0; i < t_monsters; ++i)
+		for (auto i = FIRST_INDEX; i < t_monsters; ++i)
 		{
 			add_random_monsters(i);
 			spawn(i);
@@ -76,9 +76,9 @@ namespace G6037599
 
 	void Fantasy_world_2_d::spawn(const int t_id)
 	{
-		REQUIRE(0 <= t_id && t_id < int(m_monsters_.size()));
-
-		int x = rand() % m_grid_.size(), y = rand() % m_grid_[0]->size();
+		REQUIRE(FIRST_INDEX <= t_id && t_id < static_cast<int>( m_monsters_.size() ) );
+    
+		int x = rand() % m_grid_.size(), y = rand() % m_grid_[FIRST_INDEX]->size();
 		while (true)
 		{
 			if (m_grid_[x]->at(y).expired())//the tile is free
@@ -88,13 +88,13 @@ namespace G6037599
 				break;
 			}
 			x = rand() % m_grid_.size();
-			y = rand() % m_grid_[0]->size();
+			y = rand() % m_grid_[FIRST_INDEX]->size();
 		}
 	}
 
 	void Fantasy_world_2_d::despawn(const int t_x, const int t_y)
 	{
-		REQUIRE(t_x < int(m_grid_.size()) && t_y < int(m_grid_[t_x]->size()));
+		REQUIRE(t_x < static_cast<int>(m_grid_.size()) && t_y < static_cast<int>(m_grid_[t_x]->size()));
 		m_grid_[t_x]->at(t_y) = std::weak_ptr<Unit>();
 		PROMISE(m_grid_[t_x]->at(t_y).expired());
 	}
@@ -130,13 +130,16 @@ namespace G6037599
 	//___ private _______________________________________________________
 	void Fantasy_world_2_d::add_random_monsters(const int t_id)
 	{
-		const auto TYPES = 3;
+    enum Type
+    {
+      TYPE_1 = 1, TYPE_2, TYPES
+    };
 		switch (rand() % TYPES)
 		{
-		case 0: m_monsters_.push_back(std::make_shared<Zombie>(*this, t_id) );
+		case TYPE_1: m_monsters_.push_back(std::make_shared<Zombie>(*this, t_id) );
 			++m_zombie_count_;
 			break;
-		case 1: m_monsters_.push_back(std::make_shared<Orc>(*this, t_id));
+		case TYPE_2: m_monsters_.push_back(std::make_shared<Orc>(*this, t_id));
 			++m_orc_count_;
 			break;
 		default: m_monsters_.push_back(std::make_shared<Doremon>(*this, t_id));

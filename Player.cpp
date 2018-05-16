@@ -25,7 +25,7 @@ namespace G6037599
   {
     hp_ -= t_damage;
     std::cout << m_name_ << " received " << t_damage << " damages and now has " << hp_ << " health" << std::endl;
-    if (hp_ <= 0)
+    if (hp_ <= DEAD)
     {
       std::cout << m_name_ << " say: ";
       switch (m_is_dead_)
@@ -36,7 +36,7 @@ namespace G6037599
       default: std::cout << "I'm already dead." << std::endl;
         break;
       }
-    }//if (hp_ <= 0)
+    }//if (hp_ <= DEAD)
   }
 
   //___ public void const _________________________________________________

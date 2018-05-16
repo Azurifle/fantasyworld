@@ -20,7 +20,7 @@ namespace G6037599
     void print() const override;
 
 		void update();
-	  void set_target(const std::weak_ptr<Unit>& t_target);
+	  void set_target(std::weak_ptr<Unit> t_target);
 		void respawns(int t_x, int t_y);
 	private:
 		Fantasy_world_2_d& m_world_;
