@@ -4,20 +4,20 @@
 namespace G6037599
 {
   //___ (de)constructors _____________________________________________
-  Zombie::Zombie(Fantasy_world_2_d& t_world, const int t_id): Monster(t_world, t_id) {} 
+  Zombie::Zombie(World& t_world, const int t_id): Monster(t_world, t_id) {}
   
   //___ public _________________________________________________
+  const char* Zombie::get_name() const
+  {
+    return "Zombie";
+  }
+
   void Zombie::print_character() const
   {
     std::cout << 'Z';
   }
 
   //___ protected _________________________________________________
-  const char* Zombie::get_name() const
-  {
-    return "Zombie";
-  }
-
   const char* Zombie::get_attack_name() const
   {
     return "Bitting Attack !";

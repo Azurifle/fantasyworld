@@ -4,20 +4,27 @@
 namespace G6037599
 {
   //___ (de)constructors _____________________________________________
-  Player::Player(Fantasy_world_2_d& t_world, const int t_id, const char* t_name, const int t_hp)
-    : Unit(t_world, t_id), NAME(t_name), MAX_HP(t_hp)
+  Player::Player(World& t_world, const int t_id, const char* t_name, const int t_hp)
+    : Unit(t_world, t_id), MAX_HP(t_hp)
   {
+    m_name_ = '\"' + std::string(t_name) + '\"';
     set_hp(t_hp);
   }
 
-  Player::Player(Fantasy_world_2_d& t_world, const int t_id
+  Player::Player(World& t_world, const int t_id
     , const char* t_name, const int t_hp, const char* t_weapon, const int t_attack_power)
-    : Unit(t_world, t_id), NAME(t_name), WEAPON(t_weapon), MAX_HP(t_hp), ATTACK_POWER(t_attack_power)
+    : Unit(t_world, t_id), WEAPON(t_weapon), MAX_HP(t_hp), ATTACK_POWER(t_attack_power)
   {
+    m_name_ = '\"' + std::string(t_name) + '\"';
     set_hp(t_hp);
   }
 
   //___ public _________________________________________________
+  const char* Player::get_name() const
+  {
+    return m_name_.c_str();
+  }
+
   void Player::print_character() const
   {
     std::cout << '&';
@@ -30,16 +37,18 @@ namespace G6037599
 
   void Player::update()
   {
-    if (has_target())
-      attacks();
+    switch (has_target())
+    {
+    case true: switch (is_near_target())
+      {
+      case true: attacks(); break;
+      default: clear_target();
+      } break;
+    default: break;
+    }
   }
 
   //___ protected _______________________________________________________
-  const char* Player::get_name() const
-  {
-    return NAME;
-  }
-
   const char* Player::get_attack_name() const
   {
     return WEAPON;
@@ -50,24 +59,16 @@ namespace G6037599
     return ATTACK_POWER;
   }
 
-  void Player::damaged(const int t_damage)
+  void Player::dies()
   {
-    set_hp(get_hp() - t_damage);
-    std::cout << NAME << " -" << t_damage << " damage. Now has " << get_hp() << " health."
-      << std::endl;
-    if (get_hp() <= DEAD)
+    switch (m_has_long_gone_)
     {
-      std::cout << NAME << " say: ";
-      switch (m_has_long_gone_)
-      {
-      case false: std::cout << "Ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh, Sh*t I'm dead." << std::endl;
-        m_has_long_gone_ = true;
-        break;
-      default: std::cout << "I'm already dead." << std::endl;
-        break;
-      }
-    }//is dead
-    puts("");
+    case false: std::cout << "Ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh, Sh*t I'm dead.";
+      m_has_long_gone_ = true;
+      break;
+    default: std::cout << "I'm already dead.";
+    }
+    game_reset();
   }
 
 }//G6037599

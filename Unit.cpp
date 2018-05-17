@@ -1,17 +1,24 @@
 #include "stdafx.h"
 #include "Unit.hpp"
-#include "Fantasy_world_2_d.hpp"
+#include "World.hpp"
 
 namespace G6037599
 {
   //___ (de)constructors _____________________________________________
-  Unit::Unit(Fantasy_world_2_d& t_world, const int t_id)
-    : ID(t_id), m_world_(t_world)
-  {
-    REQUIRE(t_id > NOT_ASSIGN);
-  }
+  Unit::Unit(World& t_world, const int t_id)
+    : ID(t_id), m_world_(t_world) {}
 
   //___ public ________________________________________________
+  int Unit::get_x() const
+  {
+    return m_x_;
+  }
+
+  int Unit::get_y() const
+  {
+    return m_y_;
+  }
+
   void Unit::set_target(const std::weak_ptr<Unit> t_target)
   {
     m_target_ = t_target;
@@ -19,12 +26,7 @@ namespace G6037599
 
   void Unit::set_position(const int t_x, const int t_y)
   {
-    REQUIRE(t_x > NOT_ASSIGN && t_y > NOT_ASSIGN);
-
-    if (m_x_ != NOT_ASSIGN)
-    {
-      m_world_.despawn(m_x_, m_y_);
-    }
+    REQUIRE(t_x > World::NOT_ASSIGN && t_y > World::NOT_ASSIGN);
 
     m_x_ = t_x;
     m_y_ = t_y;
@@ -48,24 +50,14 @@ namespace G6037599
     return m_hp_;
   }
 
-  int Unit::get_x() const
-  {
-    return m_x_;
-  }
-
-  int Unit::get_y() const
-  {
-    return m_y_;
-  }
-
   void Unit::set_hp(const int t_new_hp)
   {
     m_hp_ = t_new_hp;
   }
 
-  void Unit::respawn() const
+  void Unit::clear_target()
   {
-    m_world_.spawn(ID);
+    m_target_ = std::weak_ptr<Unit>();
   }
 
   void Unit::attacks() const
@@ -75,4 +67,29 @@ namespace G6037599
       << " with " << get_attack_name() << "." << std::endl;
     target->damaged(get_attack_power());
   }
+
+  void Unit::damaged(const int t_damage)
+  {
+    m_hp_ -= t_damage;
+    std::cout << get_name() << " -" << t_damage << " damage. Now has " << m_hp_ << " health."
+      << std::endl;
+    if (m_hp_ <= DEAD)
+    {
+      std::cout << get_name() << " dead message: ..."; 
+      dies();
+      puts("");
+    }
+    puts("");
+  }
+
+  void Unit::respawn() const
+  {
+    m_world_.respawn_monster(ID);
+  }
+
+  void Unit::game_reset() const
+  {
+    m_world_.set_restart();
+  }
+
 }
