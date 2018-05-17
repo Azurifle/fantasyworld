@@ -55,21 +55,6 @@ namespace G6037599
     } while (true);
   }
 
-  /*COORD Menu_ui::get_cursor()
-  {
-    CONSOLE_SCREEN_BUFFER_INFO console_info;
-    if(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &console_info))
-    {
-      return console_info.dwCursorPosition;
-    }
-    return {0, 0};
-  }
-
-  void Menu_ui::set_cursor(const int t_y, const int t_x)
-  {
-    PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {t_x, t_y}));
-  }*/
-
   int Menu_ui::limit_interval(int t_number, const int t_low, const int t_high)
   {
     if (t_number < t_low)

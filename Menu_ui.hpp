@@ -11,9 +11,7 @@ namespace G6037599
     virtual ~Menu_ui();
 
     static int main_menu();
-    /*static COORD get_cursor();
 
-    static void set_cursor(int t_y, int t_x);*/
     static int limit_interval(int t_number, int t_low, int t_high);
   private:
     static char press_any_key();

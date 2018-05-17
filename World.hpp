@@ -28,7 +28,6 @@ namespace G6037599
 	private:
 		std::vector<std::unique_ptr<std::vector<std::weak_ptr<Unit> >> > m_grid_;
 		std::vector<std::shared_ptr<Unit> > m_monsters_;
-    //COORD m_grid_start_cursor_ = {0, 0};
 		std::shared_ptr<Unit> m_player_ = nullptr;
 	  bool m_is_restart_ = false;
 
