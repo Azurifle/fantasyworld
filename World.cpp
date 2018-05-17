@@ -101,6 +101,7 @@ namespace G6037599
       case false: break;
       default: m_is_restart_ = false;
         reset();
+        return;
       }
       m_player_->update();
     }
@@ -201,8 +202,12 @@ namespace G6037599
 
   bool World::is_fighting_w_player(const std::shared_ptr<Unit> unit) const
   {
-    return unit->ID != m_player_->ID && unit->get_x() == m_player_->get_x()
-      && unit->get_y() == m_player_->get_y();
+    if(m_player_)
+    {
+      return unit->ID != m_player_->ID && unit->get_x() == m_player_->get_x()
+        && unit->get_y() == m_player_->get_y();
+    }
+    return false;
   }
 
   bool World::is_player_fighting() const
@@ -259,21 +264,29 @@ namespace G6037599
   {
     REQUIRE(m_player_);
 
-    std::cout << m_player_->get_name() << "has fallen !." << std::endl;
-    /*
-    for (int i = FIRST_INDEX; i < m_grid_.size(); ++i)
+    std::cout << m_player_->get_name() << " has fallen !." << std::endl 
+	    << std::endl;
+
+    for (int row = FIRST_INDEX; row < m_grid_.size(); ++row)
     {
-      m_grid_.push_back(std::make_unique<std::vector<std::weak_ptr<Unit> >>
-        (t_columns, std::weak_ptr<Unit>()));
+      for (int column = FIRST_INDEX; column < m_grid_[FIRST_INDEX]->size(); ++column)
+      {
+        clear(column, row);
+      }
     }
 
-    srand(unsigned int(time(nullptr)));
+    m_player_->set_full_hp();
+    spawn_player();
 
-    for (int i = FIRST_INDEX; i < t_monsters; ++i)
+    const int MONSTERS = m_monsters_.size();
+    m_monsters_.clear();
+
+    for (int i = FIRST_INDEX; i < MONSTERS; ++i)
     {
       add_random_monsters(i);
       respawn_monster(i);
-    }*/
+      m_monsters_[i]->set_target(m_player_);
+    }
 
     puts("game resetted.");
   }

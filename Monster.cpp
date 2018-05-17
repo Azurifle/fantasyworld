@@ -31,10 +31,7 @@ namespace G6037599
   //___ protected _______________________________________________________
   void Monster::dies()
   {
-    switch (has_target())
-    {
-    case true: std::cout << "I'll be back!"; default:;
-    }
+    std::cout << "I'll be back!";
     respawn();
   }
 }//G6037599
