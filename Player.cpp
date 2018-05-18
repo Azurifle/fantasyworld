@@ -68,6 +68,7 @@ namespace G6037599
       break;
     default: std::cout << "I'm already dead.";
     }
+    end_console_line();
     game_reset();
   }
 

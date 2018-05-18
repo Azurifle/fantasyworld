@@ -64,36 +64,10 @@ namespace G6037599
       << m_doremon_count_ << " doremons." << std::endl;
   }
 
-  void World::build_grid()
-  {
-    std::cout << "Z = Zombie (HP 2-3), O = Orc (HP 5-6), D = Doramon (HP 8-9)." << std::endl;
-    puts("");
-
-    /*m_grid_start_cursor_ = Menu_ui::get_cursor();
-    m_grid_start_cursor_.X += 1;*/
-    for (int row = FIRST_INDEX; row < static_cast<int>(m_grid_.size()); ++row)
-    {
-      for (int column = FIRST_INDEX; column < static_cast<int>(m_grid_[FIRST_INDEX]->size()); ++column)
-      {
-        std::cout << ' ';
-        switch (has_unit_on(column, row))
-        {
-        case false: std::cout << ". "; break;
-        default: const auto unit = m_grid_[row]->at(column).lock();
-          unit->print_character();
-          switch (is_fighting_w_player(unit))
-          {
-          case false: std::cout << ' '; break;
-          default: m_player_->print_character();
-          }
-        }//has_unit_on tile
-      }
-      puts("");
-    }//row
-  }
-
-	void World::update()
+  void World::update()
 	{
+    m_console_cursor_ = m_console_start_cursor_;
+
     if(m_player_)
     {
       switch (m_is_restart_)
@@ -101,6 +75,8 @@ namespace G6037599
       case false: break;
       default: m_is_restart_ = false;
         reset();
+        clean_console();
+        move_grid_cursor(m_player_->get_x(), m_player_->get_y());
         return;
       }
       m_player_->update();
@@ -110,6 +86,9 @@ namespace G6037599
 		{
 			(*it)->update();
 		}
+
+    clean_console();
+    move_grid_cursor(m_player_->get_x(), m_player_->get_y());
 	}
 
 	void World::create_player(const char* t_name, const int t_hp)
@@ -145,48 +124,93 @@ namespace G6037599
 		REQUIRE(FIRST_INDEX <= t_id && t_id < static_cast<int>( m_monsters_.size() ) );
 
     const auto WAS_SPAWNED_BEFORE = m_monsters_[t_id]->get_x() > NOT_ASSIGN;
-    switch(WAS_SPAWNED_BEFORE)
+    switch (WAS_SPAWNED_BEFORE)
     {
-    case true: switch (is_fighting_w_player(m_monsters_[t_id]))
-      {
-      case false: clear(m_monsters_[t_id]->get_x(), m_monsters_[t_id]->get_y()); break;
-      default: m_grid_[m_monsters_[t_id]->get_y()]->at(m_monsters_[t_id]->get_x()) = m_player_;
-      } default:;
+      case true: switch (is_fighting_w_player(m_monsters_[t_id]))
+        {
+        case false: clear(m_monsters_[t_id]->get_x(), m_monsters_[t_id]->get_y()); break;
+        default: m_grid_[m_monsters_[t_id]->get_y()]->at(m_monsters_[t_id]->get_x()) = m_player_;
+
+          move_grid_cursor(m_monsters_[t_id]->get_x(), m_monsters_[t_id]->get_y());
+          m_player_->print_character();
+          std::cout << ' ';
+        } default:;
     }
 
-		int x, y;
+		int spawn_x, spawn_y;
 		do
 		{
-      y = rand() % m_grid_.size();
-      x = rand() % m_grid_[FIRST_INDEX]->size();
-    } while (has_unit_on(x, y));
+      spawn_y = rand() % m_grid_.size();
+      spawn_x = rand() % m_grid_[FIRST_INDEX]->size();
+    } while (has_unit_on(spawn_x, spawn_y));
 
-    m_grid_[y]->at(x) = m_monsters_[t_id];
-    m_monsters_[t_id]->set_position(x, y);
+    m_grid_[spawn_y]->at(spawn_x) = m_monsters_[t_id];
+    m_monsters_[t_id]->set_position(spawn_x, spawn_y);
     m_monsters_[t_id]->set_full_hp();
+
+	  switch (is_grid_built())
+	  {
+    case true: move_grid_cursor(spawn_x, spawn_y);
+      m_monsters_[t_id]->print_character(); default:;
+	  }
 	}
+
+  void World::build_console()
+  { 
+    m_console_start_cursor_ = Menu_ui::get_cursor();
+    m_console_start_cursor_.X += SPACE_BEFORE_CONSOLE;
+    m_console_cursor_ = m_console_start_cursor_;
+    clean_console();
+  }
+
+  void World::build_grid()
+  {
+    puts("  --------------------------------- THE GRID -----------------------------------------");
+    m_grid_start_cursor_ = Menu_ui::get_cursor();
+    ++m_grid_start_cursor_.X;
+    for (int row = FIRST_INDEX; row < static_cast<int>(m_grid_.size()); ++row)
+    {
+      for (int column = FIRST_INDEX; column < static_cast<int>(m_grid_[FIRST_INDEX]->size()); ++column)
+      {
+        std::cout << ' ';
+        switch (has_unit_on(column, row))
+        {
+        case false: std::cout << ". "; break;
+        default: const auto unit = m_grid_[row]->at(column).lock();
+          unit->print_character();
+          switch (is_fighting_w_player(unit))
+          {
+          case false: std::cout << ' '; break;
+          default: m_player_->print_character();
+          }
+        }//has_unit_on tile
+      }
+      puts("");
+    }//row
+  }
 
   void World::player_move(int t_x, int t_y)
   {
-    t_x = Menu_ui::limit_interval(t_x + m_player_->get_x(), FIRST_INDEX, m_grid_[FIRST_INDEX]->size() - 1);
-    t_y = Menu_ui::limit_interval(t_y + m_player_->get_y(), FIRST_INDEX, m_grid_.size() - 1);
+    t_x = Menu_ui::limit_interval(m_player_->get_x() + t_x, FIRST_INDEX, m_grid_[FIRST_INDEX]->size() - 1);
+    t_y = Menu_ui::limit_interval(m_player_->get_y() + t_y, FIRST_INDEX, m_grid_.size() - 1);
 
     switch (is_player_fighting())
     {
-    case false: clear(m_player_->get_x(), m_player_->get_y()); default:;
+    case false: clear(m_player_->get_x(), m_player_->get_y()); break;
+    default: move_grid_cursor(m_player_->get_x(), m_player_->get_y(), true);
+      std::cout << ' ';
     }
     m_player_->set_position(t_x, t_y);
 
     switch (has_unit_on(t_x, t_y))
     {
     case false: m_grid_[t_y]->at(t_x) = m_player_;
-      /*const auto SPACE_BETWEEN_GRID = 3;
-      Menu_ui::set_cursor(m_grid_start_cursor_.Y+m_player_->get_y()
-      , m_grid_start_cursor_.X + m_player_->get_x()*SPACE_BETWEEN_GRID);
-      m_player_->print_character();*/
+      move_grid_cursor(t_x, t_y);
       break;
     default: m_player_->set_target(m_grid_[t_y]->at(t_x));
+      move_grid_cursor(t_x, t_y, true);
     }
+    m_player_->print_character();
   }
 
   void World::set_restart()
@@ -194,8 +218,43 @@ namespace G6037599
     m_is_restart_ = true;
   }
 
+  void World::open_console() const
+  {
+    if (m_console_start_cursor_.X > NOT_ASSIGN)
+    {
+      REQUIRE(m_console_cursor_.X > NOT_ASSIGN);
+
+      Menu_ui::move_cursor(m_console_cursor_);
+    }
+  }
+
+  void World::end_console_line()
+  {
+    if(m_console_start_cursor_.X <= NOT_ASSIGN)
+    {
+      return;
+    }
+
+    m_console_cursor_ = Menu_ui::get_cursor();
+
+    const auto CHARS_TO_REMOVE = 100;
+    while(m_console_cursor_.X <= CHARS_TO_REMOVE)
+    {
+      std::cout << ' ';
+      ++m_console_cursor_.X;
+    }
+
+    puts("");
+    for(int i = FIRST_INDEX; i < SPACE_BEFORE_CONSOLE; ++i)
+    {
+      std::cout << ' ';
+    }
+
+    m_console_cursor_ = Menu_ui::get_cursor();
+  }
+
   //___ private _______________________________________________________
-  bool World::has_unit_on(const int t_x, const int t_y)
+  bool World::has_unit_on(const int t_x, const int t_y) const
   {
     return !m_grid_[t_y]->at(t_x).expired();
   }
@@ -212,8 +271,13 @@ namespace G6037599
 
   bool World::is_player_fighting() const
   {
-    REQUIRE(!m_grid_[m_player_->get_y()]->at(m_player_->get_x()).expired());
+    REQUIRE(has_unit_on(m_player_->get_x(), m_player_->get_y()));
     return m_grid_[m_player_->get_y()]->at(m_player_->get_x()).lock()->ID != m_player_->ID;
+  }
+
+  bool World::is_grid_built() const
+  {
+    return m_grid_start_cursor_.X > NOT_ASSIGN;
   }
 
 	void World::add_random_monsters(const int t_id)
@@ -241,22 +305,30 @@ namespace G6037599
     REQUIRE(m_player_);
 
     const int MIDDLE_Y = m_grid_.size() / 2, MIDDLE_X = m_grid_[FIRST_INDEX]->size() / 2;
-    while (true)
+    switch (has_unit_on(MIDDLE_X, MIDDLE_Y))
     {
-      switch (has_unit_on(MIDDLE_X, MIDDLE_Y))
-      {
-      case false: m_grid_[MIDDLE_Y]->at(MIDDLE_X) = m_player_;
-        m_player_->set_position(MIDDLE_X, MIDDLE_Y);
-        return;
+      case false: break;
       default: respawn_monster(m_grid_[MIDDLE_Y]->at(MIDDLE_X).lock()->ID);
-      }
-    }//always loop
+    }
+    m_grid_[MIDDLE_Y]->at(MIDDLE_X) = m_player_;
+    m_player_->set_position(MIDDLE_X, MIDDLE_Y);
+
+    switch (is_grid_built())
+    {
+      case true: move_grid_cursor(MIDDLE_X, MIDDLE_Y);
+        m_player_->print_character(); default:;
+    }
   }
 
   void World::clear(const int t_x, const int t_y)
   {
     REQUIRE(t_y < static_cast<int>(m_grid_.size()) && t_x < static_cast<int>(m_grid_[t_y]->size()));
+
     m_grid_[t_y]->at(t_x) = std::weak_ptr<Unit>();
+
+    move_grid_cursor(t_x, t_y);
+    std::cout << ". ";
+
     PROMISE(m_grid_[t_y]->at(t_x).expired());
   }
 
@@ -264,12 +336,16 @@ namespace G6037599
   {
     REQUIRE(m_player_);
 
-    std::cout << m_player_->get_name() << " has fallen !." << std::endl 
-	    << std::endl;
+    open_console();
+      std::cout << m_player_->get_name() << " has fallen !.";
+      end_console_line();
+    end_console_line();
 
-    for (int row = FIRST_INDEX; row < m_grid_.size(); ++row)
+    const auto GRID_ROWS = static_cast<int>(m_grid_.size())
+	    , GRID_COLUMNS = static_cast<int>(m_grid_[FIRST_INDEX]->size());
+    for (int row = FIRST_INDEX; row < GRID_ROWS; ++row)
     {
-      for (int column = FIRST_INDEX; column < m_grid_[FIRST_INDEX]->size(); ++column)
+      for (int column = FIRST_INDEX; column < GRID_COLUMNS; ++column)
       {
         clear(column, row);
       }
@@ -288,7 +364,37 @@ namespace G6037599
       m_monsters_[i]->set_target(m_player_);
     }
 
-    puts("game resetted.");
+    open_console();
+      std::cout << "game resetted.";
+    end_console_line();
+  }
+
+  void World::move_grid_cursor(const int t_x, const int t_y, const bool t_challenger) const
+  {
+    const auto TO_CHALLENGER_SLOT = 1;
+
+    switch(is_grid_built())
+    {
+      case true: Menu_ui::move_cursor(m_grid_start_cursor_.Y + t_y
+        , m_grid_start_cursor_.X + t_x * SPACE_BETWEEN_GRID 
+        + (t_challenger ? TO_CHALLENGER_SLOT : NONE)); default:;
+    }
+  }
+
+  void World::clean_console()
+  {
+    open_console();
+    const auto LAST_CONSOLE_ROW = m_console_start_cursor_.Y + CONSOLE_ROWS;
+    //0 player attack
+    //1 monster damaged
+    //2
+    //3 monster attack
+    //4 player damaged
+    //5 player dead message
+    while(m_console_cursor_.Y < LAST_CONSOLE_ROW)
+    {
+      end_console_line();
+    }
   }
 
 }//namespace G6037599

@@ -63,23 +63,30 @@ namespace G6037599
   void Unit::attacks() const
   {
     auto target = m_target_.lock();
-    std::cout << get_name() << " attacks " << target->get_name()
-      << " with " << get_attack_name() << "." << std::endl;
+
+    m_world_.open_console();
+      std::cout << get_name() << " attacks " << target->get_name()
+        << " with " << get_attack_name() << ".";
+    m_world_.end_console_line();
+
     target->damaged(get_attack_power());
   }
 
   void Unit::damaged(const int t_damage)
   {
     m_hp_ -= t_damage;
-    std::cout << get_name() << " -" << t_damage << " damage. Now has " << m_hp_ << " health."
-      << std::endl;
+
+    m_world_.open_console();
+      std::cout << get_name() << " -" << t_damage << " damage. Now has " << m_hp_ << " health.";
+    m_world_.end_console_line();
+
     if (m_hp_ <= DEAD)
     {
-      std::cout << get_name() << " dead message: ..."; 
+      std::cout << get_name() << " dead message: ...";
       dies();
-      puts("");
     }
-    puts("");
+    m_world_.open_console();
+    m_world_.end_console_line();
   }
 
   void Unit::respawn() const
@@ -92,4 +99,8 @@ namespace G6037599
     m_world_.set_restart();
   }
 
+  void Unit::end_console_line() const
+  {
+    m_world_.end_console_line();
+  }
 }

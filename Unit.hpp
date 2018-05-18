@@ -38,6 +38,7 @@ namespace G6037599
     virtual void dies() = 0;
     void respawn() const;
     void game_reset() const;
+    void end_console_line() const;
   private:
     World & m_world_;
     std::weak_ptr<Unit> m_target_ = std::weak_ptr<Unit>();

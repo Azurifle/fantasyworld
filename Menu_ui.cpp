@@ -21,7 +21,7 @@ namespace G6037599
         OPTION_0_EXIT, OPTION_1, OPTION_2, OPTION_3
       };
       std::cout << "Input <" << OPTION_1 << " - " << OPTION_3 << "> or <" << OPTION_0_EXIT << "> to exit: ";
-      auto choice = World::NOT_ASSIGN;
+      int choice = World::NOT_ASSIGN;
       do
       {
         std::cin >> choice;
@@ -55,7 +55,7 @@ namespace G6037599
     } while (true);
   }
 
-  /*COORD Menu_ui::get_cursor()
+  COORD Menu_ui::get_cursor()
   {
     CONSOLE_SCREEN_BUFFER_INFO console_info;
     if(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &console_info))
@@ -65,17 +65,23 @@ namespace G6037599
     return {0, 0};
   }
 
-  void Menu_ui::set_cursor(const int t_y, const int t_x)
+  void Menu_ui::move_cursor(const int t_y, const int t_x)
   {
-    PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {t_x, t_y}));
-  }*/
+    PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE)
+      , {static_cast<short>(t_x), static_cast<short>(t_y)}));
+  }
 
-  int Menu_ui::limit_interval(int t_number, const int t_low, const int t_high)
+  void Menu_ui::move_cursor(const COORD t_position)
   {
-    if (t_number < t_low)
-      t_number = t_low;
-    else if (t_number > t_high)
-      t_number = t_high;
+    PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), t_position));
+  }
+
+  int Menu_ui::limit_interval(int t_number, const int t_min, const int t_max)
+  {
+    if (t_number < t_min)
+      t_number = t_min;
+    else if (t_number > t_max)
+      t_number = t_max;
     return t_number;
   }
 
@@ -89,8 +95,8 @@ namespace G6037599
 
   char Menu_ui::wait_key(const int t_seconds)
   {
-    const auto MAKE_SECOND = 1000;
-    const auto TIME_UP = clock() + t_seconds * MAKE_SECOND;
+    const auto MAKE_MILLISECOND = 1000;
+    const auto TIME_UP = clock() + t_seconds * MAKE_MILLISECOND;
     do
     {
       const auto NO_KEY_PRESS = 0;
@@ -153,27 +159,27 @@ namespace G6037599
     puts("");
     const auto SIZE = 30, MONSTERS = 10;
     World world(SIZE, SIZE, MONSTERS);
+    puts("");
+    std::cout << "Frame rate is " << UPDATE_SECONDS << " seconds per frame.";
+    puts("");
+    std::cout << std::endl << "Press <Any key> to update: ";
+    press_any_key();
+
     while (true)
     {
-      puts("");
-      world.build_grid();
-      std::cout << std::endl
-        << "Update will begin in " << UPDATE_SECONDS << " seconds." << std::endl
-        << std::endl
-        << "Press <Any key> to update now or <0> to exit: ";
-      switch (wait_key(UPDATE_SECONDS))
-      {
-      case '0': puts("");
-        return;
-      default: break;
-      }
       system("CLS");
       puts(TOPIC);
       puts("");
-      std::cout << "World " << SIZE << "x" << SIZE << " grid with "
-        << MONSTERS << " monsters spawn randomly." << std::endl;
-      puts("");
       world.update();
+      puts("");
+      world.build_grid();
+      puts("");
+      std::cout << "Update in " << UPDATE_SECONDS << " secs.";
+      puts(" Press <Any key>: update now, or <0>: exit.");
+      switch (wait_key(UPDATE_SECONDS))
+      {
+      case '0': return; default:;
+      }
     }
   }
 
@@ -186,30 +192,41 @@ namespace G6037599
     World world(SIZE, SIZE, MONSTERS);
     puts("");
     world.create_player("NoOne the hero", HERO_MAX_HP, "Fist !", HERO_ATTACK_DAMAGE);
+    puts("");
+    std::cout << "frame rate is " << UPDATE_SECONDS << " seconds per frame.";
+    puts("");
+    std::cout << std::endl << "Press <Any key> to update: ";
+    press_any_key();
+
+    system("CLS");
+    puts(TOPIC);
+    puts("");
+    world.build_console();
+    puts("");
+    world.build_grid();
+    puts("");
+    std::cout << "Update in " << UPDATE_SECONDS << " secs.";
+    puts(" Press <W/S/A/D>: move, <Other key>: update now, or <0>: exit.");
+    const auto LAST_LINE = get_cursor();
+    enum Direction
+    {
+      UP = -1, LEFT = -1, NONE, DOWN, RIGHT = 1
+    };
     while (true)
     {
-      puts("");
-      world.build_grid();
-      std::cout << std::endl
-        << "Update will begin in " << UPDATE_SECONDS << " seconds." << std::endl
-        << std::endl
-        << "Press <W/S/A/D>: Move, <Other key>: update now, or <0>: Exit.";
       switch (wait_key(UPDATE_SECONDS))
       {
-      case 'w': world.player_move(0, -1);
+      case 'w': world.player_move(NONE, UP);
         break;
-      case 's': world.player_move(0, 1);
+      case 's': world.player_move(NONE, DOWN);
         break;
-      case 'a': world.player_move(-1, 0);
+      case 'a': world.player_move(LEFT, NONE);
         break;
-      case 'd': world.player_move(1, 0);
+      case 'd': world.player_move(RIGHT, NONE);
         break;
-      case '0': puts("");
+      case '0': move_cursor(LAST_LINE.Y, LAST_LINE.X);
         return; default:;
       }
-      system("CLS");
-      puts(TOPIC);
-      puts("");
       world.update();
     }
   }

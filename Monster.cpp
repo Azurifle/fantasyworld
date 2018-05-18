@@ -32,6 +32,7 @@ namespace G6037599
   void Monster::dies()
   {
     std::cout << "I'll be back!";
+    end_console_line();
     respawn();
   }
 }//G6037599
