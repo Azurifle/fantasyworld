@@ -11,10 +11,15 @@ namespace G6037599
     virtual ~Menu_ui();
 
     static int main_menu();
+    /*static COORD get_cursor();
 
+    static void set_cursor(int t_y, int t_x);*/
     static int limit_interval(int t_number, int t_low, int t_high);
   private:
-    static char press_any_key();
+    static const int UPDATE_SECONDS = 5;
+
+    static char press_any_key()
+      , wait_key(int t_seconds);
     static void main_menu_topic()
       , back_to_main_menu()
 

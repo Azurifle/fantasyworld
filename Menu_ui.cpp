@@ -18,10 +18,10 @@ namespace G6037599
       main_menu_topic();
       const enum Option
       {
-        NOT_ASSIGN = -1, OPTION_0_EXIT, OPTION_1, OPTION_2, OPTION_3
+        OPTION_0_EXIT, OPTION_1, OPTION_2, OPTION_3
       };
       std::cout << "Input <" << OPTION_1 << " - " << OPTION_3 << "> or <" << OPTION_0_EXIT << "> to exit: ";
-      int choice = NOT_ASSIGN;
+      auto choice = World::NOT_ASSIGN;
       do
       {
         std::cin >> choice;
@@ -55,6 +55,21 @@ namespace G6037599
     } while (true);
   }
 
+  /*COORD Menu_ui::get_cursor()
+  {
+    CONSOLE_SCREEN_BUFFER_INFO console_info;
+    if(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &console_info))
+    {
+      return console_info.dwCursorPosition;
+    }
+    return {0, 0};
+  }
+
+  void Menu_ui::set_cursor(const int t_y, const int t_x)
+  {
+    PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {t_x, t_y}));
+  }*/
+
   int Menu_ui::limit_interval(int t_number, const int t_low, const int t_high)
   {
     if (t_number < t_low)
@@ -69,7 +84,24 @@ namespace G6037599
   {
     const char key = _getch();
     _getch();
-    return key;
+    return key; 
+  }
+
+  char Menu_ui::wait_key(const int t_seconds)
+  {
+    const auto MAKE_SECOND = 1000;
+    const auto TIME_UP = clock() + t_seconds * MAKE_SECOND;
+    do
+    {
+      const auto NO_KEY_PRESS = 0;
+      switch (_kbhit())
+      {
+      case NO_KEY_PRESS: break;
+      default: return press_any_key();
+      }
+    } while (clock() < TIME_UP);
+
+    return World::NOT_ASSIGN;
   }
 
   void Menu_ui::main_menu_topic()
@@ -126,8 +158,10 @@ namespace G6037599
       puts("");
       world.build_grid();
       std::cout << std::endl
-        << "Press <Any key> to update or <0> to exit: ";
-      switch (press_any_key())
+        << "Update will begin in " << UPDATE_SECONDS << " seconds." << std::endl
+        << std::endl
+        << "Press <Any key> to update now or <0> to exit: ";
+      switch (wait_key(UPDATE_SECONDS))
       {
       case '0': puts("");
         return;
@@ -157,8 +191,10 @@ namespace G6037599
       puts("");
       world.build_grid();
       std::cout << std::endl
-        << "Press <W/S/A/D>: Move, <Other key>: Attack same tile, or <0>: Exit.";
-      switch (press_any_key())
+        << "Update will begin in " << UPDATE_SECONDS << " seconds." << std::endl
+        << std::endl
+        << "Press <W/S/A/D>: Move, <Other key>: update now, or <0>: Exit.";
+      switch (wait_key(UPDATE_SECONDS))
       {
       case 'w': world.player_move(0, -1);
         break;
@@ -169,8 +205,7 @@ namespace G6037599
       case 'd': world.player_move(1, 0);
         break;
       case '0': puts("");
-        return;
-      default: break;
+        return; default:;
       }
       system("CLS");
       puts(TOPIC);

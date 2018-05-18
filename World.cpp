@@ -69,6 +69,8 @@ namespace G6037599
     std::cout << "Z = Zombie (HP 2-3), O = Orc (HP 5-6), D = Doramon (HP 8-9)." << std::endl;
     puts("");
 
+    /*m_grid_start_cursor_ = Menu_ui::get_cursor();
+    m_grid_start_cursor_.X += 1;*/
     for (int row = FIRST_INDEX; row < static_cast<int>(m_grid_.size()); ++row)
     {
       for (int column = FIRST_INDEX; column < static_cast<int>(m_grid_[FIRST_INDEX]->size()); ++column)
@@ -81,8 +83,8 @@ namespace G6037599
           unit->print_character();
           switch (is_fighting_w_player(unit))
           {
-          case true: m_player_->print_character(); break;
-          default: std::cout << ' ';
+          case false: std::cout << ' '; break;
+          default: m_player_->print_character();
           }
         }//has_unit_on tile
       }
@@ -178,6 +180,10 @@ namespace G6037599
     switch (has_unit_on(t_x, t_y))
     {
     case false: m_grid_[t_y]->at(t_x) = m_player_;
+      /*const auto SPACE_BETWEEN_GRID = 3;
+      Menu_ui::set_cursor(m_grid_start_cursor_.Y+m_player_->get_y()
+      , m_grid_start_cursor_.X + m_player_->get_x()*SPACE_BETWEEN_GRID);
+      m_player_->print_character();*/
       break;
     default: m_player_->set_target(m_grid_[t_y]->at(t_x));
     }
@@ -194,12 +200,12 @@ namespace G6037599
     return !m_grid_[t_y]->at(t_x).expired();
   }
 
-  bool World::is_fighting_w_player(const std::shared_ptr<Unit> unit) const
+  bool World::is_fighting_w_player(const std::shared_ptr<Unit> t_unit) const
   {
     if(m_player_)
     {
-      return unit->ID != m_player_->ID && unit->get_x() == m_player_->get_x()
-        && unit->get_y() == m_player_->get_y();
+      return t_unit->ID != m_player_->ID && t_unit->get_x() == m_player_->get_x()
+        && t_unit->get_y() == m_player_->get_y();
     }
     return false;
   }

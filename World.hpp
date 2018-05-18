@@ -28,6 +28,7 @@ namespace G6037599
 	private:
 		std::vector<std::unique_ptr<std::vector<std::weak_ptr<Unit> >> > m_grid_;
 		std::vector<std::shared_ptr<Unit> > m_monsters_;
+    //COORD m_grid_start_cursor_ = {0, 0};
 		std::shared_ptr<Unit> m_player_ = nullptr;
 	  bool m_is_restart_ = false;
 
@@ -35,7 +36,7 @@ namespace G6037599
 		int m_zombie_count_ = NONE, m_orc_count_ = NONE, m_doremon_count_ = NONE;
 
     bool has_unit_on(int t_x, int t_y);
-    bool is_fighting_w_player(std::shared_ptr<Unit> unit) const;
+    bool is_fighting_w_player(std::shared_ptr<Unit> t_unit) const;
     bool is_player_fighting() const;
 
 		void add_random_monsters(int t_id);
