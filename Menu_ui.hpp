@@ -20,7 +20,7 @@ namespace G6037599
   private:
     static const int UPDATE_SECONDS = 4;
 
-    static char press_any_key()
+    static int press_any_key()
       , wait_key(int t_seconds);
     static void main_menu_topic()
       , back_to_main_menu()

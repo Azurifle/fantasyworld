@@ -86,14 +86,14 @@ namespace G6037599
   }
 
   //___ Private ____________________________________________________________________________
-  char Menu_ui::press_any_key()
+  int Menu_ui::press_any_key()
   {
-    const char key = _getch();
+    const auto key = _getch();
     _getch();
     return key; 
   }
 
-  char Menu_ui::wait_key(const int t_seconds)
+  int Menu_ui::wait_key(const int t_seconds)
   {
     const auto MAKE_MILLISECOND = 1000;
     const auto TIME_UP = clock() + t_seconds * MAKE_MILLISECOND;
