@@ -55,6 +55,13 @@ namespace G6037599
     } while (true);
   }
 
+  int Menu_ui::press_any_key()
+  {
+    const auto key = _getch();
+    _getch();
+    return key;
+  }
+
   COORD Menu_ui::get_cursor()
   {
     CONSOLE_SCREEN_BUFFER_INFO console_info;
@@ -86,13 +93,7 @@ namespace G6037599
   }
 
   //___ Private ____________________________________________________________________________
-  int Menu_ui::press_any_key()
-  {
-    const auto key = _getch();
-    _getch();
-    return key; 
-  }
-
+  
   int Menu_ui::wait_key(const int t_seconds)
   {
     const auto MAKE_MILLISECOND = 1000;
@@ -140,16 +141,8 @@ namespace G6037599
   void Menu_ui::fantasy_world()
   {
     puts(" === Fantasy World. =======================");
-    const auto MONSTERS = 120, HERO_MAX_HP = 500;
-    World world(MONSTERS);//Stack Overflow people suggest using stack over heap
     puts("");
-    world.print_monster_list();
-    puts("");
-    world.create_player("NoOne the hero", HERO_MAX_HP);
-    std::cout << std::endl << "Press <Any key> to update: ";
-    press_any_key();
-    puts("");
-    world.update();
+    puts("Apology, the new version is not compatible with project 1 and 2. Please download older branch on Github instead.");
   }
 
   void Menu_ui::fantasy_world_2_d()
@@ -157,30 +150,7 @@ namespace G6037599
     const auto TOPIC = " === Fantasy World 2D Grid. =======================";
     puts(TOPIC);
     puts("");
-    const auto SIZE = 30, MONSTERS = 10;
-    World world(SIZE, SIZE, MONSTERS);
-    puts("");
-    std::cout << "Frame rate is " << UPDATE_SECONDS << " seconds per frame.";
-    puts("");
-    std::cout << std::endl << "Press <Any key> to update: ";
-    press_any_key();
-
-    while (true)
-    {
-      system("CLS");
-      puts(TOPIC);
-      puts("");
-      world.update();
-      puts("");
-      world.build_grid();
-      puts("");
-      std::cout << "Update in " << UPDATE_SECONDS << " secs.";
-      puts(" Press <Any key>: update now, or <0>: exit.");
-      switch (wait_key(UPDATE_SECONDS))
-      {
-      case '0': return; default:;
-      }
-    }
+    puts("Apology, the new version is not compatible with project 1 and 2. Please download older branch on Github instead.");
   }
 
   void Menu_ui::hero_in_fantasy_world()

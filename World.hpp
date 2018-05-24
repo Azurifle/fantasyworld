@@ -11,8 +11,7 @@ namespace G6037599
 	public:
     enum Starting_value { NOT_ASSIGN = -1, NONE };
 
-		World() = default;
-		explicit World(int t_monsters);
+		World(int t_monsters);
 		World(int t_rows, int t_columns, int t_monsters);
 		~World();
 

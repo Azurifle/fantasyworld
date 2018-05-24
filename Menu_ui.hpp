@@ -10,7 +10,7 @@ namespace G6037599
     Menu_ui() = default;
     virtual ~Menu_ui();
 
-    static int main_menu();
+    static int main_menu(), press_any_key();
     static COORD get_cursor();
 
     static void move_cursor(int t_y, int t_x)
@@ -20,8 +20,7 @@ namespace G6037599
   private:
     static const int UPDATE_SECONDS = 4;
 
-    static int press_any_key()
-      , wait_key(int t_seconds);
+    static int wait_key(int t_seconds);
     static void main_menu_topic()
       , back_to_main_menu()
 

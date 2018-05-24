@@ -8,8 +8,8 @@
 
 namespace G6037599
 {
-	//___ (de)constructors _____________________________________________
-	World::World(const int t_monsters)
+  //___ (de)constructors _____________________________________________
+  World::World(const int t_monsters)
 	{
 		REQUIRE(t_monsters > NONE);
 
@@ -63,7 +63,7 @@ namespace G6037599
       << m_orc_count_ << " orcs." << std::endl
       << m_doremon_count_ << " doremons." << std::endl;
   }
-
+  
   void World::update()
 	{
     m_console_cursor_ = m_console_start_cursor_;
