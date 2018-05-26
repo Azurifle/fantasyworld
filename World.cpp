@@ -33,13 +33,11 @@ namespace G6037599
 
     read_monster_types();
 
-    for(auto i = 0; i < m_spawners_.size(); ++i)
-    {
-      m_map_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_id());
-      m_console_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_symbol());
-    }
+    srand(static_cast<unsigned int>(time(nullptr)));
 
+    spawn_spawners();
     spawners_spawn_monster();
+    m_console_->move_cursor(m_player_->get_pos());
   }
 
   World::World(const World& t_to_copy)
@@ -58,65 +56,76 @@ namespace G6037599
   {
     t_move.X = limit_interval(m_player_->get_pos().X + t_move.X, 0, m_map_->SIZE);
     t_move.Y = limit_interval(m_player_->get_pos().Y + t_move.Y, 0, m_map_->SIZE);
-    //*******************
-    switch (m_map_->explore(m_player_->get_pos(), m_player_->get_id(), t_move))
-    {
-    case NO_UNIT: clear(m_player_->get_x(), m_player_->get_y()); break;
-    default: move_grid_cursor(m_player_->get_x(), m_player_->get_y(), true);
-      std::cout << ' ';
-    }
-    m_player_->set_position(t_x, t_y);
 
-    switch (has_unit_on(t_x, t_y))
+    for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
     {
-    case false: m_grid_[t_y]->at(t_x) = m_player_;
-      move_grid_cursor(t_x, t_y);
-      break;
-    default: m_player_->set_target(m_grid_[t_y]->at(t_x));
-      move_grid_cursor(t_x, t_y, true);
+      if (t_move.X == (*it)->get_pos().X || t_move.Y == (*it)->get_pos().Y)
+      {
+        update();
+        return;
+      }
     }
-    m_player_->print_character();
+
+    switch (m_map_->is_attacker(m_player_->get_pos(), m_player_.get_id()))
+    {
+    case false: m_console_->clear_owner(m_player_->get_pos());
+    default: m_console_->clear_attacker(m_player_->get_pos());
+    }
+    m_map_->move(m_player_->get_pos(), m_player_.get_id(), t_move);
+
+    switch (m_console_->update_hour())
+    {
+    case false: check_battle(); break;
+    default: monster_stronger();
+    }//switch update minute
   }
 
-  void World::move_cursor(COORD t_move)
+  void World::move_cursor(const COORD& t_move)
   {
+    m_cursor_pos_.X = limit_interval(m_cursor_pos_.X + t_move.X, 0, m_map_->SIZE);
+    m_cursor_pos_.Y = limit_interval(m_cursor_pos_.Y + t_move.Y, 0, m_map_->SIZE);
     
+    auto enemy_id = m_map_->get(m_cursor_pos_);
+    if(enemy_id <= NO_UNIT || enemy_id == m_player_->get_id())
+    {
+      m_console_->hide_cursor_status();
+    }
+    else
+    {
+      for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
+      {
+        if (enemy_id == (*it)->get_id())
+        {
+          m_console_->hide_cursor_status();//add bool already hide or not
+          return;
+        }
+      }
+
+      for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
+      {
+        if (enemy_id <= (*it)->get_last_id())
+        {
+          m_console_->show_cursor_status((*it)->get_type_name(), (*it)->get_hp(enemy_id)
+            , (*it)->get_type_max_hp(), (*it)->get_type_atk(), (*it)->get_type_max_atk());
+          break;
+        }//if this spawner manage this monster
+      }
+    }//has unit that not player
   }
 
   void World::update()
   {
     switch (m_console_->update_minute())
     {
-    case m_console_->NOTHING: break;
-    case m_console_->HOUR_REACH: auto enemy_id = m_map_->has_battle(m_player_->get_pos());
-      switch (enemy_id)
-      {
-      case NO_UNIT: break;
-      default: for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
-        {
-          if (enemy_id <= (*it)->get_last_id())
-          {
-            (*it)->damaged(enemy_id, m_player_->find_atk());
-
-            auto hp_left = m_player_->damaged((*it)->find_atk(enemy_id));
-            if (hp_left <= 0)
-            {
-              game_reset();
-            }
-            else
-            {
-              m_console_->set_player_hp(hp_left);
-            }
-          }//if monster in this spawner
-        }//for who in chart of the monster
-      }
+    case m_console_->NOT_REACH: break;
+    case m_console_->HOUR_REACH: check_battle(); break;
     default: monster_stronger();
     }//switch update minute
   }
 
   void World::exit() const
   {
-
+    m_console_->exit();
   }
 
   //___ private _______________________________________________________
@@ -156,7 +165,7 @@ namespace G6037599
       auto symbol = tokenize(line, name, dead_message, atk_name, max_hp, atk, max_atk);
 
       m_spawners_.push_back(std::make_unique<Spawn_point>(name, dead_message, atk_name
-        , max_hp, atk, max_atk, symbol, m_console_, m_map_, m_map_->random_unoccupied()));
+        , max_hp, atk, max_atk, symbol, m_console_, m_map_));
     }
     file_reader.close();
   }
@@ -165,8 +174,6 @@ namespace G6037599
   {
     const auto HEIGHT_X_WIDTH = 2;
     REQUIRE(0 < MONSTERS && MONSTERS <= m_map_->SIZE * HEIGHT_X_WIDTH);
-
-    srand(static_cast<unsigned int>(time(nullptr)));
 
     std::vector<int> each_type_random;
     auto total_random = 0;
@@ -209,6 +216,65 @@ namespace G6037599
 
   void World::game_reset()
   {
+    m_console_->show_game_reset();
 
+    m_map_->reset();
+
+    const short MIDDLE_MAP = static_cast<short>(m_map_->SIZE) / 2;
+    m_player_->set_pos({ MIDDLE_MAP , MIDDLE_MAP });
+    m_player_->set_full_hp();
+    m_map_->marked(m_player_->get_pos(), m_player_->get_id());
+    m_console_->marked(m_player_->get_pos(), m_player_->get_symbol());
+    m_console_->set_player_full_hp();
+
+    spawn_spawners();
+    spawners_spawn_monster();
+    m_console_->move_cursor(m_player_->get_pos());
   }
+
+  void World::check_battle()
+  {
+    switch (m_is_reset_)
+    {
+    case false: break;
+    default: m_is_reset_ = false;
+      game_reset();
+      return;
+    }
+
+    auto enemy_id = m_map_->has_battle(m_player_->get_pos());
+    switch (enemy_id)
+    {
+    case NO_UNIT: break;
+    default: for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
+      {
+        if (enemy_id <= (*it)->get_last_id())
+        {
+          (*it)->damaged(enemy_id, m_player_->find_atk());
+
+          auto hp_left = m_player_->damaged((*it)->find_atk(enemy_id));
+          if (hp_left <= 0)
+          {
+            m_is_reset_ = true;
+          }
+          else
+          {
+            m_console_->set_player_hp(hp_left);
+          }
+          break;
+        }//if this spawner manage this monster
+      }
+    }//switch enemy_id
+  }
+
+  void World::spawn_spawners()
+  {
+    for (auto i = 0; i < m_spawners_.size(); ++i)
+    {
+      m_spawners_[i]->set_pos(m_map_->random_unoccupied());
+      m_map_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_id());
+      m_console_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_symbol());
+    }
+  }
+
 }//namespace G6037599

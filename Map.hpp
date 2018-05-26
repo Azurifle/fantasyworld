@@ -16,6 +16,8 @@ namespace G6037599
     ~Map() = default;
     Map(const Map& t_to_copy);
     Map& operator=(const Map& t_to_copy);
+
+    void marked(const COORD& t_pos, int t_id);
   private:
     std::vector<std::unique_ptr< std::vector<Tile> >> m_grid_;
 

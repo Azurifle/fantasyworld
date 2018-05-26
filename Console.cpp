@@ -153,4 +153,12 @@ namespace G6037599
     }
   }
 
+  void Console::marked(const COORD& t_pos, const char t_symbol) const
+  {
+    REQUIRE(0 <= t_pos.X && t_pos.X < Map::SIZE);
+    REQUIRE(0 <= t_pos.Y && t_pos.Y < Map::SIZE);
+    
+    set_cursor({ m_map_start_.X + t_pos.X * static_cast<short>(SPACE_BETWEEN_TILE), m_map_start_.Y + t_pos.Y});
+    std::cout << t_symbol;
+  }
 }//G6037599

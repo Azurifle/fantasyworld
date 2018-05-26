@@ -24,6 +24,7 @@ namespace G6037599
     void show() const;
     void print_player_status() const;
     void print_map() const;
+    void marked(const COORD& t_pos, char t_symbol) const;
   private:
     COORD m_map_start_ = { 0, 0 };
     std::unique_ptr<Status_panel> m_monster_status_ = nullptr;

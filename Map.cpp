@@ -28,6 +28,15 @@ namespace G6037599
     return *this;
   }
 
+  //___ public _______________________________________________________
+  void Map::marked(const COORD& t_pos, const int t_id)
+  {
+    REQUIRE(0 <= t_pos.X && t_pos.X < SIZE);
+    REQUIRE(0 <= t_pos.Y && t_pos.Y < SIZE);
+
+    m_grid_[t_pos.Y]->at(t_pos.X).owner_id = t_id;
+  }
+
   //___ private _______________________________________________________
   void Map::copy_from(const Map& t_to_copy)
   {
