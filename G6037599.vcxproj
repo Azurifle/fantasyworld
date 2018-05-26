@@ -150,8 +150,11 @@
     <ClInclude Include="Console.hpp" />
     <ClInclude Include="Hp_bar.hpp" />
     <ClInclude Include="Map.hpp" />
+    <ClInclude Include="Spawn_point.hpp" />
     <ClInclude Include="Status_panel.hpp" />
     <ClInclude Include="Timer.hpp" />
+    <ClInclude Include="Type_data.hpp" />
+    <ClInclude Include="Unit.hpp" />
     <ClInclude Include="World.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -160,8 +163,11 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Hp_bar.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Spawn_point.cpp" />
     <ClCompile Include="Status_panel.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Type_data.cpp" />
+    <ClCompile Include="Unit.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="G6037599.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -20,7 +20,7 @@ namespace G6037599
   //___ (de)constructors _____________________________________________
   World::World()
   {
-    m_console_ = std::make_unique<Console>();
+    m_console_ = std::shared_ptr<Console>();
     m_console_->show();
 
     m_map_ = std::make_shared<Map>();
@@ -164,7 +164,7 @@ namespace G6037599
       auto max_hp = 1, atk = 1, max_atk = 1;
       auto symbol = tokenize(line, name, dead_message, atk_name, max_hp, atk, max_atk);
 
-      m_spawners_.push_back(std::make_unique<Spawn_point>(name, dead_message, atk_name
+      m_spawners_.push_back(std::make_unique<Spawn_point>(name.c_str(), dead_message.c_str(), atk_name.c_str()
         , max_hp, atk, max_atk, symbol, m_console_, m_map_));
     }
     file_reader.close();

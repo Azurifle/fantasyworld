@@ -35,7 +35,7 @@ namespace G6037599
     std::vector<std::unique_ptr<Spawn_point>> m_spawners_;
     COORD m_cursor_pos_ = { 0, 0 };
     std::shared_ptr<Map> m_map_ = nullptr;
-    std::unique_ptr<Console> m_console_ = nullptr;
+    std::shared_ptr<Console> m_console_ = nullptr;
     std::unique_ptr<Unit> m_player_ = nullptr;
 	  bool m_is_reset_ = false;
 
