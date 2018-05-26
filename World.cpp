@@ -1,202 +1,67 @@
 #include "stdafx.h"
 #include "World.hpp"
-#include "Zombie.hpp"
-#include "Orc.hpp"
-#include "Doremon.hpp"
-#include "Player.hpp"
-#include "Menu_ui.hpp"
+#include "Console.hpp"
+#include "Map.hpp"
+#include "Unit.hpp"
+#include "Spawn_point.hpp"
 
 namespace G6037599
 {
+  //___ static _____________________________________________
+  short World::limit_interval(int t_number, const int t_min, const int t_max)
+  {
+    if (t_number < t_min)
+      t_number = t_min;
+    else if (t_number > t_max)
+      t_number = t_max;
+    return static_cast<short>(t_number);
+  }
+
   //___ (de)constructors _____________________________________________
-  World::World(const int t_monsters)
-	{
-		REQUIRE(t_monsters > NONE);
-
-		srand(unsigned int(time(nullptr)));
-
-		for (int i = FIRST_INDEX; i < t_monsters; ++i)
-		{
-			add_random_monsters(i);
-		}
-
-		PROMISE(m_zombie_count_ + m_orc_count_ + m_doremon_count_ == t_monsters);
-
-		puts("world created.");
-	}
-
-	World::World(const int t_rows, const int t_columns, const int t_monsters)
-	{
-		REQUIRE(t_rows > NONE && t_columns > NONE && t_monsters >= NONE);
-
-		for (int i = FIRST_INDEX; i < t_rows; ++i)
-		{
-			m_grid_.push_back(std::make_unique<std::vector<std::weak_ptr<Unit> >>
-				(t_columns, std::weak_ptr<Unit>()));
-		}
-
-		srand(unsigned int(time(nullptr)));
-
-		for (int i = FIRST_INDEX; i < t_monsters; ++i)
-		{
-			add_random_monsters(i);
-			respawn_monster(i);
-		}
-
-		PROMISE(m_zombie_count_ + m_orc_count_ + m_doremon_count_ == t_monsters);
-
-		std::cout << "World " << t_rows << "x" << t_columns << " grid created with "
-			<< t_monsters << " monsters spawn randomly." << std::endl;
-	}
-
-	World::~World()
-	{
-		puts("world destroyed.");
-	}
-
-	//___ public _______________________________________________________
-  void World::print_monster_list() const
+  World::World()
   {
-    std::cout << " --- List of all monsters in the fantasy world -----------" << std::endl
-      << "Total " << m_zombie_count_ + m_orc_count_ + m_doremon_count_ << " monsters" << std::endl
-      << m_zombie_count_ << " zombies." << std::endl
-      << m_orc_count_ << " orcs." << std::endl
-      << m_doremon_count_ << " doremons." << std::endl;
-  }
-  
-  void World::update()
-	{
-    m_console_cursor_ = m_console_start_cursor_;
+    m_console_ = std::make_unique<Console>();
+    m_console_->show();
 
-    if(m_player_)
+    m_map_ = std::make_shared<Map>();
+
+    const short MIDDLE_MAP = static_cast<short>(m_map_->SIZE) / 2;
+    m_player_ = std::make_unique<Unit>(PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
+      , PLAYER_MAX_HP, PLAYER_ATK, PLAYER_MAX_ATK, '&', { MIDDLE_MAP, MIDDLE_MAP });
+    m_map_->marked(m_player_->get_pos(), m_player_->get_id());
+    m_console_->marked(m_player_->get_pos(), m_player_->get_symbol());
+
+    read_monster_types();
+
+    for(auto i = 0; i < m_spawners_.size(); ++i)
     {
-      switch (m_is_restart_)
-      {
-      case false: break;
-      default: m_is_restart_ = false;
-        reset();
-        clean_console();
-        move_grid_cursor(m_player_->get_x(), m_player_->get_y());
-        return;
-      }
-      m_player_->update();
+      m_map_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_id());
+      m_console_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_symbol());
     }
 
-		for (auto it = m_monsters_.begin(); it != m_monsters_.end(); ++it)
-		{
-			(*it)->update();
-		}
-
-    clean_console();
-    move_grid_cursor(m_player_->get_x(), m_player_->get_y());
-	}
-
-	void World::create_player(const char* t_name, const int t_hp)
-	{
-		m_player_ = std::make_shared<Player>(*this, PLAYER_ID, t_name, t_hp);
-
-		for (auto it = m_monsters_.begin(); it != m_monsters_.end(); ++it)
-		{
-      (*it)->set_target(m_player_);
-		}
-
-    std::cout << m_player_->get_name() << " has logged in with " << t_hp << " health." << std::endl;
-	}
-
-  void World::create_player(const char* t_name, const int t_hp
-    , const char* t_weapon, const int t_attack_power)
-  {
-    m_player_ = std::make_shared<Player>(*this, PLAYER_ID, t_name, t_hp
-      , t_weapon, t_attack_power);
-    spawn_player();
-
-    for (auto it = m_monsters_.begin(); it != m_monsters_.end(); ++it)
-    {
-      (*it)->set_target(m_player_);
-    }
-
-    std::cout << m_player_->get_name() << " has logged in with " << t_hp << " health and "
-      << t_weapon << " attack power: " << t_attack_power << " as weapon." << std::endl;
+    spawners_spawn_monster();
   }
 
-  void World::respawn_monster(const int t_id)
-	{
-		REQUIRE(FIRST_INDEX <= t_id && t_id < static_cast<int>( m_monsters_.size() ) );
-
-    const auto WAS_SPAWNED_BEFORE = m_monsters_[t_id]->get_x() > NOT_ASSIGN;
-    switch (WAS_SPAWNED_BEFORE)
-    {
-      case true: switch (is_fighting_w_player(m_monsters_[t_id]))
-        {
-        case false: clear(m_monsters_[t_id]->get_x(), m_monsters_[t_id]->get_y()); break;
-        default: m_grid_[m_monsters_[t_id]->get_y()]->at(m_monsters_[t_id]->get_x()) = m_player_;
-
-          move_grid_cursor(m_monsters_[t_id]->get_x(), m_monsters_[t_id]->get_y());
-          m_player_->print_character();
-          std::cout << ' ';
-        } default:;
-    }
-
-		int spawn_x, spawn_y;
-		do
-		{
-      spawn_y = rand() % m_grid_.size();
-      spawn_x = rand() % m_grid_[FIRST_INDEX]->size();
-    } while (has_unit_on(spawn_x, spawn_y));
-
-    m_grid_[spawn_y]->at(spawn_x) = m_monsters_[t_id];
-    m_monsters_[t_id]->set_position(spawn_x, spawn_y);
-    m_monsters_[t_id]->set_full_hp();
-
-	  switch (is_grid_built())
-	  {
-    case true: move_grid_cursor(spawn_x, spawn_y);
-      m_monsters_[t_id]->print_character(); default:;
-	  }
-	}
-
-  void World::build_console()
-  { 
-    m_console_start_cursor_ = Menu_ui::get_cursor();
-    m_console_start_cursor_.X += SPACE_BEFORE_CONSOLE;
-    m_console_cursor_ = m_console_start_cursor_;
-    clean_console();
+  World::World(const World& t_to_copy)
+  {
+    copy_from(t_to_copy);
   }
 
-  void World::build_grid()
+  World& World::operator=(const World& t_to_copy)
   {
-    puts("  --------------------------------- THE GRID -----------------------------------------");
-    m_grid_start_cursor_ = Menu_ui::get_cursor();
-    ++m_grid_start_cursor_.X;
-    for (int row = FIRST_INDEX; row < static_cast<int>(m_grid_.size()); ++row)
-    {
-      for (int column = FIRST_INDEX; column < static_cast<int>(m_grid_[FIRST_INDEX]->size()); ++column)
-      {
-        std::cout << ' ';
-        switch (has_unit_on(column, row))
-        {
-        case false: std::cout << ". "; break;
-        default: const auto unit = m_grid_[row]->at(column).lock();
-          unit->print_character();
-          switch (is_fighting_w_player(unit))
-          {
-          case false: std::cout << ' '; break;
-          default: m_player_->print_character();
-          }
-        }//has_unit_on tile
-      }
-      puts("");
-    }//row
+    copy_from(t_to_copy);
+    return *this;
   }
 
-  void World::player_move(int t_x, int t_y)
+  //___ public _____________________________________________
+  void World::player_move(COORD t_move)
   {
-    t_x = Menu_ui::limit_interval(m_player_->get_x() + t_x, FIRST_INDEX, m_grid_[FIRST_INDEX]->size() - 1);
-    t_y = Menu_ui::limit_interval(m_player_->get_y() + t_y, FIRST_INDEX, m_grid_.size() - 1);
-
-    switch (is_player_fighting())
+    t_move.X = limit_interval(m_player_->get_pos().X + t_move.X, 0, m_map_->SIZE);
+    t_move.Y = limit_interval(m_player_->get_pos().Y + t_move.Y, 0, m_map_->SIZE);
+    //*******************
+    switch (m_map_->explore(m_player_->get_pos(), m_player_->get_id(), t_move))
     {
-    case false: clear(m_player_->get_x(), m_player_->get_y()); break;
+    case NO_UNIT: clear(m_player_->get_x(), m_player_->get_y()); break;
     default: move_grid_cursor(m_player_->get_x(), m_player_->get_y(), true);
       std::cout << ' ';
     }
@@ -213,188 +78,137 @@ namespace G6037599
     m_player_->print_character();
   }
 
-  void World::set_restart()
+  void World::move_cursor(COORD t_move)
   {
-    m_is_restart_ = true;
+    
   }
 
-  void World::open_console() const
+  void World::update()
   {
-    if (m_console_start_cursor_.X > NOT_ASSIGN)
+    switch (m_console_->update_minute())
     {
-      REQUIRE(m_console_cursor_.X > NOT_ASSIGN);
+    case m_console_->NOTHING: break;
+    case m_console_->HOUR_REACH: auto enemy_id = m_map_->has_battle(m_player_->get_pos());
+      switch (enemy_id)
+      {
+      case NO_UNIT: break;
+      default: for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
+        {
+          if (enemy_id <= (*it)->get_last_id())
+          {
+            (*it)->damaged(enemy_id, m_player_->find_atk());
 
-      Menu_ui::move_cursor(m_console_cursor_);
-    }
+            auto hp_left = m_player_->damaged((*it)->find_atk(enemy_id));
+            if (hp_left <= 0)
+            {
+              game_reset();
+            }
+            else
+            {
+              m_console_->set_player_hp(hp_left);
+            }
+          }//if monster in this spawner
+        }//for who in chart of the monster
+      }
+    default: monster_stronger();
+    }//switch update minute
   }
 
-  void World::end_console_line()
+  void World::exit() const
   {
-    if(m_console_start_cursor_.X <= NOT_ASSIGN)
-    {
-      return;
-    }
 
-    m_console_cursor_ = Menu_ui::get_cursor();
-
-    const auto CHARS_TO_REMOVE = 100;
-    while(m_console_cursor_.X <= CHARS_TO_REMOVE)
-    {
-      std::cout << ' ';
-      ++m_console_cursor_.X;
-    }
-
-    puts("");
-    for(int i = FIRST_INDEX; i < SPACE_BEFORE_CONSOLE; ++i)
-    {
-      std::cout << ' ';
-    }
-
-    m_console_cursor_ = Menu_ui::get_cursor();
   }
 
   //___ private _______________________________________________________
-  bool World::has_unit_on(const int t_x, const int t_y) const
+  char World::tokenize(const std::string& t_line, std::string& t_name
+    , std::string& t_dead_message, std::string& t_atk_name
+    , int& t_max_hp, int& t_atk, int& t_max_atk) const
   {
-    return !m_grid_[t_y]->at(t_x).expired();
+    std::istringstream string_cutter(t_line);
+    std::string token;
+    const auto TAB = '\t';
+    std::getline(string_cutter, t_name, TAB);
+    std::getline(string_cutter, t_dead_message, TAB);
+    std::getline(string_cutter, t_atk_name, TAB);
+
+    std::getline(string_cutter, token, TAB);
+    t_max_hp = std::stoi(token);
+    std::getline(string_cutter, token, TAB);
+    t_atk = std::stoi(token);
+    std::getline(string_cutter, token, TAB);
+    t_max_atk = std::stoi(token);
+
+    std::getline(string_cutter, token, TAB);
+    const auto TO_CHAR = 0;
+    return token[TO_CHAR];
   }
 
-  bool World::is_fighting_w_player(const std::shared_ptr<Unit> t_unit) const
+  void World::read_monster_types()
   {
-    if(m_player_)
+    std::ifstream file_reader(MONSTER_CONF_PATH);
+    REQUIRE(file_reader.is_open());
+
+    std::string line;
+    while (std::getline(file_reader, line))
     {
-      return t_unit->ID != m_player_->ID && t_unit->get_x() == m_player_->get_x()
-        && t_unit->get_y() == m_player_->get_y();
+      std::string name, dead_message, atk_name;
+      auto max_hp = 1, atk = 1, max_atk = 1;
+      auto symbol = tokenize(line, name, dead_message, atk_name, max_hp, atk, max_atk);
+
+      m_spawners_.push_back(std::make_unique<Spawn_point>(name, dead_message, atk_name
+        , max_hp, atk, max_atk, symbol, m_console_, m_map_, m_map_->random_unoccupied()));
     }
-    return false;
+    file_reader.close();
   }
 
-  bool World::is_player_fighting() const
+  void World::spawners_spawn_monster()
   {
-    REQUIRE(has_unit_on(m_player_->get_x(), m_player_->get_y()));
-    return m_grid_[m_player_->get_y()]->at(m_player_->get_x()).lock()->ID != m_player_->ID;
-  }
+    const auto HEIGHT_X_WIDTH = 2;
+    REQUIRE(0 < MONSTERS && MONSTERS <= m_map_->SIZE * HEIGHT_X_WIDTH);
 
-  bool World::is_grid_built() const
-  {
-    return m_grid_start_cursor_.X > NOT_ASSIGN;
-  }
+    srand(static_cast<unsigned int>(time(nullptr)));
 
-	void World::add_random_monsters(const int t_id)
-	{
-    enum Type
+    std::vector<int> each_type_random;
+    auto total_random = 0;
+    for (auto i = 0; i < m_spawners_.size(); ++i)
     {
-      TYPE_1 = 1, TYPE_2, TYPES
-    };
-		switch (rand() % TYPES)
-		{
-		case TYPE_1: m_monsters_.push_back(std::make_shared<Zombie>(*this, t_id) );
-			++m_zombie_count_;
-			break;
-		case TYPE_2: m_monsters_.push_back(std::make_shared<Orc>(*this, t_id));
-			++m_orc_count_;
-			break;
-		default: m_monsters_.push_back(std::make_shared<Doremon>(*this, t_id));
-			++m_doremon_count_;
-			break;
-		}
-	}
-
-  void World::spawn_player()
-  {
-    REQUIRE(m_player_);
-
-    const int MIDDLE_Y = m_grid_.size() / 2, MIDDLE_X = m_grid_[FIRST_INDEX]->size() / 2;
-    switch (has_unit_on(MIDDLE_X, MIDDLE_Y))
-    {
-      case false: break;
-      default: respawn_monster(m_grid_[MIDDLE_Y]->at(MIDDLE_X).lock()->ID);
+      each_type_random.push_back(rand() % MONSTERS);
+      total_random += each_type_random[i];
     }
-    m_grid_[MIDDLE_Y]->at(MIDDLE_X) = m_player_;
-    m_player_->set_position(MIDDLE_X, MIDDLE_Y);
+    total_random /= MONSTERS;
 
-    switch (is_grid_built())
+    for (auto i = 0; i < m_spawners_.size(); ++i)
     {
-      case true: move_grid_cursor(MIDDLE_X, MIDDLE_Y);
-        m_player_->print_character(); default:;
+      m_spawners_[i]->spawn(each_type_random[i] / total_random);
     }
   }
 
-  void World::clear(const int t_x, const int t_y)
+  void World::copy_from(const World& t_to_copy)
   {
-    REQUIRE(t_y < static_cast<int>(m_grid_.size()) && t_x < static_cast<int>(m_grid_[t_y]->size()));
+    *m_console_ = *t_to_copy.m_console_;
+    m_console_->show();
 
-    m_grid_[t_y]->at(t_x) = std::weak_ptr<Unit>();
+    *m_map_ = *t_to_copy.m_map_;
+    *m_player_ = *t_to_copy.m_player_;
 
-    move_grid_cursor(t_x, t_y);
-    std::cout << ". ";
-
-    PROMISE(m_grid_[t_y]->at(t_x).expired());
-  }
-
-  void World::reset()
-  {
-    REQUIRE(m_player_);
-
-    open_console();
-      std::cout << m_player_->get_name() << " has fallen !.";
-      end_console_line();
-    end_console_line();
-
-    const auto GRID_ROWS = static_cast<int>(m_grid_.size())
-	    , GRID_COLUMNS = static_cast<int>(m_grid_[FIRST_INDEX]->size());
-    for (int row = FIRST_INDEX; row < GRID_ROWS; ++row)
+    m_spawners_.clear();
+    for (auto i = 0; i < t_to_copy.m_spawners_.size(); ++i)
     {
-      for (int column = FIRST_INDEX; column < GRID_COLUMNS; ++column)
-      {
-        clear(column, row);
-      }
-    }
-
-    m_player_->set_full_hp();
-    spawn_player();
-
-    const int MONSTERS = m_monsters_.size();
-    m_monsters_.clear();
-
-    for (int i = FIRST_INDEX; i < MONSTERS; ++i)
-    {
-      add_random_monsters(i);
-      respawn_monster(i);
-      m_monsters_[i]->set_target(m_player_);
-    }
-
-    open_console();
-      std::cout << "game resetted.";
-    end_console_line();
-  }
-
-  void World::move_grid_cursor(const int t_x, const int t_y, const bool t_challenger) const
-  {
-    const auto TO_CHALLENGER_SLOT = 1;
-
-    switch(is_grid_built())
-    {
-      case true: Menu_ui::move_cursor(m_grid_start_cursor_.Y + t_y
-        , m_grid_start_cursor_.X + t_x * SPACE_BETWEEN_GRID 
-        + (t_challenger ? TO_CHALLENGER_SLOT : NONE)); default:;
+      m_spawners_.push_back( std::make_unique<Spawn_point>(*t_to_copy.m_spawners_[i]) );
     }
   }
 
-  void World::clean_console()
+  void World::monster_stronger()
   {
-    open_console();
-    const auto LAST_CONSOLE_ROW = m_console_start_cursor_.Y + CONSOLE_ROWS;
-    //0 player attack
-    //1 monster damaged
-    //2
-    //3 monster attack
-    //4 player damaged
-    //5 player dead message
-    while(m_console_cursor_.Y < LAST_CONSOLE_ROW)
+    for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
     {
-      end_console_line();
+      const auto PERCENT = 1;
+      (*it)->monster_stronger(PERCENT);
     }
   }
 
+  void World::game_reset()
+  {
+
+  }
 }//namespace G6037599

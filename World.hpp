@@ -1,55 +1,57 @@
-#ifndef FANTASY_WORLD_2_D
-#define FANTASY_WORLD_2_D
+#ifndef WORLD
+#define WORLD
 #pragma once
+#include "Map.hpp"
 
 namespace G6037599
 {
+  class Console;
   class Unit;
+  class Spawn_point;
+  class Map;
 
 	class World
 	{
 	public:
-    enum Starting_value { NOT_ASSIGN = -1, NONE };
+    static const char* MONSTER_CONF_PATH, * PLAYER_NAME;
+	  static const COORD UP, DOWN, LEFT, RIGHT, ZERO;
+    const enum Enum 
+	  { 
+	    PLAYER_MAX_HP = 50, PLAYER_ATK = 20, PLAYER_MAX_ATK = 22, MONSTERS = 101
+	  };
 
-		World(int t_monsters);
-		World(int t_rows, int t_columns, int t_monsters);
-		~World();
+    static short limit_interval(int t_number, int t_min, int t_max);
 
-    void print_monster_list() const;
+	  World();
+	  ~World() = default;
+    World(const World& t_to_copy);
+    World& operator=(const World& t_to_copy);
 
-	  void update()
-      , create_player(const char* t_name, int t_hp)
-      , create_player(const char* t_name, int t_hp, const char* t_weapon, int t_attack_power)
-      , respawn_monster(int t_id)
-      , build_console(), build_grid()
-      , player_move(int t_x, int t_y)
-      , set_restart();
-
-	  void open_console() const;
-    void end_console_line();
+	  void player_move(COORD t_move);
+	  void move_cursor(COORD t_move);
+	  void update();
+	  void exit() const;
 	private:
-		std::vector<std::unique_ptr<std::vector<std::weak_ptr<Unit> >> > m_grid_;
-		std::vector<std::shared_ptr<Unit> > m_monsters_;
-	  COORD m_console_start_cursor_ = { NOT_ASSIGN, NOT_ASSIGN }
-      , m_console_cursor_ = { NOT_ASSIGN, NOT_ASSIGN }
-    , m_grid_start_cursor_ = { NOT_ASSIGN, NOT_ASSIGN };
+    std::vector<std::unique_ptr<Spawn_point>> m_spawners_;
+    std::shared_ptr<Map> m_map_ = nullptr;
+    std::unique_ptr<Console> m_console_ = nullptr;
+    std::unique_ptr<Unit> m_player_ = nullptr;
 
-	  enum Special_value
-    {
-      PLAYER_ID = -1, FIRST_INDEX, SPACE_BEFORE_CONSOLE = 2, SPACE_BETWEEN_GRID, CONSOLE_ROWS = 6
-    };
-		std::shared_ptr<Unit> m_player_ = nullptr;
-		int m_zombie_count_ = NONE, m_orc_count_ = NONE, m_doremon_count_ = NONE;
-    bool m_is_restart_ = false;
-
-    bool has_unit_on(int t_x, int t_y) const
-      , is_fighting_w_player(std::shared_ptr<Unit> t_unit) const
-      , is_player_fighting() const, is_grid_built() const;
-
-		void add_random_monsters(int t_id), spawn_player()
-      , clear(int t_x, int t_y), reset();
-	  void move_grid_cursor(int t_x, int t_y, bool t_challenger = false) const;
-    void clean_console();
+    char tokenize(const std::string& t_line, std::string& t_name
+      , std::string& t_dead_message, std::string& t_atk_name
+      , int& t_max_hp, int& t_atk, int& t_max_atk) const;
+    void read_monster_types();
+    void spawners_spawn_monster();
+    void copy_from(const World& t_to_copy);
+    void monster_stronger();
 	};
+
+  const char* World::MONSTER_CONF_PATH = "monster_conf.txt";
+  const char* World::PLAYER_NAME = "NoOne The Hero";
+  const COORD World::UP = { 0, -1 };
+  const COORD World::DOWN = { 0, 1 };
+  const COORD World::LEFT = { -1, 0 };
+  const COORD World::RIGHT = { 1, 0 };
+  const COORD World::ZERO = { 0, 0 };
 }
-#endif //FANTASY_WORLD_2_D
+#endif //WORLD
