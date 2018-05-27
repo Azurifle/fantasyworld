@@ -33,8 +33,39 @@ namespace G6037599
   {
     REQUIRE(0 <= t_pos.X && t_pos.X < SIZE);
     REQUIRE(0 <= t_pos.Y && t_pos.Y < SIZE);
+    REQUIRE(t_id > NO_UNIT);
 
     m_grid_[t_pos.Y]->at(t_pos.X).owner_id = t_id;
+  }
+
+  bool Map::is_attacker(const COORD& t_pos, const int t_id) const
+  {
+    REQUIRE(0 <= t_pos.X && t_pos.X < SIZE);
+    REQUIRE(0 <= t_pos.Y && t_pos.Y < SIZE);
+
+    return m_grid_[t_pos.Y]->at(t_pos.X).attacker_id == t_id;
+  }
+
+  void Map::move(const COORD& t_from, const int t_id, const COORD& t_to)
+  {
+    REQUIRE(0 <= t_from.X && t_from.X < SIZE);
+    REQUIRE(0 <= t_from.Y && t_from.Y < SIZE);
+    REQUIRE(t_id > NO_UNIT);
+    REQUIRE(0 <= t_to.X && t_to.X < SIZE);
+    REQUIRE(0 <= t_to.Y && t_to.Y < SIZE);
+
+    switch (is_attacker(t_from, t_id))
+    {
+    case false: REQUIRE(m_grid_[t_from.Y]->at(t_from.X).owner_id == t_id);
+      m_grid_[t_from.Y]->at(t_from.X).owner_id = NO_UNIT;
+    default: m_grid_[t_from.Y]->at(t_from.X).attacker_id = NO_UNIT;;
+    }
+
+    switch (m_grid_[t_to.Y]->at(t_to.X).owner_id)
+    {
+    case NO_UNIT: m_grid_[t_to.Y]->at(t_to.X).owner_id = t_id; break;
+    default: m_grid_[t_to.Y]->at(t_to.X).attacker_id = t_id;
+    }
   }
 
   //___ private _______________________________________________________

@@ -14,4 +14,10 @@ namespace G6037599
     m_max_hp_ = t_to_copy.m_max_hp_;
     return *this;
   }
+
+  //___ public ________________________________________________
+  int Type_data::get_max_hp() const
+  {
+    return m_max_hp_;
+  }
 }//G6037599

@@ -16,6 +16,8 @@ namespace G6037599
     ~Type_data() = default;
     Type_data(const Type_data& t_to_copy) = default;
     Type_data& operator=(const Type_data& t_to_copy);
+
+    int get_max_hp() const;
   private:
     int m_max_hp_ = 0;
   };

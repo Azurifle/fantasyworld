@@ -13,12 +13,13 @@ namespace G6037599
   class Spawn_point
   {
   public:
-    Spawn_point(const char* t_name, const char* t_dead_message, const char* t_atk_name
-      , int t_max_hp, int t_atk, int t_max_atk, char t_symbol
+    Spawn_point(std::shared_ptr<Type_data> t_type
       , std::shared_ptr<Console> t_m_console, std::shared_ptr<Map> t_m_map);
     ~Spawn_point() = default;
     Spawn_point(const Spawn_point& t_to_copy);
     Spawn_point& operator=(const Spawn_point& t_to_copy);
+
+    COORD get_pos() const;
   private:
     std::vector<std::unique_ptr<Unit>> m_monsters_;
     std::shared_ptr<Type_data> m_type_ = nullptr;
@@ -27,6 +28,8 @@ namespace G6037599
     std::unique_ptr<Tile_data> m_tile_ = nullptr;
     const char* m_symbol_ = "XM";
     int m_monster_count_ = 0;
+
+    void copy_from(const Spawn_point& t_to_copy);
   };
 }//G6037599
 

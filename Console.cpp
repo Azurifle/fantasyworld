@@ -53,8 +53,6 @@ namespace G6037599
     cursor.X = static_cast<short>(Map::SIZE) * static_cast<short>(SPACE_BETWEEN_TILE) + TO_CURSOR_STATUS_COLUMN;
     cursor.Y += TO_CURSOR_STATUS_ROW;
     m_cursor_status_ = std::make_unique<Status_panel>(cursor);
-
-    show();
   }
 
   Console::Console(const Console& t_to_copy)
@@ -153,12 +151,118 @@ namespace G6037599
     }
   }
 
-  void Console::marked(const COORD& t_pos, const char t_symbol) const
+  void Console::marked(const COORD& t_pos, const char* t_symbol, const bool t_is_attacker) const
   {
     REQUIRE(0 <= t_pos.X && t_pos.X < Map::SIZE);
     REQUIRE(0 <= t_pos.Y && t_pos.Y < Map::SIZE);
-    
-    set_cursor({ m_map_start_.X + t_pos.X * static_cast<short>(SPACE_BETWEEN_TILE), m_map_start_.Y + t_pos.Y});
+
+    switch (t_is_attacker)
+    {
+    case false: set_cursor(find_map_cursor_pos(t_pos));
+      const auto SLOT_SIZE = 2;
+      REQUIRE(std::strlen(t_symbol) <= SLOT_SIZE); break;
+    default: const auto SLOT_ATTACKER = 1;
+      REQUIRE(std::strlen(t_symbol) <= SLOT_ATTACKER);
+      set_cursor(COORD{ find_map_cursor_pos(t_pos).X+ SLOT_ATTACKER
+        , find_map_cursor_pos(t_pos).Y });
+    }
     std::cout << t_symbol;
+
+    set_cursor(m_player_cursor_);
   }
+
+  void Console::move_player_cursor(const COORD& t_pos)
+  {
+    REQUIRE(0 <= t_pos.X && t_pos.X < Map::SIZE);
+    REQUIRE(0 <= t_pos.Y && t_pos.Y < Map::SIZE);
+
+    m_player_cursor_ = find_map_cursor_pos(t_pos);
+    set_cursor(m_player_cursor_);
+  }
+
+  int Console::update_minute() const
+  {
+    const int result = m_timer_->update_minute();
+    set_cursor(m_player_cursor_);
+    return result;
+  }
+
+  bool Console::update_hour() const
+  {
+    const bool result = m_timer_->update_hour();
+    set_cursor(m_player_cursor_);
+    return result;
+  }
+
+  void Console::hide_cursor_status() const
+  {
+    m_cursor_status_->hide();//keep bool alreay hide or not
+    set_cursor(m_player_cursor_);
+  }
+
+  void Console::update_cursor_status(const char* t_name, int t_hp, int t_max_hp, int t_atk, int t_max_atk) const
+  {
+    m_cursor_status_->update(t_name, t_hp, t_max_hp, t_atk, t_max_atk);
+    set_cursor(m_player_cursor_);
+  }
+
+  void Console::thanks_user() const
+  {
+    puts("");
+    puts("");
+    puts("");
+    puts("                      //////////////////// A Rich Fantasy World ///////////////////");
+    puts("");
+    puts("                                       By: Darlyn Sirikasem G6037599.");
+    puts("");
+    puts("");
+    puts("                                     THANK YOU FOR PLAYING THIS GAME !!!");
+    puts("");
+    puts("");
+    puts("                      ////////////////////////////////////////////////////////////");
+    puts("");
+    puts("");
+    puts("   Press <Any key> = exit ");
+  }
+
+  void Console::show_game_reset() const
+  {
+    set_cursor(m_map_start_);//*****************
+    const auto WIDTH = 65;
+    std::cout << std::setw(WIDTH) << std::setfill('/');
+    std::cout << std::setw(WIDTH) << std::setfill(' ');
+    std::cout << "             \" "<< World::PLAYER_NAME <<" \" has fallen." 
+      << std::setw(WIDTH) << std::setfill(' ');;
+    std::cout << "                                                                ";
+    std::cout << "                       Game reset in 3.                         ";
+    std::cout << "                                                                ";
+    std::cout << "////////////////////////////////////////////////////////////////";
+  }
+
+  void Console::show_game_reset(int t_count_down) const
+  {
+  }
+
+  void Console::set_player_full_hp() const
+  {
+    m_player_hp_->set_full_hp();
+  }
+
+  void Console::set_player_hp(int t_hp) const
+  {
+    REQUIRE(0 <= t_hp);
+
+    m_player_hp_->set_hp(t_hp);
+    set_cursor(m_player_cursor_);
+  }
+
+  //___ private _______________________________________________________
+  COORD Console::find_map_cursor_pos(const COORD& t_pos) const
+  {
+    REQUIRE(0 <= t_pos.X && t_pos.X < Map::SIZE);
+    REQUIRE(0 <= t_pos.Y && t_pos.Y < Map::SIZE);
+
+    return COORD{ m_map_start_.X + t_pos.X * SPACE_BETWEEN_TILE, m_map_start_.Y + t_pos.Y };
+  }
+
 }//G6037599

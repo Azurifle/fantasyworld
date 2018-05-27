@@ -3,7 +3,9 @@
 #include "Console.hpp"
 #include "Map.hpp"
 #include "Unit.hpp"
+#include "Type_data.hpp"
 #include "Spawn_point.hpp"
+#include "Timer.hpp"
 
 namespace G6037599
 {
@@ -17,6 +19,24 @@ namespace G6037599
     return static_cast<short>(t_number);
   }
 
+  int World::wait_key(const int t_miliseconds)
+  {
+    const auto TIME_UP = clock() + t_miliseconds;
+    do
+    {
+      switch (_kbhit())
+      {
+      case NO_KEY_PRESS: break;
+      default: return _getch();
+      }
+
+      const auto HALF_SECOND = 500;
+      Sleep(HALF_SECOND);
+    } while (clock() < TIME_UP);
+
+    return NO_KEY_PRESS;
+  }
+
   //___ (de)constructors _____________________________________________
   World::World()
   {
@@ -25,11 +45,14 @@ namespace G6037599
 
     m_map_ = std::make_shared<Map>();
 
-    const short MIDDLE_MAP = static_cast<short>(m_map_->SIZE) / 2;
-    m_player_ = std::make_unique<Unit>(PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
-      , PLAYER_MAX_HP, PLAYER_ATK, PLAYER_MAX_ATK, '&', { MIDDLE_MAP, MIDDLE_MAP });
+    m_player_ = std::make_unique<Unit>(std::make_shared<Type_data>(
+        PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
+        , PLAYER_MAX_HP, PLAYER_ATK, PLAYER_MAX_ATK, '&') );
+    m_player_->set_pos(COORD{ Map::MIDDLE, Map::MIDDLE });
+
     m_map_->marked(m_player_->get_pos(), m_player_->get_id());
-    m_console_->marked(m_player_->get_pos(), m_player_->get_symbol());
+    m_console_->move_player_cursor(m_player_->get_pos());
+    m_console_->marked(m_player_->get_pos(), std::string(1, m_player_->get_symbol()).c_str() );
 
     read_monster_types();
 
@@ -37,7 +60,6 @@ namespace G6037599
 
     spawn_spawners();
     spawners_spawn_monster();
-    m_console_->move_cursor(m_player_->get_pos());
   }
 
   World::World(const World& t_to_copy)
@@ -66,27 +88,29 @@ namespace G6037599
       }
     }
 
-    switch (m_map_->is_attacker(m_player_->get_pos(), m_player_.get_id()))
+    switch (m_map_->is_attacker(m_player_->get_pos(), m_player_->get_id()))
     {
-    case false: m_console_->clear_owner(m_player_->get_pos());
-    default: m_console_->clear_attacker(m_player_->get_pos());
+    case false: m_console_->marked(m_player_->get_pos(), " ");
+    default: m_console_->marked(m_player_->get_pos(), " ", true);
     }
-    m_map_->move(m_player_->get_pos(), m_player_.get_id(), t_move);
+    m_map_->move(m_player_->get_pos(), m_player_->get_id(), t_move);
+    m_console_->marked(t_move, std::string(1, m_player_->get_symbol()).c_str());
 
     switch (m_console_->update_hour())
     {
     case false: check_battle(); break;
     default: monster_stronger();
-    }//switch update minute
+    }//switch update_hour
   }
 
   void World::move_cursor(const COORD& t_move)
   {
-    m_cursor_pos_.X = limit_interval(m_cursor_pos_.X + t_move.X, 0, m_map_->SIZE);
-    m_cursor_pos_.Y = limit_interval(m_cursor_pos_.Y + t_move.Y, 0, m_map_->SIZE);
+    m_player_cursor_pos_.X = limit_interval(m_player_cursor_pos_.X + t_move.X, 0, m_map_->SIZE);
+    m_player_cursor_pos_.Y = limit_interval(m_player_cursor_pos_.Y + t_move.Y, 0, m_map_->SIZE);
+    m_console_->move_player_cursor(m_player_cursor_pos_);
     
-    auto enemy_id = m_map_->get(m_cursor_pos_);
-    if(enemy_id <= NO_UNIT || enemy_id == m_player_->get_id())
+    auto enemy_id = m_map_->get(m_player_cursor_pos_);
+    if(enemy_id <= m_map_->NO_UNIT || enemy_id == m_player_->get_id())
     {
       m_console_->hide_cursor_status();
     }
@@ -105,7 +129,7 @@ namespace G6037599
       {
         if (enemy_id <= (*it)->get_last_id())
         {
-          m_console_->show_cursor_status((*it)->get_type_name(), (*it)->get_hp(enemy_id)
+          m_console_->update_cursor_status((*it)->get_type_name(), (*it)->get_hp(enemy_id)
             , (*it)->get_type_max_hp(), (*it)->get_type_atk(), (*it)->get_type_max_atk());
           break;
         }//if this spawner manage this monster
@@ -117,39 +141,42 @@ namespace G6037599
   {
     switch (m_console_->update_minute())
     {
-    case m_console_->NOT_REACH: break;
-    case m_console_->HOUR_REACH: check_battle(); break;
+    case Timer::NOT_REACH: break;
+    case Timer::HOUR_REACH: check_battle(); break;
     default: monster_stronger();
     }//switch update minute
   }
 
   void World::exit() const
   {
-    m_console_->exit();
+    system("CLS");
+    m_console_->thanks_user();
+    _getch();
+    _getch();
   }
 
   //___ private _______________________________________________________
-  char World::tokenize(const std::string& t_line, std::string& t_name
-    , std::string& t_dead_message, std::string& t_atk_name
-    , int& t_max_hp, int& t_atk, int& t_max_atk) const
+  std::shared_ptr<Type_data> World::tokenize(const std::string& t_line) const
   {
     std::istringstream string_cutter(t_line);
-    std::string token;
+    std::string token, name, dead_message, atk_name;
     const auto TAB = '\t';
-    std::getline(string_cutter, t_name, TAB);
-    std::getline(string_cutter, t_dead_message, TAB);
-    std::getline(string_cutter, t_atk_name, TAB);
+    std::getline(string_cutter, name, TAB);
+    std::getline(string_cutter, dead_message, TAB);
+    std::getline(string_cutter, atk_name, TAB);
 
     std::getline(string_cutter, token, TAB);
-    t_max_hp = std::stoi(token);
+    auto max_hp = std::stoi(token);
     std::getline(string_cutter, token, TAB);
-    t_atk = std::stoi(token);
+    auto atk = std::stoi(token);
     std::getline(string_cutter, token, TAB);
-    t_max_atk = std::stoi(token);
+    auto max_atk = std::stoi(token);
 
     std::getline(string_cutter, token, TAB);
     const auto TO_CHAR = 0;
-    return token[TO_CHAR];
+
+    return std::make_shared<Type_data>(name.c_str(), dead_message.c_str(), atk_name.c_str()
+      , max_hp, atk, max_atk, token[TO_CHAR]);
   }
 
   void World::read_monster_types()
@@ -160,12 +187,7 @@ namespace G6037599
     std::string line;
     while (std::getline(file_reader, line))
     {
-      std::string name, dead_message, atk_name;
-      auto max_hp = 1, atk = 1, max_atk = 1;
-      auto symbol = tokenize(line, name, dead_message, atk_name, max_hp, atk, max_atk);
-
-      m_spawners_.push_back(std::make_unique<Spawn_point>(name.c_str(), dead_message.c_str(), atk_name.c_str()
-        , max_hp, atk, max_atk, symbol, m_console_, m_map_));
+      m_spawners_.push_back(std::make_unique<Spawn_point>( tokenize(line), m_console_, m_map_));
     }
     file_reader.close();
   }
@@ -177,14 +199,14 @@ namespace G6037599
 
     std::vector<int> each_type_random;
     auto total_random = 0;
-    for (auto i = 0; i < m_spawners_.size(); ++i)
+    for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
       each_type_random.push_back(rand() % MONSTERS);
       total_random += each_type_random[i];
     }
     total_random /= MONSTERS;
 
-    for (auto i = 0; i < m_spawners_.size(); ++i)
+    for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
       m_spawners_[i]->spawn(each_type_random[i] / total_random);
     }
@@ -199,10 +221,12 @@ namespace G6037599
     *m_player_ = *t_to_copy.m_player_;
 
     m_spawners_.clear();
-    for (auto i = 0; i < t_to_copy.m_spawners_.size(); ++i)
+    for (unsigned i = 0; i < t_to_copy.m_spawners_.size(); ++i)
     {
       m_spawners_.push_back( std::make_unique<Spawn_point>(*t_to_copy.m_spawners_[i]) );
     }
+
+    m_console_->move_player_cursor(m_player_->get_pos());
   }
 
   void World::monster_stronger()
@@ -216,12 +240,25 @@ namespace G6037599
 
   void World::game_reset()
   {
+    const auto THREE_SECOND = 3000, COUNT_DOWN = 3, ONE_SECOND = 1000;
+    wait_key(THREE_SECOND);
+
     m_console_->show_game_reset();
+    for(auto i = COUNT_DOWN; i > 0; --i)
+    {
+      m_console_->show_game_reset(i);
+      switch (wait_key(ONE_SECOND))
+      {
+        case NO_KEY_PRESS: break;
+        default: i = 0;
+          system("CLS");
+          m_console_->show();
+      }
+    }
 
     m_map_->reset();
 
-    const short MIDDLE_MAP = static_cast<short>(m_map_->SIZE) / 2;
-    m_player_->set_pos({ MIDDLE_MAP , MIDDLE_MAP });
+    m_player_->set_pos(COORD{ Map::MIDDLE , Map::MIDDLE });
     m_player_->set_full_hp();
     m_map_->marked(m_player_->get_pos(), m_player_->get_id());
     m_console_->marked(m_player_->get_pos(), m_player_->get_symbol());
@@ -229,23 +266,15 @@ namespace G6037599
 
     spawn_spawners();
     spawners_spawn_monster();
-    m_console_->move_cursor(m_player_->get_pos());
+    m_console_->move_player_cursor(m_player_->get_pos());
   }
 
   void World::check_battle()
   {
-    switch (m_is_reset_)
-    {
-    case false: break;
-    default: m_is_reset_ = false;
-      game_reset();
-      return;
-    }
-
     auto enemy_id = m_map_->has_battle(m_player_->get_pos());
     switch (enemy_id)
     {
-    case NO_UNIT: break;
+    case Map::NO_UNIT: break;
     default: for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
       {
         if (enemy_id <= (*it)->get_last_id())
@@ -253,15 +282,8 @@ namespace G6037599
           (*it)->damaged(enemy_id, m_player_->find_atk());
 
           auto hp_left = m_player_->damaged((*it)->find_atk(enemy_id));
-          if (hp_left <= 0)
-          {
-            m_is_reset_ = true;
-          }
-          else
-          {
-            m_console_->set_player_hp(hp_left);
-          }
-          break;
+          m_console_->set_player_hp(hp_left);
+          switch (hp_left) { case 0: game_reset(); default:; }
         }//if this spawner manage this monster
       }
     }//switch enemy_id
@@ -269,7 +291,7 @@ namespace G6037599
 
   void World::spawn_spawners()
   {
-    for (auto i = 0; i < m_spawners_.size(); ++i)
+    for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
       m_spawners_[i]->set_pos(m_map_->random_unoccupied());
       m_map_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_id());

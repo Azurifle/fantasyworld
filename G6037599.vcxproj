@@ -152,6 +152,7 @@
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Spawn_point.hpp" />
     <ClInclude Include="Status_panel.hpp" />
+    <ClInclude Include="Tile_data.hpp" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="Type_data.hpp" />
     <ClInclude Include="Unit.hpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Spawn_point.cpp" />
     <ClCompile Include="Status_panel.cpp" />
+    <ClCompile Include="Tile_data.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Type_data.cpp" />
     <ClCompile Include="Unit.cpp" />

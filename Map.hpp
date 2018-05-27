@@ -4,13 +4,14 @@
 
 namespace G6037599
 {
-  static const int NO_UNIT = -1;
-  struct Tile { int owner_id = NO_UNIT, attacker_id = NO_UNIT; };
-
   class Map
   {
   public:
-    const enum Enum { SIZE = 30 };
+    const enum Enum 
+    { 
+      NO_UNIT = -1, SIZE = 30, MIDDLE = SIZE / 2
+    };
+    struct Tile { int owner_id = NO_UNIT, attacker_id = NO_UNIT; };
 
     Map();
     ~Map() = default;
@@ -18,6 +19,8 @@ namespace G6037599
     Map& operator=(const Map& t_to_copy);
 
     void marked(const COORD& t_pos, int t_id);
+    bool is_attacker(const COORD& t_pos, int t_id) const;
+    void move(const COORD& t_from, int t_id, const COORD& t_to);
   private:
     std::vector<std::unique_ptr< std::vector<Tile> >> m_grid_;
 
