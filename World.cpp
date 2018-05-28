@@ -98,7 +98,7 @@ namespace G6037599
 
     switch (m_console_->update_hour())
     {
-    case false: check_battle(); break;
+    case Timer::HOUR_REACH: check_battle(); break;
     default: monster_stronger();
     }//switch update_hour
   }

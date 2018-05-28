@@ -7,50 +7,29 @@ namespace G6037599
   //___ (de)constructors _____________________________________________
   Hp_bar::Hp_bar(const COORD& t_pos) : m_start_(t_pos) {}
 
-  Hp_bar::Hp_bar(const Hp_bar& t_to_copy)
+  //___ public _____________________________________________
+  COORD Hp_bar::get_pos() const
   {
-    m_start_ = t_to_copy.m_start_;
-    m_hp_ = t_to_copy.m_hp_;
-    m_max_hp_ = t_to_copy.m_max_hp_;
+    return m_start_;
   }
 
-  Hp_bar& Hp_bar::operator=(const Hp_bar& t_to_copy)
+  void Hp_bar::set(const int t_hp, const int t_max_hp) const
   {
-    m_start_ = t_to_copy.m_start_;
-    m_hp_ = t_to_copy.m_hp_;
-    m_max_hp_ = t_to_copy.m_max_hp_;
-    return *this;
-  }
+    const auto HP_DISPLAY_LIMIT = 1000;
+    REQUIRE(0 <= t_hp && t_hp <= t_max_hp && t_max_hp < HP_DISPLAY_LIMIT);
 
-  void Hp_bar::show() const
-  {
     Console::set_cursor(m_start_);
     std::cout << '[';
     const auto MAX_BAR = 6;
-    auto bar_left = MAX_BAR * m_hp_ / m_max_hp_;
+    auto bar_left = MAX_BAR * t_hp / t_max_hp;
 
     bar_left = print_half_bar(bar_left);
 
-    std::cout << "HP:" << m_hp_ << '/' << m_max_hp_;
+    std::cout << "HP:" << t_hp << '/' << t_max_hp;
 
     print_half_bar(bar_left);
 
     std::cout << ']';
-  }
-
-  //___ public _____________________________________________
-  void Hp_bar::increase_max(const int t_increase)
-  {
-    const auto HP_DISPLAY_LIMIT = 999;
-    REQUIRE(0 < t_increase && m_max_hp_+t_increase <= HP_DISPLAY_LIMIT);
-
-    m_max_hp_ += t_increase;
-    m_hp_ += t_increase;
-  }
-
-  COORD Hp_bar::get_pos() const
-  {
-    return m_start_;
   }
 
   //___ private static _____________________________________________

@@ -19,13 +19,13 @@ namespace G6037599
     Status_panel(const Status_panel& t_to_copy);
     Status_panel& operator=(const Status_panel& t_to_copy);
 
-    void show() const;
     COORD get_pos() const;
+    void show(const char* t_name, int t_hp, int t_max_hp, int t_atk, int t_max_atk);
+    void hide();
   private:
     COORD m_start_ = {0, 0};
-    std::string m_name_ = std::string("");
     std::unique_ptr<Hp_bar> m_hp_ = nullptr;
-    int m_atk_ = 0, m_max_atk_ = 0;
+    bool m_is_hide_ = true;
   };
 }//G6037599
 

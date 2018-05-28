@@ -9,6 +9,8 @@
 namespace G6037599
 {
   //___ static _______________________________________________________
+  const int POP_UP_PANEL_WIDTH = 65;
+
   COORD Console::get_cursor()
   {
     CONSOLE_SCREEN_BUFFER_INFO console_info;
@@ -23,6 +25,14 @@ namespace G6037599
   void Console::set_cursor(const COORD& t_pos)
   {
     PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), t_pos));
+  }
+
+  void Console::print_centered_text(const int t_width, const char* t_message, const char t_delim)
+  {
+    const auto SPACE_BEFORE = (t_width - std::strlen(t_message)) / 2
+      , SPACE_AFTER = SPACE_BEFORE + SPACE_BEFORE % 2;
+    std::cout << std::setw(SPACE_BEFORE) << std::setfill(t_delim);
+    std::cout << t_message << std::setw(SPACE_AFTER) << std::setfill(t_delim);
   }
 
   //___ (de)constructors _____________________________________________
@@ -44,15 +54,23 @@ namespace G6037599
     ++cursor.Y;
     m_timer_ = std::make_unique<Timer>(cursor);
 
-    const short TO_PLAYER_HP_BAR = 3, PLAYER_MAX_HP = 50;
+    const short TO_PLAYER_HP_BAR = 3;
     cursor.X += static_cast<short>(m_timer_->WIDTH) + TO_PLAYER_HP_BAR;
     m_player_hp_ = std::make_unique<Hp_bar>(cursor);
-    m_player_hp_->increase_max(PLAYER_MAX_HP);
 
     const short TO_CURSOR_STATUS_COLUMN = 3, TO_CURSOR_STATUS_ROW = 11;
     cursor.X = static_cast<short>(Map::SIZE) * static_cast<short>(SPACE_BETWEEN_TILE) + TO_CURSOR_STATUS_COLUMN;
     cursor.Y += TO_CURSOR_STATUS_ROW;
     m_cursor_status_ = std::make_unique<Status_panel>(cursor);
+
+    m_pop_up_panel_cursor_ = find_map_cursor_pos({ Map::MIDDLE / 2, Map::MIDDLE / 2 });
+    cursor = m_pop_up_panel_cursor_;
+    
+    const auto SPACE_BEFORE = (POP_UP_PANEL_WIDTH - std::strlen(GAME_RESET_MESSAGE)) / 2
+      , SPACE_AFTER = SPACE_BEFORE + SPACE_BEFORE % 2;
+    const auto GAME_RESET_ROW = 4, BACK_TO_COUNT_DOWN_NUM = 1;
+    m_game_reset_count_down_cursor_ = COORD{ cursor.X - SPACE_AFTER - BACK_TO_COUNT_DOWN_NUM
+      , cursor.Y + GAME_RESET_ROW };
   }
 
   Console::Console(const Console& t_to_copy)
@@ -125,7 +143,7 @@ namespace G6037599
     ++cursor.Y;
     set_cursor(cursor);
     std::cout << '|';
-    m_player_hp_->show();
+    m_player_hp_->set(World::PLAYER_MAX_HP, World::PLAYER_MAX_HP);
     std::cout << " |";
 
     ++cursor.Y;
@@ -202,16 +220,16 @@ namespace G6037599
 
   void Console::update_cursor_status(const char* t_name, int t_hp, int t_max_hp, int t_atk, int t_max_atk) const
   {
-    m_cursor_status_->update(t_name, t_hp, t_max_hp, t_atk, t_max_atk);
+    m_cursor_status_->show(t_name, t_hp, t_max_hp, t_atk, t_max_atk);
     set_cursor(m_player_cursor_);
   }
 
-  void Console::thanks_user() const
+  void Console::thanks_user()
   {
     puts("");
     puts("");
     puts("");
-    puts("                      //////////////////// A Rich Fantasy World ///////////////////");
+    puts("                      ////////////////////// Rich Fantasy World ///////////////////");
     puts("");
     puts("                                       By: Darlyn Sirikasem G6037599.");
     puts("");
@@ -227,32 +245,54 @@ namespace G6037599
 
   void Console::show_game_reset() const
   {
-    set_cursor(m_map_start_);//*****************
-    const auto WIDTH = 65;
-    std::cout << std::setw(WIDTH) << std::setfill('/');
-    std::cout << std::setw(WIDTH) << std::setfill(' ');
-    std::cout << "             \" "<< World::PLAYER_NAME <<" \" has fallen." 
-      << std::setw(WIDTH) << std::setfill(' ');;
-    std::cout << "                                                                ";
-    std::cout << "                       Game reset in 3.                         ";
-    std::cout << "                                                                ";
-    std::cout << "////////////////////////////////////////////////////////////////";
+    auto cursor = m_pop_up_panel_cursor_;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill('/');
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ');
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    print_centered_text(POP_UP_PANEL_WIDTH,
+      (std::string("\" ") + World::PLAYER_NAME + std::string(" \" has fallen.")).c_str()
+      , ' ');
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ');
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    print_centered_text(POP_UP_PANEL_WIDTH, GAME_RESET_MESSAGE, ' ');
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ');
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill('/');
   }
 
-  void Console::show_game_reset(int t_count_down) const
+  void Console::show_game_reset(const int t_count_down) const
   {
+    set_cursor(m_game_reset_count_down_cursor_);
+    std::cout << t_count_down;
   }
 
   void Console::set_player_full_hp() const
   {
-    m_player_hp_->set_full_hp();
+    m_player_hp_->set(World::PLAYER_MAX_HP, World::PLAYER_MAX_HP);
   }
 
-  void Console::set_player_hp(int t_hp) const
+  void Console::set_player_hp(const int t_hp) const
   {
-    REQUIRE(0 <= t_hp);
+    REQUIRE(0 <= t_hp && t_hp <= World::PLAYER_MAX_HP);
 
-    m_player_hp_->set_hp(t_hp);
+    m_player_hp_->set(t_hp, World::PLAYER_MAX_HP);
     set_cursor(m_player_cursor_);
   }
 

@@ -12,10 +12,12 @@ namespace G6037599
   {
   public:
     const enum Enum { SPACE_BETWEEN_TILE = 3 };
+    static const int POP_UP_PANEL_WIDTH;
 
     static COORD get_cursor();
     static void set_cursor(const COORD& t_pos);
-
+    static void print_centered_text(int t_width, const char* t_message, char t_delim);
+    
     Console();
     ~Console() = default;
     Console(const Console& t_to_copy);
@@ -31,13 +33,15 @@ namespace G6037599
     void hide_cursor_status() const;
     void update_cursor_status(const char* t_name
       , int t_hp, int t_max_hp, int t_atk, int t_max_atk) const;
-    void thanks_user() const;
+    static void thanks_user();
     void show_game_reset() const;
     void show_game_reset(int t_count_down) const;
     void set_player_full_hp() const;
     void set_player_hp(int t_hp) const;
   private:
-    COORD m_map_start_ = { 0, 0 }, m_player_cursor_ = { 0, 0 };
+    const char* GAME_RESET_MESSAGE = "Game reset in ?.";
+    COORD m_map_start_ = { 0, 0 }, m_player_cursor_ = { 0, 0 }
+      , m_pop_up_panel_cursor_ = {0, 0}, m_game_reset_count_down_cursor_ = { 0, 0 };
     std::unique_ptr<Status_panel> m_monster_status_ = nullptr;
     std::unique_ptr<Status_panel> m_cursor_status_ = nullptr;
     std::unique_ptr<Hp_bar> m_player_hp_ = nullptr;

@@ -16,45 +16,58 @@ namespace G6037599
   Status_panel::Status_panel(const Status_panel& t_to_copy)
   {
     m_start_ = t_to_copy.m_start_;
-    m_name_ = t_to_copy.m_name_;
     *m_hp_ = *t_to_copy.m_hp_;
-    m_atk_ = t_to_copy.m_atk_;
-    m_max_atk_ = t_to_copy.m_max_atk_;
   }
 
   Status_panel& Status_panel::operator=(const Status_panel& t_to_copy)
   {
     m_start_ = t_to_copy.m_start_;
-    m_name_ = t_to_copy.m_name_;
     *m_hp_ = *t_to_copy.m_hp_;
-    m_atk_ = t_to_copy.m_atk_;
-    m_max_atk_ = t_to_copy.m_max_atk_;
     return *this;
   }
 
   //___ public _______________________________________________________
-  void Status_panel::show() const
+  COORD Status_panel::get_pos() const
   {
+    return m_start_;
+  }
+
+  void Status_panel::show(const char* t_name, const int t_hp
+    , const int t_max_hp, const int t_atk, const int t_max_atk)
+  {
+    m_is_hide_ = false;
+
     auto cursor = m_start_;
     Console::set_cursor(cursor);
-    std::cout << "-- " << m_name_ << " ";
+    std::cout << "-- " << t_name << " ";
     std::cout << std::setw(cursor.X + WIDTH - Console::get_cursor().X) << std::setfill('-');
 
-    m_hp_->show();
+    m_hp_->set(t_hp, t_max_hp);
 
     const auto ROW_ATK = 2;
     cursor.Y += ROW_ATK;
     ++cursor.X;
     Console::set_cursor(cursor);
-    std::cout << "ATK: " << m_atk_ << " - " << m_max_atk_;
+    std::cout << "ATK: " << t_atk << " - " << t_max_atk;
 
     ++cursor.Y;
     Console::set_cursor(cursor);
     std::cout << std::setw(WIDTH) << std::setfill('-');
   }
 
-  COORD Status_panel::get_pos() const
+  void Status_panel::hide()
   {
-    return m_start_;
+    switch (m_is_hide_)
+    {
+      case true: return; 
+      default: m_is_hide_ = true;
+    }
+
+    for(auto cursor = m_start_; cursor.Y < m_start_.Y+HIEGHT; ++cursor.Y)
+    {
+      Console::set_cursor(cursor);
+      std::cout << std::setw(WIDTH) << std::setfill(' ');
+    }//for clear Status_panel
   }
+
 }//G6037599
