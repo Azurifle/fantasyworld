@@ -189,7 +189,8 @@ namespace G6037599
     m_spawners_.clear();
     for (unsigned i = 0; i < t_to_copy.m_spawners_.size(); ++i)
     {
-      m_spawners_.push_back(std::make_unique<Spawn_point>(*t_to_copy.m_spawners_[i]));
+      m_spawners_.push_back(std::make_unique<Spawn_to<Unit>>(
+        t_to_copy.m_spawners_[i]->share_type(), m_console_, m_map_) );
     }
 
     m_console_->move_player_cursor(m_player_->get_pos());

@@ -1,12 +1,12 @@
 #ifndef WORLD
 #define WORLD
 #pragma once
+#include "Unit.hpp"
+#include "Spawn_point.hpp"
 
 namespace G6037599
 {
   class Console;
-  class Unit;
-  class Spawn_point;
   class Map;
   class Type_data;
 

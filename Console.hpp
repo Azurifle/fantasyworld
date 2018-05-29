@@ -11,8 +11,7 @@ namespace G6037599
   class Console
   {
   public:
-    const enum Enum { SPACE_BETWEEN_TILE = 3 };
-    static const int POP_UP_PANEL_WIDTH;
+    const enum Enum { SPACE_BETWEEN_TILE = 3, POP_UP_PANEL_WIDTH = 65 };
 
     static COORD get_cursor();
     static void set_cursor(const COORD& t_pos);

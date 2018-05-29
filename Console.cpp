@@ -9,8 +9,6 @@
 namespace G6037599
 {
   //___ static _______________________________________________________
-  const int POP_UP_PANEL_WIDTH = 65;
-
   COORD Console::get_cursor()
   {
     CONSOLE_SCREEN_BUFFER_INFO console_info;
@@ -46,8 +44,7 @@ namespace G6037599
     ++cursor.X;
     m_monster_status_ = std::make_unique<Status_panel>(cursor);
 
-    const short FIRST_COLUMN = 0;
-    m_map_start_ = { FIRST_COLUMN, cursor.Y + static_cast<short>(m_monster_status_->HIEGHT)};
+    m_map_start_ = { 0, cursor.Y + static_cast<short>(m_monster_status_->HIEGHT)};
 
     const short TO_TIMER_PANEL = 1;
     cursor.X += static_cast<short>(m_monster_status_->WIDTH) + TO_TIMER_PANEL;
@@ -59,17 +56,16 @@ namespace G6037599
     m_player_hp_ = std::make_unique<Hp_bar>(cursor);
 
     const short TO_CURSOR_STATUS_COLUMN = 3, TO_CURSOR_STATUS_ROW = 11;
-    cursor.X = static_cast<short>(Map::SIZE) * static_cast<short>(SPACE_BETWEEN_TILE) + TO_CURSOR_STATUS_COLUMN;
+    cursor.X = Map::SIZE * SPACE_BETWEEN_TILE + TO_CURSOR_STATUS_COLUMN;
     cursor.Y += TO_CURSOR_STATUS_ROW;
     m_cursor_status_ = std::make_unique<Status_panel>(cursor);
 
     m_pop_up_panel_cursor_ = find_map_cursor_pos({ Map::MIDDLE / 2, Map::MIDDLE / 2 });
     cursor = m_pop_up_panel_cursor_;
     
-    const auto SPACE_BEFORE = (POP_UP_PANEL_WIDTH - std::strlen(GAME_RESET_MESSAGE)) / 2
-      , SPACE_AFTER = SPACE_BEFORE + SPACE_BEFORE % 2;
-    const auto GAME_RESET_ROW = 4, BACK_TO_COUNT_DOWN_NUM = 1;
-    m_game_reset_count_down_cursor_ = COORD{ cursor.X - SPACE_AFTER - BACK_TO_COUNT_DOWN_NUM
+    const short SPACE_BEFORE = (POP_UP_PANEL_WIDTH - static_cast<short>( std::strlen(GAME_RESET_MESSAGE) ) ) / 2
+      , SPACE_AFTER = SPACE_BEFORE + SPACE_BEFORE % 2, GAME_RESET_ROW = 4;
+    m_game_reset_count_down_cursor_ = COORD{ cursor.X - SPACE_AFTER - 1
       , cursor.Y + GAME_RESET_ROW };
   }
 
@@ -174,10 +170,10 @@ namespace G6037599
     REQUIRE(0 <= t_pos.X && t_pos.X < Map::SIZE);
     REQUIRE(0 <= t_pos.Y && t_pos.Y < Map::SIZE);
 
+    const auto SLOT_SIZE = 2;
     switch (t_is_attacker)
     {
     case false: set_cursor(find_map_cursor_pos(t_pos));
-      const auto SLOT_SIZE = 2;
       REQUIRE(std::strlen(t_symbol) <= SLOT_SIZE); break;
     default: const auto SLOT_ATTACKER = 1;
       REQUIRE(std::strlen(t_symbol) <= SLOT_ATTACKER);

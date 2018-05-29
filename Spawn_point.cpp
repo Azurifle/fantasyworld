@@ -73,6 +73,11 @@ namespace G6037599
     return m_symbol_;
   }
 
+  std::shared_ptr<Type_data> Spawn_point::share_type() const
+  {
+    return m_type_;
+  }
+
   void Spawn_point::set_pos(const COORD& t_pos) const
   {
     m_tile_->set_pos(t_pos);
@@ -84,11 +89,6 @@ namespace G6037599
   }
 
   //___ protected _____________________________________________
-  std::shared_ptr<Type_data> Spawn_point::share_type() const
-  {
-    return m_type_;
-  }
-
   void Spawn_point::set_console_monster_hp(const int t_hp, const int t_max_hp) const
   {
     m_console_->set_monster_hp(t_hp, t_max_hp);

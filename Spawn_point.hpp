@@ -1,11 +1,11 @@
 #ifndef SPAWN_POINT
 #define SPAWN_POINT
 #pragma once
+#include "Tile_data.hpp"
 
 namespace G6037599
 {
   class Type_data;
-  class Tile_data;
   class Map;
   class Console;
 
@@ -25,6 +25,7 @@ namespace G6037599
     int get_type_atk() const;
     int get_type_max_atk() const;
     const char* get_symbol() const;
+    std::shared_ptr<Type_data> share_type() const;
 
     void set_pos(const COORD& t_pos) const;
     int random_type_atk() const;
@@ -36,7 +37,6 @@ namespace G6037599
     virtual void monsters_stronger(int t_percent) const = 0;
     virtual COORD find_pos(int t_monster_id) const = 0;
   protected:
-    std::shared_ptr<Type_data> share_type() const;
     void set_console_monster_hp(int t_hp, int t_max_hp) const;
     COORD random_unoccupied_tile() const;
     void map_move(const COORD& t_from, int t_id, const COORD& t_to) const;

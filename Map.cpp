@@ -81,8 +81,8 @@ namespace G6037599
     COORD pos;
     do
     {
-      pos.Y = rand() % m_grid_.size();
-      pos.X = rand() % m_grid_[0]->size();
+      pos.Y = static_cast<short>( rand() % m_grid_.size() );
+      pos.X = static_cast<short>( rand() % m_grid_[0]->size() );
     } while (m_grid_[pos.Y]->at(pos.X).owner_id != NO_UNIT || 
       m_grid_[pos.Y]->at(pos.X).attacker_id != NO_UNIT);
 

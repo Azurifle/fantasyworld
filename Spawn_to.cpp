@@ -6,12 +6,12 @@ namespace G6037599
 {
   //___ (de)constructors _____________________________________________
   template <class T>
-  Spawn_to<T>::Spawn_to<T>(const std::shared_ptr<Type_data> t_type
+  Spawn_to<T>::Spawn_to(const std::shared_ptr<Type_data> t_type
     , const std::shared_ptr<Console> t_m_console, const std::shared_ptr<Map> t_m_map)
   : Spawn_point(t_type, t_m_console, t_m_map) {}
 
   template<class T>
-  Spawn_to<T>::Spawn_to<T>(const Spawn_to<T>& t_to_copy) : Spawn_point(t_to_copy)
+  Spawn_to<T>::Spawn_to(const Spawn_to<T>& t_to_copy) : Spawn_point(t_to_copy)
   {
     copy_from(t_to_copy);
   }

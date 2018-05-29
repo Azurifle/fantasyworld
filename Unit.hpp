@@ -1,11 +1,11 @@
 #ifndef UNIT
 #define UNIT
 #pragma once
+#include "Tile_data.hpp"
 
 namespace G6037599
 {
   class Type_data;
-  class Tile_data;
 
   class Unit
   {
