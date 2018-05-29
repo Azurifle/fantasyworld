@@ -39,9 +39,37 @@ namespace G6037599
     return m_type_->SYMBOL;
   }
 
+  int Unit::get_hp() const
+  {
+    return m_hp_;
+  }
+
   void Unit::set_pos(const COORD& t_pos) const
   {
     m_tile_->set_pos(t_pos);
+  }
+
+  void Unit::damaged(const int t_damage)
+  {
+    REQUIRE(t_damage > 0);
+
+    m_hp_ -= t_damage;
+    if(m_hp_ < 0)
+    {
+      m_hp_ = 0;
+    }
+  }
+
+  void Unit::set_hp(const int t_hp)
+  {
+    REQUIRE(0 <= t_hp && t_hp <= m_type_->get_max_hp());
+
+    m_hp_ = t_hp;
+  }
+
+  int Unit::random_atk() const
+  {
+    return m_type_->random_atk();
   }
 
   //___ private ________________________________________________

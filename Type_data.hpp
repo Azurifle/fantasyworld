@@ -18,6 +18,8 @@ namespace G6037599
     Type_data& operator=(const Type_data& t_to_copy);
 
     int get_max_hp() const;
+    void increase_max_hp(int t_amount);
+    int random_atk() const;
   private:
     int m_max_hp_ = 0;
   };

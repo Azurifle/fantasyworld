@@ -20,4 +20,15 @@ namespace G6037599
   {
     return m_max_hp_;
   }
+
+  void Type_data::increase_max_hp(const int t_amount)
+  {
+    m_max_hp_ += t_amount;
+  }
+
+  int Type_data::random_atk() const
+  {
+    const auto RANDOM_SIZE = MAX_ATK + 1 - ATK;
+    return ATK + rand() % RANDOM_SIZE;
+  }
 }//G6037599

@@ -31,13 +31,18 @@ namespace G6037599
     int update_minute() const;
     bool update_hour() const;
     void hide_cursor_status() const;
-    void update_cursor_status(const char* t_name
+    void show_cursor_status(const char* t_name
+      , int t_hp, int t_max_hp, int t_atk, int t_max_atk) const;
+    void hide_monster_status() const;
+    void show_monster_status(const char* t_name
       , int t_hp, int t_max_hp, int t_atk, int t_max_atk) const;
     static void thanks_user();
     void show_game_reset() const;
     void show_game_reset(int t_count_down) const;
     void set_player_full_hp() const;
     void set_player_hp(int t_hp) const;
+    void set_monster_hp(int t_hp, int t_max_hp) const;
+    void set_cursor_hp(int t_hp, int t_max_hp) const;
   private:
     const char* GAME_RESET_MESSAGE = "Game reset in ?.";
     COORD m_map_start_ = { 0, 0 }, m_player_cursor_ = { 0, 0 }

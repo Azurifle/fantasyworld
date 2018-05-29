@@ -58,7 +58,7 @@ namespace G6037599
     {
     case false: REQUIRE(m_grid_[t_from.Y]->at(t_from.X).owner_id == t_id);
       m_grid_[t_from.Y]->at(t_from.X).owner_id = NO_UNIT;
-    default: m_grid_[t_from.Y]->at(t_from.X).attacker_id = NO_UNIT;;
+    default: m_grid_[t_from.Y]->at(t_from.X).attacker_id = NO_UNIT;
     }
 
     switch (m_grid_[t_to.Y]->at(t_to.X).owner_id)
@@ -66,6 +66,39 @@ namespace G6037599
     case NO_UNIT: m_grid_[t_to.Y]->at(t_to.X).owner_id = t_id; break;
     default: m_grid_[t_to.Y]->at(t_to.X).attacker_id = t_id;
     }
+  }
+
+  int Map::get(const COORD& t_pos) const
+  {
+    REQUIRE(0 <= t_pos.X && t_pos.X < SIZE);
+    REQUIRE(0 <= t_pos.Y && t_pos.Y < SIZE);
+
+    return m_grid_[t_pos.Y]->at(t_pos.X).owner_id;
+  }
+
+  COORD Map::random_unoccupied() const
+  {
+    COORD pos;
+    do
+    {
+      pos.Y = rand() % m_grid_.size();
+      pos.X = rand() % m_grid_[0]->size();
+    } while (m_grid_[pos.Y]->at(pos.X).owner_id != NO_UNIT || 
+      m_grid_[pos.Y]->at(pos.X).attacker_id != NO_UNIT);
+
+    return pos;
+  }
+
+  void Map::reset()
+  {
+    for(auto it_y = m_grid_.begin(); it_y < m_grid_.end(); ++it_y)
+    {
+      for (auto it_x = (*it_y)->begin(); it_x < (*it_y)->end(); ++it_x)
+      {
+        (*it_x).owner_id = NO_UNIT;
+        (*it_x).attacker_id = NO_UNIT;
+      }
+    }//for iterator y
   }
 
   //___ private _______________________________________________________

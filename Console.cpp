@@ -218,9 +218,23 @@ namespace G6037599
     set_cursor(m_player_cursor_);
   }
 
-  void Console::update_cursor_status(const char* t_name, int t_hp, int t_max_hp, int t_atk, int t_max_atk) const
+  void Console::show_cursor_status(const char* t_name, const int t_hp
+    , const int t_max_hp, const int t_atk, const int t_max_atk) const
   {
     m_cursor_status_->show(t_name, t_hp, t_max_hp, t_atk, t_max_atk);
+    set_cursor(m_player_cursor_);
+  }
+
+  void Console::hide_monster_status() const
+  {
+    m_monster_status_->hide();//keep bool alreay hide or not
+    set_cursor(m_player_cursor_);
+  }
+
+  void Console::show_monster_status(const char* t_name, const int t_hp
+    , const int t_max_hp, const int t_atk, const int t_max_atk) const
+  {
+    m_monster_status_->show(t_name, t_hp, t_max_hp, t_atk, t_max_atk);
     set_cursor(m_player_cursor_);
   }
 
@@ -294,6 +308,16 @@ namespace G6037599
 
     m_player_hp_->set(t_hp, World::PLAYER_MAX_HP);
     set_cursor(m_player_cursor_);
+  }
+
+  void Console::set_monster_hp(const int t_hp, const int t_max_hp) const
+  {
+    m_monster_status_->set(t_hp, t_max_hp);
+  }
+
+  void Console::set_cursor_hp(const int t_hp, const int t_max_hp) const
+  {
+    m_cursor_status_->set(t_hp, t_max_hp);
   }
 
   //___ private _______________________________________________________

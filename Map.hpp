@@ -21,6 +21,9 @@ namespace G6037599
     void marked(const COORD& t_pos, int t_id);
     bool is_attacker(const COORD& t_pos, int t_id) const;
     void move(const COORD& t_from, int t_id, const COORD& t_to);
+    int get(const COORD& t_pos) const;
+    COORD random_unoccupied() const;
+    void reset();
   private:
     std::vector<std::unique_ptr< std::vector<Tile> >> m_grid_;
 

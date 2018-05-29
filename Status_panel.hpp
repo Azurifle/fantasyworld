@@ -22,6 +22,7 @@ namespace G6037599
     COORD get_pos() const;
     void show(const char* t_name, int t_hp, int t_max_hp, int t_atk, int t_max_atk);
     void hide();
+    void set(int t_hp, int t_max_hp) const;
   private:
     COORD m_start_ = {0, 0};
     std::unique_ptr<Hp_bar> m_hp_ = nullptr;

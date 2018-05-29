@@ -151,6 +151,7 @@
     <ClInclude Include="Hp_bar.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Spawn_point.hpp" />
+    <ClInclude Include="Spawn_to.hpp" />
     <ClInclude Include="Status_panel.hpp" />
     <ClInclude Include="Tile_data.hpp" />
     <ClInclude Include="Timer.hpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="Hp_bar.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Spawn_point.cpp" />
+    <ClCompile Include="Spawn_to.cpp" />
     <ClCompile Include="Status_panel.cpp" />
     <ClCompile Include="Tile_data.cpp" />
     <ClCompile Include="Timer.cpp" />

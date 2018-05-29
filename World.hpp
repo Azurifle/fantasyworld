@@ -1,7 +1,6 @@
 #ifndef WORLD
 #define WORLD
 #pragma once
-#include "Map.hpp"
 
 namespace G6037599
 {
@@ -18,7 +17,8 @@ namespace G6037599
 	  static const COORD UP, DOWN, LEFT, RIGHT, ZERO;
     const enum Enum 
 	  { 
-      NO_KEY_PRESS, PLAYER_MAX_HP = 50, PLAYER_ATK = 20, PLAYER_MAX_ATK = 22, MONSTERS = 101
+      NO_KEY_PRESS, MONSTERS = 101
+	    , PLAYER_MAX_HP = 50, PLAYER_ATK = 20, PLAYER_MAX_ATK = 22
 	  };
 
     static short limit_interval(int t_number, int t_min, int t_max);
@@ -40,14 +40,17 @@ namespace G6037599
     COORD m_player_cursor_pos_ = { 0, 0 };
     std::unique_ptr<Unit> m_player_ = nullptr;
 
+    void copy_from(const World& t_to_copy);
     std::shared_ptr<Type_data> tokenize(const std::string& t_line) const;
     void read_monster_types();
     void spawners_spawn_monster();
-    void copy_from(const World& t_to_copy);
-    void monster_stronger();
+    void monsters_stronger();
     void game_reset();
     void check_battle();
     void spawn_spawners();
+	  int find_spawner_index(int t_monster_id) const;
+    void update_monster_status_hp() const;
+    void update_cursor_status_hp() const;
 	};
 
   const char* World::MONSTER_CONF_PATH = "monster_conf.txt";

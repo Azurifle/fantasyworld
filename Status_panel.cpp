@@ -70,4 +70,8 @@ namespace G6037599
     }//for clear Status_panel
   }
 
+  void Status_panel::set(const int t_hp, const int t_max_hp) const
+  {
+    m_hp_->set(t_hp, t_max_hp);
+  }
 }//G6037599

@@ -45,10 +45,13 @@
     <ClInclude Include="Type_data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Spawn_point.hpp">
+    <ClInclude Include="Tile_data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tile_data.hpp">
+    <ClInclude Include="Spawn_to.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawn_point.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,10 +86,13 @@
     <ClCompile Include="Type_data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Spawn_point.cpp">
+    <ClCompile Include="Tile_data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tile_data.cpp">
+    <ClCompile Include="Spawn_to.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawn_point.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
