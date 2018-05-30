@@ -56,7 +56,7 @@ namespace G6037599
     cursor.X += Timer::WIDTH + TO_PLAYER_HP_BAR;
     m_player_hp_ = std::make_unique<Hp_bar>(cursor);
 
-    const short TO_CURSOR_STATUS_COLUMN = 3, TO_CURSOR_STATUS_ROW = 11;
+    const short TO_CURSOR_STATUS_COLUMN = 5, TO_CURSOR_STATUS_ROW = 11;
     cursor.X = Map::SIZE * SPACE_BETWEEN_TILE + TO_CURSOR_STATUS_COLUMN;
     cursor.Y += TO_CURSOR_STATUS_ROW;
     m_cursor_status_ = std::make_unique<Status_panel>(cursor);
@@ -112,6 +112,20 @@ namespace G6037599
     set_cursor(cursor); 
     std::cout << " [<][\\/][>] = move cursor";
 
+    const short TO_SYMBOL_INSTRUCT = 5, ROW_DOWN = 2;
+    cursor.Y += TO_SYMBOL_INSTRUCT;
+    set_cursor(cursor);
+    std::cout << "=== Symbol ===";
+    cursor.Y += ROW_DOWN;
+    set_cursor(cursor);
+    std::cout << "&     = You, the player, the hero";
+    cursor.Y += ROW_DOWN;
+    set_cursor(cursor);
+    std::cout << "X     = Spawner, will spawn monster nearby";
+    cursor.Y += ROW_DOWN;
+    set_cursor(cursor);
+    std::cout << "Other = Monsters";
+
     const short TO_WSAD_INSTRUCT_COLUMN = 15, TO_WSAD_INSTRUCT_ROW = 1;
     cursor = { m_map_start_.X + TO_WSAD_INSTRUCT_COLUMN
       , m_map_start_.Y + Map::SIZE + TO_WSAD_INSTRUCT_ROW };
@@ -160,14 +174,13 @@ namespace G6037599
 
   void Console::print_map() const
   {
-    set_cursor(m_map_start_);
     for (short row = 0; row < Map::SIZE; ++row)
     {
+      set_cursor({ m_map_start_.X, m_map_start_.Y + row });
       for (short column = 0; column < Map::SIZE; ++column)
       {
         std::cout << ".  ";
       }
-      set_cursor({ m_map_start_ .X, m_map_start_ .Y+ row });
     }
   }
 
@@ -220,7 +233,7 @@ namespace G6037599
     set_cursor(m_player_cursor_);
   }
 
-  void Console::show_cursor_status(const char* t_name, const int t_hp
+  void Console::show_cursor_status(const std::string& t_name, const int t_hp
     , const int t_max_hp, const int t_atk, const int t_max_atk) const
   {
     m_cursor_status_->show(t_name, t_hp, t_max_hp, t_atk, t_max_atk);
@@ -233,7 +246,7 @@ namespace G6037599
     set_cursor(m_player_cursor_);
   }
 
-  void Console::show_monster_status(const char* t_name, const int t_hp
+  void Console::show_monster_status(const std::string& t_name, const int t_hp
     , const int t_max_hp, const int t_atk, const int t_max_atk) const
   {
     m_monster_status_->show(t_name, t_hp, t_max_hp, t_atk, t_max_atk);

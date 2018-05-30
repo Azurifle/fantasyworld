@@ -32,7 +32,7 @@ namespace G6037599
     return m_start_;
   }
 
-  void Status_panel::show(const char* t_name, const int t_hp
+  void Status_panel::show(const std::string& t_name, const int t_hp
     , const int t_max_hp, const int t_atk, const int t_max_atk)
   {
     m_is_hide_ = false;
@@ -40,7 +40,8 @@ namespace G6037599
     auto cursor = m_start_;
     Console::set_cursor(cursor);
     std::cout << "-- " << t_name << " ";
-    std::cout << std::setw(cursor.X + WIDTH - Console::get_cursor().X) << std::setfill('-');
+    std::cout << std::setw(cursor.X + WIDTH - Console::get_cursor().X) 
+      << std::setfill('-') << '-';
 
     m_hp_->set(t_hp, t_max_hp);
 
@@ -52,7 +53,7 @@ namespace G6037599
 
     ++cursor.Y;
     Console::set_cursor(cursor);
-    std::cout << std::setw(WIDTH) << std::setfill('-');
+    std::cout << std::setw(WIDTH) << std::setfill('-') << '-';
   }
 
   void Status_panel::hide()
@@ -66,7 +67,7 @@ namespace G6037599
     for(auto cursor = m_start_; cursor.Y < m_start_.Y+HIEGHT; ++cursor.Y)
     {
       Console::set_cursor(cursor);
-      std::cout << std::setw(WIDTH) << std::setfill(' ');
+      std::cout << std::setw(WIDTH) << std::setfill(' ') << ' ';
     }//for clear Status_panel
   }
 

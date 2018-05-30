@@ -41,7 +41,7 @@ namespace G6037599
     return m_tile_->ID;
   }
 
-  const char* Spawn_point::get_type_name() const
+  std::string Spawn_point::get_type_name() const
   {
     return m_type_->NAME;
   }

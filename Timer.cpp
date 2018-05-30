@@ -29,7 +29,7 @@ namespace G6037599
   int Timer::update_minute()
   {
     ++m_minute_;
-    const auto ONE_HOUR = 60;
+    const auto ONE_HOUR = 6;
     if(m_minute_ >= ONE_HOUR)
     {
       return update_hour();

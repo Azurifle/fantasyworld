@@ -20,7 +20,7 @@ namespace G6037599
     Status_panel& operator=(const Status_panel& t_to_copy);
 
     COORD get_pos() const;
-    void show(const char* t_name, int t_hp, int t_max_hp, int t_atk, int t_max_atk);
+    void show(const std::string& t_name, int t_hp, int t_max_hp, int t_atk, int t_max_atk);
     void hide();
     void set(int t_hp, int t_max_hp) const;
   private:

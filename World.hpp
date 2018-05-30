@@ -17,7 +17,7 @@ namespace G6037599
 	  static const COORD UP, DOWN, LEFT, RIGHT, ZERO;
     const enum Enum 
 	  { 
-      NO_KEY_PRESS, MONSTERS = 101
+      NO_KEY_PRESS, MONSTERS = 10
 	    , PLAYER_MAX_HP = 50, PLAYER_ATK = 20, PLAYER_MAX_ATK = 22
 	  };
 

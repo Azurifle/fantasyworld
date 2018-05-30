@@ -30,10 +30,10 @@ namespace G6037599
     int update_minute() const;
     bool update_hour() const;
     void hide_cursor_status() const;
-    void show_cursor_status(const char* t_name
+    void show_cursor_status(const std::string& t_name
       , int t_hp, int t_max_hp, int t_atk, int t_max_atk) const;
     void hide_monster_status() const;
-    void show_monster_status(const char* t_name
+    void show_monster_status(const std::string& t_name
       , int t_hp, int t_max_hp, int t_atk, int t_max_atk) const;
     static void thanks_user();
     void show_game_reset() const;

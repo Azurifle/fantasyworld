@@ -20,7 +20,7 @@ namespace G6037599
 
     COORD get_pos() const;
     int get_id() const;
-    const char* get_type_name() const;
+    std::string get_type_name() const;
     int get_type_max_hp() const;
     int get_type_atk() const;
     int get_type_max_atk() const;

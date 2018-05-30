@@ -37,8 +37,8 @@ namespace G6037599
       default: return _getch();
       }
 
-      const auto HALF_SECOND = 500;
-      Sleep(HALF_SECOND);
+      const auto MILISEC_PER_KEY = 50;
+      Sleep(MILISEC_PER_KEY);
     } while (clock() < TIME_UP);
 
     return NO_KEY_PRESS;
@@ -54,6 +54,7 @@ namespace G6037599
     m_console_->show();
     
     m_player_->set_pos(COORD{ Map::MIDDLE, Map::MIDDLE });
+    m_player_cursor_pos_ = m_player_->get_pos();
     m_map_->marked(m_player_->get_pos(), m_player_->get_id());
 
     m_console_->move_player_cursor(m_player_->get_pos());
@@ -67,13 +68,15 @@ namespace G6037599
     spawners_spawn_monster();
   }
 
-  World::World(const World& t_to_copy)
+  World::World(const World& t_to_copy) 
+    : m_player_cursor_pos_(t_to_copy.m_player_cursor_pos_)
   {
     copy_from(t_to_copy);
   }
 
   World& World::operator=(const World& t_to_copy)
   {
+    m_player_cursor_pos_ = t_to_copy.m_player_cursor_pos_;
     copy_from(t_to_copy);
     return *this;
   }
@@ -81,12 +84,12 @@ namespace G6037599
   //___ public _____________________________________________
   void World::player_move(COORD t_move)
   {
-    t_move.X = limit_interval(m_player_->get_pos().X + t_move.X, 0, m_map_->SIZE);
-    t_move.Y = limit_interval(m_player_->get_pos().Y + t_move.Y, 0, m_map_->SIZE);
+    t_move.X = limit_interval(m_player_->get_pos().X + t_move.X, 0, m_map_->SIZE -1);
+    t_move.Y = limit_interval(m_player_->get_pos().Y + t_move.Y, 0, m_map_->SIZE -1);
 
     for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
     {
-      if (t_move.X == (*it)->get_pos().X || t_move.Y == (*it)->get_pos().Y)
+      if (t_move.X == (*it)->get_pos().X && t_move.Y == (*it)->get_pos().Y)
       {
         update();
         return;
@@ -95,7 +98,8 @@ namespace G6037599
 
     switch (m_map_->is_attacker(m_player_->get_pos(), m_player_->get_id()))
     {
-    case false: m_console_->marked(m_player_->get_pos(), " ");
+    case false: m_console_->marked(m_player_->get_pos(), "."); 
+      break;
     default: m_console_->marked(m_player_->get_pos(), " ", true);
       m_console_->hide_monster_status();
     }
@@ -243,7 +247,7 @@ namespace G6037599
     REQUIRE(0 < MONSTERS);
     REQUIRE(MONSTERS <= m_map_->SIZE * m_map_->SIZE);
 
-    std::vector<int> each_type_random;
+    std::vector<float> each_type_random;
     auto total_random = 0.0F;
     for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
@@ -254,7 +258,7 @@ namespace G6037599
 
     for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
-      m_spawners_[i]->spawn(each_type_random[i] / total_random);
+      m_spawners_[i]->spawn(round(each_type_random[i] / total_random));
     }
   }
 
