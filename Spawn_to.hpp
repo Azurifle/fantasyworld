@@ -28,16 +28,20 @@ namespace G6037599
 
     //___ public _____________________________________________
     int get_last_id() const override {
-      return m_monsters_[m_monsters_.size() - 1]->get_id();
+      REQUIRE(m_monsters_.size() > 0);
+      return m_monsters_.back()->get_id();
     }
 
     int find_hp(const int t_id) const override {
+      REQUIRE(m_monsters_.size() > 0);
       REQUIRE(t_id > Map::NO_UNIT);
       return m_monsters_[find_index(t_id)]->get_hp();
     }
 
     bool damaged_n_dies(const int t_monster_id, const int t_damage) const override {
+      REQUIRE(m_monsters_.size() > 0);
       REQUIRE(t_monster_id > Map::NO_UNIT);
+
       const auto INDEX = find_index(t_monster_id);
       m_monsters_[INDEX]->damaged(t_damage);
       set_console_monster_hp(m_monsters_[INDEX]->get_hp(), get_type_max_hp());
@@ -50,12 +54,14 @@ namespace G6037599
         mark_console(NEW_POS);
         m_monsters_[INDEX]->set_pos(NEW_POS);
         m_monsters_[INDEX]->set_hp(get_type_max_hp());
-      return true; default:;
+        return true; default:;
       }
       return false;
     }
 
     void spawn(const int t_monsters) override {
+      m_monsters_.clear();
+
       for (auto i = 0; i < t_monsters; ++i)
       {
         m_monsters_.push_back(std::make_unique<T>(share_type()));
@@ -66,16 +72,21 @@ namespace G6037599
     }
 
     void monsters_stronger(const int t_percent) const override {
-      const auto HP_PERCENT = get_type_max_hp() * t_percent / 100;
-      increase_type_max_hp(HP_PERCENT);
+      REQUIRE(t_percent > 0);
+
+      auto hp_amount = static_cast<int>(round(get_type_max_hp() * t_percent / 100.0f));
+      switch (hp_amount) { case 0: hp_amount = 1; default:; }
+
+      increase_type_max_hp(hp_amount);
 
       for (auto it = m_monsters_.begin(); it != m_monsters_.end(); ++it)
       {
-        (*it)->set_hp((*it)->get_hp() + HP_PERCENT);
+        (*it)->set_hp((*it)->get_hp() + hp_amount);
       }
     }
 
     COORD find_pos(const int t_monster_id) const override {
+      REQUIRE(m_monsters_.size() > 0);
       REQUIRE(t_monster_id > Map::NO_UNIT);
       return m_monsters_[find_index(t_monster_id)]->get_pos();
     }
@@ -92,6 +103,7 @@ namespace G6037599
     }
 
     int find_index(const int t_monster_id) const {
+      REQUIRE(m_monsters_.size() > 0);
       REQUIRE(t_monster_id > Map::NO_UNIT);
 
       for (unsigned i = 0; i < m_monsters_.size(); ++i)
@@ -101,7 +113,7 @@ namespace G6037599
           return i;
         }
       }
-      PROMISE(false);//this monster is not managed by this spawner
+      PROMISE(false);//the monster is not managed by this spawner
       return Map::NO_UNIT;
     }
   };

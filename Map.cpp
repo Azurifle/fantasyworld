@@ -56,9 +56,10 @@ namespace G6037599
 
     switch (is_attacker(t_from, t_id))
     {
-    case false: REQUIRE(m_grid_[t_from.Y]->at(t_from.X).owner_id == t_id);
-      m_grid_[t_from.Y]->at(t_from.X).owner_id = NO_UNIT;
-    default: m_grid_[t_from.Y]->at(t_from.X).attacker_id = NO_UNIT;
+    case false: PROMISE(m_grid_[t_from.Y]->at(t_from.X).owner_id == t_id);
+      m_grid_[t_from.Y]->at(t_from.X).owner_id = NO_UNIT; break;
+    default: PROMISE(m_grid_[t_from.Y]->at(t_from.X).attacker_id == t_id);
+      m_grid_[t_from.Y]->at(t_from.X).attacker_id = NO_UNIT;
     }
 
     switch (m_grid_[t_to.Y]->at(t_to.X).owner_id)

@@ -20,6 +20,9 @@ namespace G6037599
 
   void Console::set_cursor(const COORD& t_pos)
   {
+    REQUIRE(0 <= t_pos.X);
+    REQUIRE(0 <= t_pos.Y);
+
     PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), t_pos));
   }
 
@@ -27,16 +30,14 @@ namespace G6037599
   {
     const auto SPACE_BEFORE = (t_width - std::strlen(t_message)) / 2
       , SPACE_AFTER = SPACE_BEFORE + SPACE_BEFORE % 2;
-    std::cout << std::setw(SPACE_BEFORE) << std::setfill(t_delim);
-    std::cout << t_message << std::setw(SPACE_AFTER) << std::setfill(t_delim);
+    std::cout << std::setw(SPACE_BEFORE) << std::setfill(t_delim) << t_delim;
+    std::cout << t_message << std::setw(SPACE_AFTER) << std::setfill(t_delim) << t_delim;
   }
 
   //___ (de)constructors _____________________________________________
   Console::Console()
   {
     REQUIRE(std::strlen(World::PLAYER_NAME) <= Status_panel::MAX_NAME_LENGTH);
-    const auto CMD_ROW_LIMIT = 40;
-    REQUIRE(Map::SIZE < CMD_ROW_LIMIT);
 
     auto cursor = get_cursor();
     const short TO_MONSTER_STATUS = 7;
@@ -61,13 +62,14 @@ namespace G6037599
     cursor.Y += TO_CURSOR_STATUS_ROW;
     m_cursor_status_ = std::make_unique<Status_panel>(cursor);
 
-    m_pop_up_panel_cursor_ = find_map_cursor_pos({ Map::MIDDLE / 2, Map::MIDDLE / 2 });
+    m_pop_up_panel_cursor_ = find_map_cursor_pos({ Map::MIDDLE / 3, Map::MIDDLE / 2 });
     cursor = m_pop_up_panel_cursor_;
-    
-    const short SPACE_BEFORE = (POP_UP_PANEL_WIDTH - static_cast<short>( std::strlen(GAME_RESET_MESSAGE) ) ) / 2
-      , SPACE_AFTER = SPACE_BEFORE + SPACE_BEFORE % 2, GAME_RESET_ROW = 4;
-    m_game_reset_count_down_cursor_ = COORD{ cursor.X - SPACE_AFTER - 1
-      , cursor.Y + GAME_RESET_ROW };
+
+    const short TO_BEHIND_MESSAGE = (POP_UP_PANEL_WIDTH + 
+      static_cast<short>( std::strlen(GAME_RESET_MESSAGE) ) ) / 2
+      , BACK_TO_COUNT_DOWN_COLUMN = 2, GAME_RESET_ROW = 4;
+    m_game_reset_count_down_cursor_ = { cursor.X + TO_BEHIND_MESSAGE
+      - BACK_TO_COUNT_DOWN_COLUMN, cursor.Y + GAME_RESET_ROW };
   }
 
   Console::Console(const Console& t_to_copy)
@@ -92,6 +94,7 @@ namespace G6037599
   //___ public _______________________________________________________
   void Console::show() const
   {
+    system("CLS");
     m_timer_->show();
     
     print_player_status();
@@ -220,9 +223,9 @@ namespace G6037599
     return result;
   }
 
-  bool Console::update_hour() const
+  int Console::update_hour() const
   {
-    const bool result = m_timer_->update_hour();
+    const int result = m_timer_->update_hour();
     set_cursor(m_player_cursor_);
     return result;
   }
@@ -277,11 +280,11 @@ namespace G6037599
     auto cursor = m_pop_up_panel_cursor_;
     set_cursor(cursor);
 
-    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill('/');
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill('/') << '/';
     ++cursor.Y;
     set_cursor(cursor);
 
-    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ');
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ') << ' ';
     ++cursor.Y;
     set_cursor(cursor);
 
@@ -291,7 +294,7 @@ namespace G6037599
     ++cursor.Y;
     set_cursor(cursor);
 
-    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ');
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ') << ' ';
     ++cursor.Y;
     set_cursor(cursor);
 
@@ -299,17 +302,18 @@ namespace G6037599
     ++cursor.Y;
     set_cursor(cursor);
 
-    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ');
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ') << ' ';
     ++cursor.Y;
     set_cursor(cursor);
 
-    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill('/');
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill('/') << '/';
+    set_cursor(m_game_reset_count_down_cursor_);
   }
 
   void Console::show_game_reset(const int t_count_down) const
   {
-    set_cursor(m_game_reset_count_down_cursor_);
     std::cout << t_count_down;
+    set_cursor(m_game_reset_count_down_cursor_);
   }
 
   void Console::set_player_full_hp() const

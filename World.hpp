@@ -29,7 +29,8 @@ namespace G6037599
     World(const World& t_to_copy);
     World& operator=(const World& t_to_copy);
 
-	  void player_move(COORD t_move = ZERO);
+    void player_move();
+	  void player_move(COORD t_move);
 	  void move_cursor(const COORD& t_move);
 	  void update();
 	  void exit() const;
@@ -43,14 +44,16 @@ namespace G6037599
     void copy_from(const World& t_to_copy);
     std::shared_ptr<Type_data> tokenize(const std::string& t_line) const;
     void read_monster_types();
+    void spawn_spawners();
     void spawners_spawn_monster();
     void monsters_stronger();
     void game_reset();
-    void check_battle();
-    void spawn_spawners();
+	  void check_battle();
 	  int find_spawner_index(int t_monster_id) const;
     void update_monster_status_hp() const;
     void update_cursor_status_hp() const;
+    void player_move_into_battle();
+    void monster_dies(int t_enemy_id, int t_index);
 	};
 }
 #endif //WORLD

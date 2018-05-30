@@ -82,6 +82,18 @@ namespace G6037599
   }
 
   //___ public _____________________________________________
+  void World::player_move()
+  {
+    switch (m_console_->update_hour())
+    {
+    case Timer::HOUR_REACH: check_battle(); 
+      break;
+    default: monsters_stronger();
+      update_monster_status_hp();
+      update_cursor_status_hp();
+    }//switch update_hour
+  }
+
   void World::player_move(COORD t_move)
   {
     t_move.X = limit_interval(m_player_->get_pos().X + t_move.X, 0, m_map_->SIZE -1);
@@ -94,48 +106,36 @@ namespace G6037599
         update();
         return;
       }
-    }
+    }//way blocked by spawner
+
+    switch (m_console_->update_hour())
+    {
+    case Timer::HOUR_REACH: break;
+    default: monsters_stronger();
+      update_cursor_status_hp();
+    }//switch update_hour
 
     switch (m_map_->is_attacker(m_player_->get_pos(), m_player_->get_id()))
     {
     case false: m_console_->marked(m_player_->get_pos(), "."); 
       break;
     default: m_console_->marked(m_player_->get_pos(), " ", true);
-      m_console_->hide_monster_status();
-    }
+    }//move from battle?
 
     m_map_->move(m_player_->get_pos(), m_player_->get_id(), t_move);
     m_player_->set_pos(t_move);
-    m_console_->marked(t_move, std::string(1, m_player_->get_symbol()).c_str());
 
-    switch (m_console_->update_hour())
+    switch (m_map_->is_attacker(m_player_->get_pos(), m_player_->get_id()))
     {
-    case Timer::HOUR_REACH: break;
-    default: monsters_stronger();
-    }//switch update_hour
-
-    const auto ENEMY_ID = m_map_->get(t_move);
-    if (ENEMY_ID != m_player_->get_id())
-    {
-      const auto INDEX = find_spawner_index(ENEMY_ID);
-      m_console_->show_monster_status(m_spawners_[INDEX]->get_type_name()
-        , m_spawners_[INDEX]->find_hp(ENEMY_ID)
-        , m_spawners_[INDEX]->get_type_max_hp()
-        , m_spawners_[INDEX]->get_type_atk()
-        , m_spawners_[INDEX]->get_type_max_atk());
-    }
+    case false: m_console_->marked(t_move, std::string(1, m_player_->get_symbol()).c_str());
+      m_console_->hide_monster_status();
+      break;
+    default: player_move_into_battle();
+    }//move into battle?    
   }
 
   void World::move_cursor(const COORD& t_move)
   {
-    switch (m_console_->update_minute())
-    {
-    case Timer::NOT_REACH: break;
-    case Timer::HOUR_REACH: check_battle(); break;
-    default: monsters_stronger();
-      update_monster_status_hp();
-    }//switch update minute
-
     m_player_cursor_pos_.X = limit_interval(m_player_cursor_pos_.X + t_move.X, 0, m_map_->SIZE);
     m_player_cursor_pos_.Y = limit_interval(m_player_cursor_pos_.Y + t_move.Y, 0, m_map_->SIZE);
     m_console_->move_player_cursor(m_player_cursor_pos_);
@@ -156,8 +156,7 @@ namespace G6037599
         }
       }//check that it's not spawner
 
-      const auto INDEX = find_spawner_index(ENEMY_ID);
-      
+      const auto INDEX = find_spawner_index(ENEMY_ID);      
       m_console_->show_cursor_status(m_spawners_[INDEX]->get_type_name()
         , m_spawners_[INDEX]->find_hp(ENEMY_ID)
         , m_spawners_[INDEX]->get_type_max_hp()
@@ -242,23 +241,36 @@ namespace G6037599
     file_reader.close();
   }
 
+  void World::spawn_spawners()
+  {
+    for (unsigned i = 0; i < m_spawners_.size(); ++i)
+    {
+      m_spawners_[i]->set_pos(m_map_->random_unoccupied());
+      m_map_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_id());
+      m_console_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_symbol().c_str());
+    }
+  }
+
   void World::spawners_spawn_monster()
   {
     REQUIRE(0 < MONSTERS);
     REQUIRE(MONSTERS <= m_map_->SIZE * m_map_->SIZE);
 
-    std::vector<float> each_type_random;
-    auto total_random = 0.0F;
+    std::vector<int> size_per_types;
+    const auto FIRST_MONSTER = 1;
     for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
-      each_type_random.push_back(rand() % MONSTERS);
-      total_random += each_type_random[i];
+      size_per_types.push_back(FIRST_MONSTER);
     }
-    total_random /= MONSTERS;
+
+    for (unsigned i = FIRST_MONSTER; i < MONSTERS; ++i)
+    {
+      ++size_per_types[rand() % m_spawners_.size()];
+    }
 
     for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
-      m_spawners_[i]->spawn(round(each_type_random[i] / total_random));
+      m_spawners_[i]->spawn(size_per_types[i]);
     }
   }
 
@@ -273,7 +285,7 @@ namespace G6037599
 
   void World::game_reset()
   {
-    const auto THREE_SECOND = 3000, COUNT_DOWN = 3, ONE_SECOND = 1000;
+    const auto THREE_SECOND = 3000, COUNT_DOWN = 9, ONE_SECOND = 1000;
     wait_key(THREE_SECOND);
 
     m_console_->show_game_reset();
@@ -282,16 +294,16 @@ namespace G6037599
       m_console_->show_game_reset(i);
       switch (wait_key(ONE_SECOND))
       {
-        case NO_KEY_PRESS: break;
-        default: i = 0;
-          system("CLS");
-          m_console_->show();
+      case NO_KEY_PRESS: break;
+      default: _getch();
       }
     }
 
+    m_console_->show();
+
     m_map_->reset();
 
-    m_player_->set_pos(COORD{ Map::MIDDLE , Map::MIDDLE });
+    m_player_->set_pos({ Map::MIDDLE , Map::MIDDLE });
     m_player_->set_hp(PLAYER_MAX_HP);
     m_map_->marked(m_player_->get_pos(), m_player_->get_id());
     m_console_->marked(m_player_->get_pos()
@@ -314,44 +326,19 @@ namespace G6037599
     const auto INDEX = find_spawner_index(ENEMY_ID);
     switch ( m_spawners_[INDEX]->damaged_n_dies(ENEMY_ID, m_player_->random_atk() ) )
     {
-    case false: m_player_->damaged(m_spawners_[INDEX]->random_type_atk());
+    case false: update_cursor_status_hp();
+      
+      m_player_->damaged(m_spawners_[INDEX]->random_type_atk());
       m_console_->set_player_hp(m_player_->get_hp());
 
       switch (m_player_->get_hp())
       {
-      case 0: game_reset(); default:;
-      } break;
-    default: m_map_->move(m_player_->get_pos(), m_player_->get_id(), m_player_->get_pos());
-      m_console_->marked(m_player_->get_pos(), " ", true);
-      m_console_->marked(m_player_->get_pos(), std::string(1, m_player_->get_symbol()).c_str());
-
-      const auto RESPAWN_POS = m_spawners_[INDEX]->find_pos(ENEMY_ID);
-      if (m_player_cursor_pos_.X == RESPAWN_POS.X
-        && m_player_cursor_pos_.Y == RESPAWN_POS.Y)
-      {
-        m_console_->show_cursor_status(m_spawners_[INDEX]->get_type_name()
-          , m_spawners_[INDEX]->find_hp(ENEMY_ID)
-          , m_spawners_[INDEX]->get_type_max_hp()
-          , m_spawners_[INDEX]->get_type_atk()
-          , m_spawners_[INDEX]->get_type_max_atk());
-      }
-    }
+        case 0: game_reset(); default:;
+      } 
+      break;
+    default: monster_dies(ENEMY_ID, INDEX);
+    }//switch monster dies
     
-    if (m_player_cursor_pos_.X == m_player_->get_pos().X
-      && m_player_cursor_pos_.Y == m_player_->get_pos().Y)
-    {
-      m_console_->hide_cursor_status();
-    }
-  }
-
-  void World::spawn_spawners()
-  {
-    for (unsigned i = 0; i < m_spawners_.size(); ++i)
-    {
-      m_spawners_[i]->set_pos(m_map_->random_unoccupied());
-      m_map_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_id());
-      m_console_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_symbol().c_str());
-    }
   }
 
   int World::find_spawner_index(const int t_monster_id) const
@@ -397,6 +384,45 @@ namespace G6037599
       const auto INDEX = find_spawner_index(ENEMY_ID);
       m_console_->set_cursor_hp(m_spawners_[INDEX]->find_hp(ENEMY_ID)
         , m_spawners_[INDEX]->get_type_max_hp());
+    }
+  }
+
+  void World::player_move_into_battle()
+  {
+    m_console_->marked(m_player_->get_pos()
+      , std::string(1, m_player_->get_symbol()).c_str(), true);
+
+    const auto ENEMY_ID = m_map_->get(m_player_->get_pos())
+      , INDEX = find_spawner_index(ENEMY_ID);
+    m_console_->show_monster_status(m_spawners_[INDEX]->get_type_name()
+      , m_spawners_[INDEX]->find_hp(ENEMY_ID)
+      , m_spawners_[INDEX]->get_type_max_hp()
+      , m_spawners_[INDEX]->get_type_atk()
+      , m_spawners_[INDEX]->get_type_max_atk());
+  }
+
+  void World::monster_dies(const int t_enemy_id, const int t_index)
+  {
+    m_console_->hide_monster_status();
+
+    m_map_->move(m_player_->get_pos(), m_player_->get_id(), m_player_->get_pos());
+    m_console_->marked(m_player_->get_pos(), " ", true);
+    m_console_->marked(m_player_->get_pos(), std::string(1, m_player_->get_symbol()).c_str());
+
+    const auto RESPAWN_POS = m_spawners_[t_index]->find_pos(t_enemy_id);
+    if (m_player_cursor_pos_.X == RESPAWN_POS.X
+      && m_player_cursor_pos_.Y == RESPAWN_POS.Y)
+    {
+      m_console_->show_cursor_status(m_spawners_[t_index]->get_type_name()
+        , m_spawners_[t_index]->find_hp(t_enemy_id)
+        , m_spawners_[t_index]->get_type_max_hp()
+        , m_spawners_[t_index]->get_type_atk()
+        , m_spawners_[t_index]->get_type_max_atk());
+    }
+    else if (m_player_cursor_pos_.X == m_player_->get_pos().X
+      && m_player_cursor_pos_.Y == m_player_->get_pos().Y)
+    {
+      m_console_->hide_cursor_status();
     }
   }
 

@@ -28,7 +28,7 @@ namespace G6037599
     void marked(const COORD& t_pos, const char* t_symbol, bool t_is_attacker = false) const;
     void move_player_cursor(const COORD& t_pos);
     int update_minute() const;
-    bool update_hour() const;
+    int update_hour() const;
     void hide_cursor_status() const;
     void show_cursor_status(const std::string& t_name
       , int t_hp, int t_max_hp, int t_atk, int t_max_atk) const;

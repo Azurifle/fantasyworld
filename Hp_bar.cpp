@@ -25,7 +25,9 @@ namespace G6037599
 
     bar_left = print_half_bar(bar_left);
 
-    std::cout << "HP:" << t_hp << '/' << t_max_hp;
+    const auto DIGIT = 2;
+    std::cout << "HP:" << std::setw(DIGIT) << std::setfill('0') << t_hp
+      << '/' << std::setw(DIGIT) << std::setfill('0') << t_max_hp;
 
     print_half_bar(bar_left);
 
@@ -40,7 +42,7 @@ namespace G6037599
     {
       if (t_bar_left > NO_BAR)
       {
-        std::cout << '/';
+        std::cout << '|';
         --t_bar_left;
       }
       else
