@@ -22,8 +22,6 @@ namespace G6037599
     COORD m_pos_ = { 0, 0 };
     static int m_id_count_;
   };
-
-  int Tile_data::m_id_count_ = 0;
 }//G6037599
 
 #endif //TILE_DATA

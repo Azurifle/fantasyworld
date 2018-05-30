@@ -40,7 +40,7 @@ namespace G6037599
     {
       if (t_bar_left > NO_BAR)
       {
-        std::cout << '|';
+        std::cout << '/';
         --t_bar_left;
       }
       else

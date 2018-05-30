@@ -2,6 +2,7 @@
 #define SPAWN_TO
 #pragma once
 #include "Spawn_point.hpp"
+#include "Map.hpp"
 
 namespace G6037599
 {
@@ -9,23 +10,100 @@ namespace G6037599
   class Spawn_to : public Spawn_point
   {
   public:
-    Spawn_to<T>(std::shared_ptr<Type_data> t_type
-      , std::shared_ptr<Console> t_m_console, std::shared_ptr<Map> t_m_map);
+    //LNK2019 error when put definition in .cpp
+    Spawn_to<T>(const std::shared_ptr<Type_data> t_type
+      , const std::shared_ptr<Console> t_m_console, const std::shared_ptr<Map> t_m_map)
+    : Spawn_point(t_type, t_m_console, t_m_map) {}
+    
     ~Spawn_to<T>() = default;
-    Spawn_to<T>(const Spawn_to<T>& t_to_copy);
-    Spawn_to<T>& operator=(const Spawn_to<T>& t_to_copy);
 
-    int get_last_id() const override;
-    int find_hp(int t_id) const override;
-    bool damaged_n_dies(int t_monster_id, int t_damage) const override;
-    void spawn(int t_monsters) override;
-    void monsters_stronger(int t_percent) const override;
-    COORD find_pos(int t_monster_id) const override;
+    Spawn_to<T>(const Spawn_to<T>& t_to_copy) : Spawn_point(t_to_copy) {
+      copy_from(t_to_copy);
+    }
+
+    Spawn_to<T>& operator=(const Spawn_to<T>& t_to_copy) {
+      copy_from(t_to_copy);
+      return *this;
+    }
+
+    //___ public _____________________________________________
+    int get_last_id() const override {
+      return m_monsters_[m_monsters_.size() - 1]->get_id();
+    }
+
+    int find_hp(const int t_id) const override {
+      REQUIRE(t_id > Map::NO_UNIT);
+      return m_monsters_[find_index(t_id)]->get_hp();
+    }
+
+    bool damaged_n_dies(const int t_monster_id, const int t_damage) const override {
+      REQUIRE(t_monster_id > Map::NO_UNIT);
+      const auto INDEX = find_index(t_monster_id);
+      m_monsters_[INDEX]->damaged(t_damage);
+      set_console_monster_hp(m_monsters_[INDEX]->get_hp(), get_type_max_hp());
+
+      switch (m_monsters_[INDEX]->get_hp())
+      {
+      case 0: const auto NEW_POS = random_unoccupied_tile();
+        map_move(m_monsters_[INDEX]->get_pos(), t_monster_id, NEW_POS);
+        mark_console(m_monsters_[INDEX]->get_pos(), true);
+        mark_console(NEW_POS);
+        m_monsters_[INDEX]->set_pos(NEW_POS);
+        m_monsters_[INDEX]->set_hp(get_type_max_hp());
+      return true; default:;
+      }
+      return false;
+    }
+
+    void spawn(const int t_monsters) override {
+      for (auto i = 0; i < t_monsters; ++i)
+      {
+        m_monsters_.push_back(std::make_unique<T>(share_type()));
+        m_monsters_[i]->set_pos(random_unoccupied_tile());
+        mark_map(m_monsters_[i]->get_pos(), m_monsters_[i]->get_id());
+        mark_console(m_monsters_[i]->get_pos());
+      }
+    }
+
+    void monsters_stronger(const int t_percent) const override {
+      const auto HP_PERCENT = get_type_max_hp() * t_percent / 100;
+      increase_type_max_hp(HP_PERCENT);
+
+      for (auto it = m_monsters_.begin(); it != m_monsters_.end(); ++it)
+      {
+        (*it)->set_hp((*it)->get_hp() + HP_PERCENT);
+      }
+    }
+
+    COORD find_pos(const int t_monster_id) const override {
+      REQUIRE(t_monster_id > Map::NO_UNIT);
+      return m_monsters_[find_index(t_monster_id)]->get_pos();
+    }
+
   private:
     std::vector<std::unique_ptr<T>> m_monsters_;
 
-    void copy_from(const Spawn_to<T>& t_to_copy);
-    int find_index(int t_monster_id) const;
+    void copy_from(const Spawn_to<T>& t_to_copy) {
+      m_monsters_.clear();
+      for (unsigned i = 0; i < t_to_copy.m_monsters_.size(); ++i)
+      {
+        m_monsters_.push_back(std::make_unique<T>(*t_to_copy.m_monsters_[i]));
+      }
+    }
+
+    int find_index(const int t_monster_id) const {
+      REQUIRE(t_monster_id > Map::NO_UNIT);
+
+      for (unsigned i = 0; i < m_monsters_.size(); ++i)
+      {
+        if (m_monsters_[i]->get_id() == t_monster_id)
+        {
+          return i;
+        }
+      }
+      PROMISE(false);//this monster is not managed by this spawner
+      return Map::NO_UNIT;
+    }
   };
 }//G6037599
 

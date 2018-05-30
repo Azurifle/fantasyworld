@@ -24,7 +24,7 @@ namespace G6037599
     int get_type_max_hp() const;
     int get_type_atk() const;
     int get_type_max_atk() const;
-    const char* get_symbol() const;
+    std::string get_symbol() const;
     std::shared_ptr<Type_data> share_type() const;
 
     void set_pos(const COORD& t_pos) const;
@@ -48,7 +48,6 @@ namespace G6037599
     std::shared_ptr<Console> m_console_ = nullptr;
     std::shared_ptr<Map> m_map_ = nullptr;
     std::unique_ptr<Tile_data> m_tile_ = nullptr;
-    const char* m_symbol_ = "XM";
   };
 }//G6037599
 

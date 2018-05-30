@@ -52,13 +52,5 @@ namespace G6037599
     void update_monster_status_hp() const;
     void update_cursor_status_hp() const;
 	};
-
-  const char* World::MONSTER_CONF_PATH = "monster_conf.txt";
-  const char* World::PLAYER_NAME = "NoOne The Hero";
-  const COORD World::UP = { 0, -1 };
-  const COORD World::DOWN = { 0, 1 };
-  const COORD World::LEFT = { -1, 0 };
-  const COORD World::RIGHT = { 1, 0 };
-  const COORD World::ZERO = { 0, 0 };
 }
 #endif //WORLD

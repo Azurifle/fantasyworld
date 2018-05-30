@@ -16,12 +16,12 @@ namespace G6037599
     Timer(const Timer& t_to_copy) = default;//no (smart)pointer
     Timer& operator=(const Timer& t_to_copy) = default;
 
-    void show() const;
+    void show();
     int update_minute();
     int update_hour();
   private:
     COORD m_start_ = { 0, 0 };
-    int m_day_ = 0, m_hour_ = 0, m_minute_ = 0;
+    int m_day_ = 1, m_hour_ = 0, m_minute_ = 0;
   };
 }//G6037599
 

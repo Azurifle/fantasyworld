@@ -1,11 +1,11 @@
 #ifndef CONSOLE
 #define CONSOLE
 #pragma once
+#include "Hp_bar.hpp"
+#include "Status_panel.hpp"
 
 namespace G6037599
 {
-  class Status_panel;
-  class Hp_bar;
   class Timer;
 
   class Console

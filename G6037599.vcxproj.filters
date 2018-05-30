@@ -89,9 +89,6 @@
     <ClCompile Include="Tile_data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Spawn_to.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Spawn_point.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

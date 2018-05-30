@@ -2,8 +2,6 @@
 #include "Console.hpp"
 #include "World.hpp"
 #include "Map.hpp"
-#include "Status_panel.hpp"
-#include "Hp_bar.hpp"
 #include "Timer.hpp"
 
 namespace G6037599
@@ -41,18 +39,21 @@ namespace G6037599
     REQUIRE(Map::SIZE < CMD_ROW_LIMIT);
 
     auto cursor = get_cursor();
-    ++cursor.X;
+    const short TO_MONSTER_STATUS = 7;
+    cursor.X += TO_MONSTER_STATUS;
+    ++cursor.Y;
     m_monster_status_ = std::make_unique<Status_panel>(cursor);
 
-    m_map_start_ = { 0, cursor.Y + static_cast<short>(m_monster_status_->HIEGHT)};
+    ++cursor.Y;
+    m_map_start_ = { 2, cursor.Y + Status_panel::HIEGHT};
 
-    const short TO_TIMER_PANEL = 1;
-    cursor.X += static_cast<short>(m_monster_status_->WIDTH) + TO_TIMER_PANEL;
+    const short TO_TIMER_PANEL = 7;
+    cursor.X += Status_panel::WIDTH + TO_TIMER_PANEL;
     ++cursor.Y;
     m_timer_ = std::make_unique<Timer>(cursor);
 
-    const short TO_PLAYER_HP_BAR = 3;
-    cursor.X += static_cast<short>(m_timer_->WIDTH) + TO_PLAYER_HP_BAR;
+    const short TO_PLAYER_HP_BAR = 9;
+    cursor.X += Timer::WIDTH + TO_PLAYER_HP_BAR;
     m_player_hp_ = std::make_unique<Hp_bar>(cursor);
 
     const short TO_CURSOR_STATUS_COLUMN = 3, TO_CURSOR_STATUS_ROW = 11;
@@ -92,38 +93,43 @@ namespace G6037599
   void Console::show() const
   {
     m_timer_->show();
-
+    
     print_player_status();
-
+    
     print_map();
 
     auto cursor = m_cursor_status_->get_pos();
-    --cursor.Y;
+    const short UP_TO_CURSOR_TITLE = 2;
+    cursor.Y -= UP_TO_CURSOR_TITLE;
     set_cursor(cursor);
     std::cout << "=== Cursor ===";
 
     const short TO_CURSOR_INSTRUCT = 2;
     cursor.Y += static_cast<short>(m_cursor_status_->HIEGHT) + TO_CURSOR_INSTRUCT;
     set_cursor(cursor);
-    std::cout << "   [^]" << std::endl;
-    std::cout << "[<][V][>] = move cursor";
+    std::cout << "    [/\\]";
+    ++cursor.Y;
+    set_cursor(cursor); 
+    std::cout << " [<][\\/][>] = move cursor";
 
     const short TO_WSAD_INSTRUCT_COLUMN = 15, TO_WSAD_INSTRUCT_ROW = 1;
     cursor = { m_map_start_.X + TO_WSAD_INSTRUCT_COLUMN
       , m_map_start_.Y + Map::SIZE + TO_WSAD_INSTRUCT_ROW };
     set_cursor(cursor);
-    std::cout << "   [W]" << std::endl;
+    std::cout << "   [W]";
+    ++cursor.Y;
+    set_cursor(cursor);
     std::cout << "[A][S][D] = move";
 
     const short TO_SPACE_INSTRUCT = 40;
     cursor.X += TO_SPACE_INSTRUCT;
-    ++cursor.Y;
     set_cursor(cursor);
     std::cout << "[SPACE] = force update";
 
     const short TO_ESC_INSTRUCT = 5;
     cursor.X = Map::SIZE * SPACE_BETWEEN_TILE + TO_ESC_INSTRUCT;
     --cursor.Y;
+    set_cursor(cursor);
     std::cout << "[ESC] = exit";
   }
 
@@ -140,7 +146,7 @@ namespace G6037599
     set_cursor(cursor);
     std::cout << '|';
     m_player_hp_->set(World::PLAYER_MAX_HP, World::PLAYER_MAX_HP);
-    std::cout << " |";
+    std::cout << std::setw(cursor.X + PLAYER_STATUS_WIDTH - get_cursor().X) << std::setfill(' ') << '|';
 
     ++cursor.Y;
     set_cursor(cursor);
@@ -149,19 +155,19 @@ namespace G6037599
 
     ++cursor.Y;
     set_cursor(cursor);    
-    std::cout << std::setw(PLAYER_STATUS_WIDTH) << std::setfill('=');
+    std::cout << std::setw(PLAYER_STATUS_WIDTH) << std::setfill('=') << '=';
   }
 
   void Console::print_map() const
   {
     set_cursor(m_map_start_);
-    for (int row = m_map_start_.X; row < Map::SIZE; ++row)
+    for (short row = 0; row < Map::SIZE; ++row)
     {
-      for (int column = m_map_start_.Y; column < Map::SIZE; ++column)
+      for (short column = 0; column < Map::SIZE; ++column)
       {
-        std::cout << " . ";
+        std::cout << ".  ";
       }
-      puts("");
+      set_cursor({ m_map_start_ .X, m_map_start_ .Y+ row });
     }
   }
 

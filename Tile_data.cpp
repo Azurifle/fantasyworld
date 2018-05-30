@@ -24,4 +24,7 @@ namespace G6037599
   {
     m_pos_ = t_pos;
   }
+
+  //___ private static _____________________________________________
+  int Tile_data::m_id_count_ = 0;
 }//G6037599

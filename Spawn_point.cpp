@@ -10,17 +10,11 @@ namespace G6037599
   //___ (de)constructors _____________________________________________
   Spawn_point::Spawn_point(const std::shared_ptr<Type_data> t_type
     , const std::shared_ptr<Console> t_m_console, const std::shared_ptr<Map> t_m_map)
-  {
-    m_type_ = t_type;
-    m_console_ = t_m_console;
-    m_map_ = t_m_map;
-    m_tile_ = std::make_unique<Tile_data>();
-    m_symbol_ = "X" + m_type_->SYMBOL;
-  }
+    : m_type_(t_type), m_console_(t_m_console), m_map_(t_m_map)
+      , m_tile_(std::make_unique<Tile_data>()) {}
 
   Spawn_point::Spawn_point(const Spawn_point& t_to_copy) : m_type_(t_to_copy.m_type_)
     , m_console_(t_to_copy.m_console_), m_map_(t_to_copy.m_map_)
-    , m_symbol_("X" + m_type_->SYMBOL)
   {
     m_tile_.reset();
     m_tile_ = std::make_unique<Tile_data>(t_to_copy.m_tile_->get_pos());
@@ -31,7 +25,6 @@ namespace G6037599
     m_type_ = t_to_copy.m_type_;
     m_console_ = t_to_copy.m_console_;
     m_map_ = t_to_copy.m_map_;
-    m_symbol_ = "X" + m_type_->SYMBOL;
     m_tile_.reset();
     m_tile_ = std::make_unique<Tile_data>(t_to_copy.m_tile_->get_pos());
     return *this;
@@ -68,9 +61,9 @@ namespace G6037599
     return m_type_->MAX_ATK;
   }
 
-  const char* Spawn_point::get_symbol() const
+  std::string Spawn_point::get_symbol() const
   {
-    return m_symbol_;
+    return std::string("X") + m_type_->SYMBOL;
   }
 
   std::shared_ptr<Type_data> Spawn_point::share_type() const

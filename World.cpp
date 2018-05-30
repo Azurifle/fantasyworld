@@ -2,7 +2,6 @@
 #include "World.hpp"
 #include "Console.hpp"
 #include "Map.hpp"
-#include "Unit.hpp"
 #include "Type_data.hpp"
 #include "Timer.hpp"
 #include "Spawn_to.hpp"
@@ -10,6 +9,14 @@
 namespace G6037599
 {
   //___ static _____________________________________________
+  const char* World::MONSTER_CONF_PATH = "monster_conf.txt";
+  const char* World::PLAYER_NAME = "NoOne The Hero";
+  const COORD World::UP = { 0, -1 };
+  const COORD World::DOWN = { 0, 1 };
+  const COORD World::LEFT = { -1, 0 };
+  const COORD World::RIGHT = { 1, 0 };
+  const COORD World::ZERO = { 0, 0 };
+
   short World::limit_interval(int t_number, const int t_min, const int t_max)
   {
     if (t_number < t_min)
@@ -38,19 +45,17 @@ namespace G6037599
   }
 
   //___ (de)constructors _____________________________________________
-  World::World()
+  World::World() : m_map_(std::make_shared<Map>())
+  , m_console_(std::make_shared<Console>())
+  , m_player_(std::make_unique<Unit>(std::make_shared<Type_data>(
+    PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
+    , PLAYER_MAX_HP, PLAYER_ATK, PLAYER_MAX_ATK, '&')))
   {
-    m_console_ = std::shared_ptr<Console>();
     m_console_->show();
-
-    m_map_ = std::make_shared<Map>();
-
-    m_player_ = std::make_unique<Unit>(std::make_shared<Type_data>(
-        PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
-        , PLAYER_MAX_HP, PLAYER_ATK, PLAYER_MAX_ATK, '&') );
+    
     m_player_->set_pos(COORD{ Map::MIDDLE, Map::MIDDLE });
-
     m_map_->marked(m_player_->get_pos(), m_player_->get_id());
+
     m_console_->move_player_cursor(m_player_->get_pos());
     m_console_->marked(m_player_->get_pos(), std::string(1, m_player_->get_symbol()).c_str() );
 
@@ -236,11 +241,10 @@ namespace G6037599
   void World::spawners_spawn_monster()
   {
     REQUIRE(0 < MONSTERS);
-    const auto HEIGHT_X_WIDTH = 2;
-    REQUIRE(MONSTERS <= m_map_->SIZE * HEIGHT_X_WIDTH);
+    REQUIRE(MONSTERS <= m_map_->SIZE * m_map_->SIZE);
 
     std::vector<int> each_type_random;
-    auto total_random = 0;
+    auto total_random = 0.0F;
     for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
       each_type_random.push_back(rand() % MONSTERS);
@@ -342,7 +346,7 @@ namespace G6037599
     {
       m_spawners_[i]->set_pos(m_map_->random_unoccupied());
       m_map_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_id());
-      m_console_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_symbol());
+      m_console_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_symbol().c_str());
     }
   }
 
