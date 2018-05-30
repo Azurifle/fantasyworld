@@ -47,9 +47,8 @@ namespace G6037599
 
     const auto ROW_ATK = 2;
     cursor.Y += ROW_ATK;
-    ++cursor.X;
     Console::set_cursor(cursor);
-    std::cout << "ATK: " << t_atk << " - " << t_max_atk;
+    std::cout << " ATK: " << t_atk << " - " << t_max_atk;
 
     ++cursor.Y;
     Console::set_cursor(cursor);
