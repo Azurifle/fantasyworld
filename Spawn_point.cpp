@@ -61,6 +61,11 @@ namespace G6037599
     return m_type_->MAX_ATK;
   }
 
+  int Spawn_point::get_type_behavior() const
+  {
+    return m_type_->BEHAVIOR;
+  }
+
   std::string Spawn_point::get_symbol() const
   {
     return std::string("X") + m_type_->SYMBOL;
@@ -79,6 +84,11 @@ namespace G6037599
   int Spawn_point::random_type_atk() const
   {
     return m_type_->random_atk();
+  }
+
+  void Spawn_point::reset_type() const
+  {
+    m_type_->reset_max_hp();
   }
 
   //___ protected _____________________________________________

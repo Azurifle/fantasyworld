@@ -25,7 +25,7 @@ namespace G6037599
 
     bar_left = print_half_bar(bar_left);
 
-    const auto DIGIT = 2;
+    const auto DIGIT = std::to_string(t_max_hp).length();
     std::cout << "HP:" << std::setw(DIGIT) << std::setfill('0') << t_hp
       << '/' << std::setw(DIGIT) << std::setfill('0') << t_max_hp;
 

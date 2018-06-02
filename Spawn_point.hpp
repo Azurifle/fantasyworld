@@ -24,11 +24,13 @@ namespace G6037599
     int get_type_max_hp() const;
     int get_type_atk() const;
     int get_type_max_atk() const;
+    int get_type_behavior() const;
     std::string get_symbol() const;
     std::shared_ptr<Type_data> share_type() const;
 
     void set_pos(const COORD& t_pos) const;
     int random_type_atk() const;
+    void reset_type() const;
 
     virtual int get_last_id() const = 0;
     virtual int find_hp(int t_id) const = 0;
