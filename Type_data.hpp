@@ -8,7 +8,7 @@ namespace G6037599
   {
   public:
     const std::string NAME{}, DEAD_MESSAGE{}, ATK_NAME{};
-    const int ATK = 0, MAX_ATK = 0;
+    const int ATK = 0, MAX_ATK = 0, ORIGIN_MAX_HP = 0;
     const char SYMBOL = 'U';
 
     Type_data(const std::string& t_name
@@ -22,6 +22,7 @@ namespace G6037599
     int get_max_hp() const;
     void increase_max_hp(int t_amount);
     int random_atk() const;
+    void reset_max_hp();
   private:
     int m_max_hp_ = 0;
   };

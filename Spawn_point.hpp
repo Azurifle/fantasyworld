@@ -29,6 +29,7 @@ namespace G6037599
 
     void set_pos(const COORD& t_pos) const;
     int random_type_atk() const;
+    void reset_type() const;
 
     virtual int get_last_id() const = 0;
     virtual int find_hp(int t_id) const = 0;

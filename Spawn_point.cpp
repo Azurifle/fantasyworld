@@ -81,6 +81,11 @@ namespace G6037599
     return m_type_->random_atk();
   }
 
+  void Spawn_point::reset_type() const
+  {
+    m_type_->reset_max_hp();
+  }
+
   //___ protected _____________________________________________
   void Spawn_point::set_console_monster_hp(const int t_hp, const int t_max_hp) const
   {

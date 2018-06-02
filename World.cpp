@@ -245,6 +245,7 @@ namespace G6037599
   {
     for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
+      m_spawners_[i]->reset_type();
       m_spawners_[i]->set_pos(m_map_->random_unoccupied());
       m_map_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_id());
       m_console_->marked(m_spawners_[i]->get_pos(), m_spawners_[i]->get_symbol().c_str());
@@ -263,7 +264,8 @@ namespace G6037599
       size_per_types.push_back(FIRST_MONSTER);
     }
 
-    for (unsigned i = FIRST_MONSTER; i < MONSTERS; ++i)
+    const auto AFTER_FIRST_MONSTER = m_spawners_.size() - 1;
+    for (auto i = AFTER_FIRST_MONSTER; i < MONSTERS; ++i)
     {
       ++size_per_types[rand() % m_spawners_.size()];
     }
