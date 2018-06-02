@@ -33,7 +33,7 @@ namespace G6037599
   {
     REQUIRE(0 <= t_pos.X && t_pos.X < SIZE);
     REQUIRE(0 <= t_pos.Y && t_pos.Y < SIZE);
-    REQUIRE(t_id > NO_UNIT);
+    REQUIRE(t_id >= NO_UNIT);
 
     m_grid_[t_pos.Y]->at(t_pos.X).owner_id = t_id;
   }
@@ -42,6 +42,7 @@ namespace G6037599
   {
     REQUIRE(0 <= t_pos.X && t_pos.X < SIZE);
     REQUIRE(0 <= t_pos.Y && t_pos.Y < SIZE);
+    REQUIRE(t_id >= NO_UNIT);
 
     return m_grid_[t_pos.Y]->at(t_pos.X).attacker_id == t_id;
   }

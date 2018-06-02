@@ -17,8 +17,8 @@ namespace G6037599
 	  static const COORD UP, DOWN, LEFT, RIGHT, ZERO;
     const enum Enum 
 	  { 
-      NO_KEY_PRESS, MONSTERS = 10
-	    , PLAYER_MAX_HP = 50, PLAYER_ATK = 20, PLAYER_MAX_ATK = 22
+      NO_KEY_PRESS, PLAYER_MAX_HP = 50
+	    , PLAYER_ATK = 20, PLAYER_MAX_ATK = 22
 	  };
 
     static short limit_interval(int t_number, int t_min, int t_max);
@@ -40,6 +40,7 @@ namespace G6037599
     std::shared_ptr<Console> m_console_ = nullptr;
     COORD m_player_cursor_pos_ = { 0, 0 };
     std::unique_ptr<Unit> m_player_ = nullptr;
+    int m_monster_count_ = 4, m_level_monsters_ = 4;
 
     void copy_from(const World& t_to_copy);
     std::shared_ptr<Type_data> tokenize(const std::string& t_line) const;
@@ -53,7 +54,8 @@ namespace G6037599
     void update_monster_status_hp() const;
     void update_cursor_status_hp() const;
     void player_move_into_battle();
-    void monster_dies(int t_enemy_id, int t_index);
+    void monster_dies(int t_index);
+    void next_stage();
 	};
 }
 #endif //WORLD

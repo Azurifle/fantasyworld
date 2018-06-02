@@ -38,6 +38,7 @@ namespace G6037599
     static void thanks_user();
     void show_game_reset() const;
     void show_game_reset(int t_count_down) const;
+    void show_next_stage() const;
     void set_player_full_hp() const;
     void set_player_hp(int t_hp) const;
     void set_monster_hp(int t_hp, int t_max_hp) const;

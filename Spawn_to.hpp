@@ -48,12 +48,9 @@ namespace G6037599
 
       switch (m_monsters_[INDEX]->get_hp())
       {
-      case 0: const auto NEW_POS = random_unoccupied_tile();
-        map_move(m_monsters_[INDEX]->get_pos(), t_monster_id, NEW_POS);
+      case 0: mark_map(m_monsters_[INDEX]->get_pos(), Map::NO_UNIT);
         mark_console(m_monsters_[INDEX]->get_pos(), true);
-        mark_console(NEW_POS);
-        m_monsters_[INDEX]->set_pos(NEW_POS);
-        m_monsters_[INDEX]->set_hp(get_type_max_hp());
+        //if have time, remove the monster to speed up searching!
         return true; default:;
       }
       return false;

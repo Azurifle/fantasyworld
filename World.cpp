@@ -257,8 +257,8 @@ namespace G6037599
 
   void World::spawners_spawn_monster()
   {
-    REQUIRE(0 < MONSTERS);
-    REQUIRE(MONSTERS <= m_map_->SIZE * m_map_->SIZE);
+    REQUIRE(0 < m_monster_count_);
+    REQUIRE(m_monster_count_ <= m_map_->SIZE * m_map_->SIZE);
 
     std::vector<int> size_per_types;
     const auto FIRST_MONSTER = 1;
@@ -267,8 +267,8 @@ namespace G6037599
       size_per_types.push_back(FIRST_MONSTER);
     }
 
-    const auto AFTER_FIRST_MONSTER = m_spawners_.size() - 1;
-    for (auto i = AFTER_FIRST_MONSTER; i < MONSTERS; ++i)
+    const auto AFTER_FIRST_MONSTER = m_spawners_.size();
+    for (auto i = AFTER_FIRST_MONSTER; i < static_cast<unsigned>(m_monster_count_); ++i)
     {
       ++size_per_types[rand() % m_spawners_.size()];
     }
@@ -341,7 +341,7 @@ namespace G6037599
         case 0: game_reset(); default:;
       } 
       break;
-    default: monster_dies(ENEMY_ID, INDEX);
+    default: monster_dies(INDEX);
     }//switch monster dies
     
   }
@@ -406,7 +406,7 @@ namespace G6037599
       , m_spawners_[INDEX]->get_type_max_atk());
   }
 
-  void World::monster_dies(const int t_enemy_id, const int t_index)
+  void World::monster_dies(const int t_index)
   {
     const auto INSTANT_HEAL = 1;
     switch(m_spawners_[t_index]->get_type_behavior())
@@ -420,22 +420,49 @@ namespace G6037599
     m_map_->move(m_player_->get_pos(), m_player_->get_id(), m_player_->get_pos());
     m_console_->marked(m_player_->get_pos(), " ", true);
     m_console_->marked(m_player_->get_pos(), std::string(1, m_player_->get_symbol()).c_str());
-
-    const auto RESPAWN_POS = m_spawners_[t_index]->find_pos(t_enemy_id);
-    if (m_player_cursor_pos_.X == RESPAWN_POS.X
-      && m_player_cursor_pos_.Y == RESPAWN_POS.Y)
-    {
-      m_console_->show_cursor_status(m_spawners_[t_index]->get_type_name()
-        , m_spawners_[t_index]->find_hp(t_enemy_id)
-        , m_spawners_[t_index]->get_type_max_hp()
-        , m_spawners_[t_index]->get_type_atk()
-        , m_spawners_[t_index]->get_type_max_atk());
-    }
-    else if (m_player_cursor_pos_.X == m_player_->get_pos().X
+    
+    if (m_player_cursor_pos_.X == m_player_->get_pos().X
       && m_player_cursor_pos_.Y == m_player_->get_pos().Y)
     {
       m_console_->hide_cursor_status();
     }
+
+    --m_monster_count_;
+    switch (m_monster_count_) { case 0: next_stage(); default:; }
   }
 
+  void World::next_stage()
+  {
+    const auto THREE_SECOND = 3000, COUNT_DOWN = 9, ONE_SECOND = 1000;
+    wait_key(THREE_SECOND);
+
+    m_console_->show_next_stage();
+    for (auto i = COUNT_DOWN; i > 0; --i)
+    {
+      m_console_->show_game_reset(i);
+      switch (wait_key(ONE_SECOND))
+      {
+      case NO_KEY_PRESS: break;
+      default: _getch();
+      }
+    }
+
+    m_console_->show();
+
+    m_map_->reset();
+
+    m_player_->set_pos({ Map::MIDDLE , Map::MIDDLE });
+    m_player_->set_hp(PLAYER_MAX_HP);
+    m_map_->marked(m_player_->get_pos(), m_player_->get_id());
+    m_console_->marked(m_player_->get_pos()
+      , std::string(1, m_player_->get_symbol()).c_str());
+    m_console_->set_player_full_hp();
+    const auto MONSTER_MULTIPLY = 2;
+    m_level_monsters_ *= MONSTER_MULTIPLY;
+    m_monster_count_ = m_level_monsters_;
+
+    spawn_spawners();
+    spawners_spawn_monster();
+    m_console_->move_player_cursor(m_player_->get_pos());
+  }
 }//namespace G6037599

@@ -341,6 +341,41 @@ namespace G6037599
     set_cursor(m_game_reset_count_down_cursor_);
   }
 
+  void Console::show_next_stage() const
+  {
+    auto cursor = m_pop_up_panel_cursor_;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill('/') << '/';
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ') << ' ';
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    print_centered_text(POP_UP_PANEL_WIDTH,
+      (std::string("WELL DONE \" ") + World::PLAYER_NAME + std::string(" \" !!!.")).c_str()
+      , ' ');
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ') << ' ';
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    print_centered_text(POP_UP_PANEL_WIDTH, "Next stage in ?.", ' ');
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill(' ') << ' ';
+    ++cursor.Y;
+    set_cursor(cursor);
+
+    std::cout << std::setw(POP_UP_PANEL_WIDTH) << std::setfill('/') << '/';
+    set_cursor(m_game_reset_count_down_cursor_);
+  }
+
   void Console::set_player_full_hp() const
   {
     m_player_hp_->set(World::PLAYER_MAX_HP, World::PLAYER_MAX_HP);
