@@ -1,24 +1,35 @@
 #ifndef UNIT
 #define UNIT
 #pragma once
+#include "Tile_data.hpp"
 
 namespace G6037599
 {
+  class Type_data;
+
   class Unit
   {
   public:
-    static const int NOT_ASSIGN = -1;
+    explicit Unit(std::shared_ptr<Type_data> t_type);
+    ~Unit() = default;
+    Unit(const Unit& t_to_copy);
+    Unit& operator=(const Unit& t_to_copy);
 
-    virtual const char* get_name() const = 0;
-    virtual int get_max_hp() const = 0;
+    COORD get_pos() const;
+    int get_id() const;
+    char get_symbol() const;
+    int get_hp() const;
 
-    Unit() = default;
-    virtual ~Unit() = default;
+    void set_pos(const COORD& t_pos) const;    
+    void damaged(int t_damage);
+    void set_hp(int t_hp);
+    int random_atk() const;
+  private:
+    std::shared_ptr<Type_data> m_type_ = nullptr;
+    std::unique_ptr<Tile_data> m_tile_ = nullptr;
+    int m_hp_ = 0;
 
-    virtual void damaged(int t_damage) = 0;
-    virtual void print() const = 0;
-  protected:
-    int hp_ = NOT_ASSIGN;
+    void copy_from(const Unit& t_to_copy);
   };
 }
 

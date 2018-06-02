@@ -85,7 +85,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -113,7 +113,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -147,30 +147,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Doremon.hpp" />
-    <ClInclude Include="Fantasy_world_2_d.hpp" />
-    <ClInclude Include="Monster.hpp" />
-    <ClInclude Include="Orc.hpp" />
-    <ClInclude Include="Player.hpp" />
+    <ClInclude Include="Console.hpp" />
+    <ClInclude Include="Hp_bar.hpp" />
+    <ClInclude Include="Map.hpp" />
+    <ClInclude Include="Spawn_point.hpp" />
+    <ClInclude Include="Spawn_to.hpp" />
+    <ClInclude Include="Status_panel.hpp" />
+    <ClInclude Include="Tile_data.hpp" />
+    <ClInclude Include="Timer.hpp" />
+    <ClInclude Include="Type_data.hpp" />
+    <ClInclude Include="Unit.hpp" />
+    <ClInclude Include="World.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Unit.hpp" />
-    <ClInclude Include="Zombie.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Doremon.cpp" />
-    <ClCompile Include="Fantasy_world_2_d.cpp" />
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Hp_bar.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Spawn_point.cpp" />
+    <ClCompile Include="Status_panel.cpp" />
+    <ClCompile Include="Tile_data.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Type_data.cpp" />
+    <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="World.cpp" />
     <ClCompile Include="G6037599.cpp" />
-    <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="Orc.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
