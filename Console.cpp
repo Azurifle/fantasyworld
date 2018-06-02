@@ -286,7 +286,7 @@ namespace G6037599
     puts("");
     puts("");
     puts("");
-    puts("                      ////////////////////// Rich Fantasy World ///////////////////");
+    puts("                      /////////////////////// THE FANTASY WORLD ///////////////////");
     puts("");
     puts("                                       By: Darlyn Sirikasem G6037599.");
     puts("");
@@ -335,7 +335,7 @@ namespace G6037599
     set_cursor(m_game_reset_count_down_cursor_);
   }
 
-  void Console::show_game_reset(const int t_count_down) const
+  void Console::show_count_down(const int t_count_down) const
   {
     std::cout << t_count_down;
     set_cursor(m_game_reset_count_down_cursor_);

@@ -296,7 +296,7 @@ namespace G6037599
     m_console_->show_game_reset();
     for(auto i = COUNT_DOWN; i > 0; --i)
     {
-      m_console_->show_game_reset(i);
+      m_console_->show_count_down(i);
       switch (wait_key(ONE_SECOND))
       {
       case NO_KEY_PRESS: break;
@@ -439,7 +439,7 @@ namespace G6037599
     m_console_->show_next_stage();
     for (auto i = COUNT_DOWN; i > 0; --i)
     {
-      m_console_->show_game_reset(i);
+      m_console_->show_count_down(i);
       switch (wait_key(ONE_SECOND))
       {
       case NO_KEY_PRESS: break;
