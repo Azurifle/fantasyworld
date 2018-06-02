@@ -98,10 +98,29 @@ namespace G6037599
     m_timer_->show();
     
     print_player_status();
+
+    auto cursor = m_cursor_status_->get_pos();
+    const short UP_TO_OBJECTIVE_TITLE = 10, ROW_DOWN = 2;
+    cursor.Y -= UP_TO_OBJECTIVE_TITLE;
+    set_cursor(cursor);
+
+    std::cout << "=== Quest ===";
+    ++cursor.X;
+    cursor.Y += ROW_DOWN;
+    set_cursor(cursor);
+
+    std::cout << "1. Slain all monsters before";
+    ++cursor.Y;
+    set_cursor(cursor);
+    std::cout << "  they become too strong !!.";
+    cursor.Y += ROW_DOWN;
+    set_cursor(cursor);
+
+    std::cout << "2. NoOne The Hero must survive.";
     
     print_map();
 
-    auto cursor = m_cursor_status_->get_pos();
+    cursor = m_cursor_status_->get_pos();
     const short UP_TO_CURSOR_TITLE = 2;
     cursor.Y -= UP_TO_CURSOR_TITLE;
     set_cursor(cursor);
@@ -115,19 +134,25 @@ namespace G6037599
     set_cursor(cursor); 
     std::cout << " [<][\\/][>] = move cursor";
 
-    const short TO_SYMBOL_INSTRUCT = 5, ROW_DOWN = 2;
+    const short TO_SYMBOL_INSTRUCT = 5;
     cursor.Y += TO_SYMBOL_INSTRUCT;
     set_cursor(cursor);
-    std::cout << "=== Symbol ===";
+    std::cout << "=== Hint ===";
     cursor.Y += ROW_DOWN;
     set_cursor(cursor);
-    std::cout << "&     = You, the player, the hero";
+    std::cout << "&     = You, the player, the hero.";
     cursor.Y += ROW_DOWN;
     set_cursor(cursor);
-    std::cout << "X     = Spawner, will spawn monster nearby";
+    std::cout << "X     = Spawner, spawn monster.";
     cursor.Y += ROW_DOWN;
     set_cursor(cursor);
-    std::cout << "Other = Monsters";
+    std::cout << "Other = Monsters, stronger each day.";
+    cursor.Y += ROW_DOWN;
+    set_cursor(cursor);
+    std::cout << "- Kill Zombie Doramon to get";
+    ++cursor.Y;
+    set_cursor(cursor);
+    std::cout << "  instant healing device!";
 
     const short TO_WSAD_INSTRUCT_COLUMN = 15, TO_WSAD_INSTRUCT_ROW = 1;
     cursor = { m_map_start_.X + TO_WSAD_INSTRUCT_COLUMN

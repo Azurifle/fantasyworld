@@ -8,13 +8,14 @@ namespace G6037599
   {
   public:
     const std::string NAME{}, DEAD_MESSAGE{}, ATK_NAME{};
-    const int ATK = 0, MAX_ATK = 0, ORIGIN_MAX_HP = 0;
+    const int ATK = 0, MAX_ATK = 0, ORIGIN_MAX_HP = 0, BEHAVIOR = 0;
     const char SYMBOL = 'U';
 
     Type_data(const std::string& t_name
       , const std::string& t_dead_message
       , const std::string& t_atk_name
-      , int t_max_hp, int t_atk, int t_max_atk, char t_symbol);
+      , int t_max_hp, int t_atk, int t_max_atk
+      , char t_symbol, int t_behavior=0);
     ~Type_data() = default;
     Type_data(const Type_data& t_to_copy) = default;
     Type_data& operator=(const Type_data& t_to_copy);

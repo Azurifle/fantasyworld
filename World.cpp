@@ -221,10 +221,13 @@ namespace G6037599
     auto max_atk = std::stoi(token);
 
     std::getline(string_cutter, token, TAB);
+    auto behavior = std::stoi(token);
+
+    std::getline(string_cutter, token, TAB);
     const auto TO_CHAR = 0;
 
     return std::make_shared<Type_data>(name.c_str(), dead_message.c_str(), atk_name.c_str()
-      , max_hp, atk, max_atk, token[TO_CHAR]);
+      , max_hp, atk, max_atk, token[TO_CHAR], behavior);
   }
 
   void World::read_monster_types()
@@ -405,6 +408,13 @@ namespace G6037599
 
   void World::monster_dies(const int t_enemy_id, const int t_index)
   {
+    const auto INSTANT_HEAL = 1;
+    switch(m_spawners_[t_index]->get_type_behavior())
+    {
+    case INSTANT_HEAL: m_player_->set_hp(PLAYER_MAX_HP);
+      m_console_->set_player_full_hp(); default:;
+    }
+
     m_console_->hide_monster_status();
 
     m_map_->move(m_player_->get_pos(), m_player_->get_id(), m_player_->get_pos());

@@ -24,6 +24,7 @@ namespace G6037599
     int get_type_max_hp() const;
     int get_type_atk() const;
     int get_type_max_atk() const;
+    int get_type_behavior() const;
     std::string get_symbol() const;
     std::shared_ptr<Type_data> share_type() const;
 
