@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Week_7">
+      <UniqueIdentifier>{ae5f51b7-27e4-431e-ac15-26bb21721eef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_7">
+      <UniqueIdentifier>{3acece29-7ec1-4919-839a-cf355859589d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Week_1">
+      <UniqueIdentifier>{5cf0321b-f655-4c08-bc9a-977cd60cff17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_1">
+      <UniqueIdentifier>{76b1a8b8-de05-4037-bdac-77b6ee08e830}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -21,11 +33,20 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Week_7\Stopwatch.hpp">
+      <Filter>Header Files\Week_7</Filter>
     </ClInclude>
-    <ClInclude Include="Stopwatch.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Week_7\Logger.hpp">
+      <Filter>Header Files\Week_7</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_1\Animal.hpp">
+      <Filter>Header Files\Week_1</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_1\Cat.hpp">
+      <Filter>Header Files\Week_1</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_1\Dog.hpp">
+      <Filter>Header Files\Week_1</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -35,11 +56,20 @@
     <ClCompile Include="G6037599.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Stopwatch.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Week_7\Stopwatch.cpp">
+      <Filter>Source Files\Week_7</Filter>
     </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Week_7\Logger.cpp">
+      <Filter>Source Files\Week_7</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_1\Cat.cpp">
+      <Filter>Source Files\Week_1</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_1\Dog.cpp">
+      <Filter>Source Files\Week_1</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_1\Animal.cpp">
+      <Filter>Source Files\Week_1</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

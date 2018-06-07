@@ -9,25 +9,36 @@ namespace G6037599
     Logger::get_instance().log("Hello I\'m \"Logger_demo\", and I\'m using logger to log this.");
     Logger::get_instance().log("Now I\'ll let world and monster log something.");
 
-    class World final
-    {
-    public:
-      World()
-      {
-        Logger::get_instance().log("World is created.");
-      }
-    };
     class Monster final
     {
     public:
-      Monster()
+      const int ID;
+
+      Monster() : ID(1)
       {
         Logger::get_instance().log("Monster is born.");
       }
     };
+    class World final
+    {
+    public:
+      World() : m_id_(0)
+      {
+        Logger::get_instance().log("World is created.");
+      }
+
+      void add(const Monster& t_monster)
+      {
+        m_id_ = t_monster.ID;
+      };
+
+    private:
+      int m_id_;
+    };
 
     World world;
-    Monster monster;
+    const Monster monster;
+    world.add(monster);
   }
 
   Logger& Logger::get_instance()

@@ -90,6 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -120,6 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,14 +149,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Logger.hpp" />
-    <ClInclude Include="Stopwatch.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Week_1\Animal.hpp" />
+    <ClInclude Include="Week_1\Cat.hpp" />
+    <ClInclude Include="Week_1\Dog.hpp" />
+    <ClInclude Include="Week_7\Logger.hpp" />
+    <ClInclude Include="Week_7\Stopwatch.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Stopwatch.cpp" />
     <ClCompile Include="G6037599.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -162,6 +165,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Week_1\Animal.cpp" />
+    <ClCompile Include="Week_1\Cat.cpp" />
+    <ClCompile Include="Week_1\Dog.cpp" />
+    <ClCompile Include="Week_7\Logger.cpp" />
+    <ClCompile Include="Week_7\Stopwatch.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
