@@ -147,35 +147,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Console.hpp" />
-    <ClInclude Include="Hp_bar.hpp" />
     <ClInclude Include="Logger.hpp" />
-    <ClInclude Include="Map.hpp" />
-    <ClInclude Include="Spawn_point.hpp" />
-    <ClInclude Include="Spawn_to.hpp" />
-    <ClInclude Include="Status_panel.hpp" />
     <ClInclude Include="Stopwatch.hpp" />
-    <ClInclude Include="Tile_data.hpp" />
-    <ClInclude Include="Timer.hpp" />
-    <ClInclude Include="Type_data.hpp" />
-    <ClInclude Include="Unit.hpp" />
-    <ClInclude Include="World.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Console.cpp" />
-    <ClCompile Include="Hp_bar.cpp" />
     <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Spawn_point.cpp" />
-    <ClCompile Include="Status_panel.cpp" />
     <ClCompile Include="Stopwatch.cpp" />
-    <ClCompile Include="Tile_data.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Type_data.cpp" />
-    <ClCompile Include="Unit.cpp" />
-    <ClCompile Include="World.cpp" />
     <ClCompile Include="G6037599.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -4,20 +4,30 @@
 namespace G6037599
 {
   //___ static _______________________________________________________
-  std::shared_ptr<Stopwatch> Stopwatch::share_instance()
+  void Stopwatch::demo()
   {
-    static auto watch = std::make_shared<Stopwatch>();
-    return watch;
+    Stopwatch watch;
+    std::cout << "Stopwatch has started. Press <Any key> to stop.";
+    _getch();
+    _getch();
+    std::cout << std::endl
+      << std::endl << "Time has elasped " << watch.stop().count() << " milliseconds." << std::endl;
+  }
+
+  //___ (de)constructors/operators ___________________________________
+  Stopwatch::Stopwatch()
+  {
+    restart();
   }
 
   //___ public _______________________________________________________
-  void Stopwatch::start()
+  void Stopwatch::restart()
   {
-    m_t1_ = clock::now();
+    m_start_time_ = Clock::now();
   }
 
-  Stopwatch::elapsed Stopwatch::stop() const
+  Stopwatch::Elapsed Stopwatch::stop() const
   {
-    return std::chrono::duration_cast<Stopwatch::elapsed>(clock::now() - m_t1_).count();
+    return std::chrono::duration_cast<Elapsed>(Clock::now() - m_start_time_);
   }
 }//G6037599
