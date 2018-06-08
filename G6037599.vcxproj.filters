@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Week_1">
       <UniqueIdentifier>{76b1a8b8-de05-4037-bdac-77b6ee08e830}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Week_2">
+      <UniqueIdentifier>{bfdcdaad-9519-4f9e-98ee-17384be4a76e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_2">
+      <UniqueIdentifier>{7024851d-7f61-4462-a065-f9cfd010567b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -48,6 +54,9 @@
     <ClInclude Include="Week_1\Dog.hpp">
       <Filter>Header Files\Week_1</Filter>
     </ClInclude>
+    <ClInclude Include="Week_2\Memory_pool.hpp">
+      <Filter>Header Files\Week_2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -70,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="Week_1\Animal.cpp">
       <Filter>Source Files\Week_1</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_2\Memory_pool.cpp">
+      <Filter>Source Files\Week_2</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

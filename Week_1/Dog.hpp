@@ -5,7 +5,7 @@
 
 namespace G6037599
 {
-  class Dog : public Animal
+  class Dog final: public Animal
   {
   public:
     Dog() = default;

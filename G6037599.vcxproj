@@ -154,6 +154,7 @@
     <ClInclude Include="Week_1\Animal.hpp" />
     <ClInclude Include="Week_1\Cat.hpp" />
     <ClInclude Include="Week_1\Dog.hpp" />
+    <ClInclude Include="Week_2\Memory_pool.hpp" />
     <ClInclude Include="Week_7\Logger.hpp" />
     <ClInclude Include="Week_7\Stopwatch.hpp" />
   </ItemGroup>
@@ -168,6 +169,7 @@
     <ClCompile Include="Week_1\Animal.cpp" />
     <ClCompile Include="Week_1\Cat.cpp" />
     <ClCompile Include="Week_1\Dog.cpp" />
+    <ClCompile Include="Week_2\Memory_pool.cpp" />
     <ClCompile Include="Week_7\Logger.cpp" />
     <ClCompile Include="Week_7\Stopwatch.cpp" />
   </ItemGroup>
