@@ -4,7 +4,7 @@
 namespace G6037599
 {
   //___ (de)constructors _____________________________________________
-  Tile_data::Tile_data() : ID(m_id_count_)
+  Tile_data::Tile_data() : ID(m_id_count_), m_pos_({ 0, 0 })
   {
     ++m_id_count_;
   }

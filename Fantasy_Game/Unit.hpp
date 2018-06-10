@@ -1,5 +1,5 @@
-#ifndef UNIT
-#define UNIT
+#ifndef G6037599_UNIT_HPP
+#define G6037599_UNIT_HPP
 #pragma once
 #include "Tile_data.hpp"
 
@@ -33,4 +33,4 @@ namespace G6037599
   };
 }
 
-#endif //UNIT
+#endif //G6037599_UNIT_HPP

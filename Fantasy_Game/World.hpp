@@ -1,5 +1,5 @@
-#ifndef WORLD
-#define WORLD
+#ifndef G6037599_WORLD_HPP
+#define G6037599_WORLD_HPP
 #pragma once
 #include "Unit.hpp"
 #include "Spawn_point.hpp"
@@ -10,7 +10,7 @@ namespace G6037599
   class Map;
   class Type_data;
 
-	class World
+	class World final
 	{
 	public:
     static const char* MONSTER_CONF_PATH, * PLAYER_NAME;
@@ -25,9 +25,7 @@ namespace G6037599
     static int wait_key(int t_miliseconds);
 	  
 	  World();
-	  ~World() = default;
-    World(const World& t_to_copy);
-    World& operator=(const World& t_to_copy);
+    ~World() = default;
 
     void player_move();
 	  void player_move(COORD t_move);
@@ -36,13 +34,17 @@ namespace G6037599
 	  void exit() const;
 	private:
     std::vector<std::unique_ptr<Spawn_point>> m_spawners_;
-    std::shared_ptr<Map> m_map_ = nullptr;
-    std::shared_ptr<Console> m_console_ = nullptr;
-    COORD m_player_cursor_pos_ = { 0, 0 };
-    std::unique_ptr<Unit> m_player_ = nullptr;
-    int m_monster_count_ = 4, m_level_monsters_ = 4;
+    std::shared_ptr<Map> m_map_{};
+    std::shared_ptr<Console> m_console_{};
+    COORD m_player_cursor_pos_{};
+    std::unique_ptr<Unit> m_player_{};
+    int m_monster_count_, m_level_monsters_;
 
-    void copy_from(const World& t_to_copy);
+    World(const World& t_to_copy) = default;
+    World(World&& t_to_move) = default;
+    World& operator=(const World& t_to_copy) = default;
+    World& operator=(World&& t_to_move) noexcept = default;
+
     std::shared_ptr<Type_data> tokenize(const std::string& t_line) const;
     void read_monster_types();
     void spawn_spawners();
@@ -57,5 +59,6 @@ namespace G6037599
     void monster_dies(int t_index);
     void next_stage();
 	};
-}
-#endif //WORLD
+}//G6037599
+
+#endif //G6037599_WORLD_HPP

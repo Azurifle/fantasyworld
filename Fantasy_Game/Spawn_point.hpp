@@ -1,5 +1,5 @@
-#ifndef SPAWN_POINT
-#define SPAWN_POINT
+#ifndef G6037599_SPAWN_POINT_HPP
+#define G6037599_SPAWN_POINT_HPP
 #pragma once
 #include "Tile_data.hpp"
 
@@ -53,4 +53,4 @@ namespace G6037599
   };
 }//G6037599
 
-#endif //SPAWN_POINT
+#endif //G6037599_SPAWN_POINT_HPP

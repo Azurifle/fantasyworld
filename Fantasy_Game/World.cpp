@@ -9,13 +9,12 @@
 namespace G6037599
 {
   //___ static _____________________________________________
-  const char* World::MONSTER_CONF_PATH = "monster_conf.txt";
+  const char* World::MONSTER_CONF_PATH = "Fantasy_Game/monster_conf.txt";
   const char* World::PLAYER_NAME = "NoOne The Hero";
   const COORD World::UP = { 0, -1 };
   const COORD World::DOWN = { 0, 1 };
   const COORD World::LEFT = { -1, 0 };
   const COORD World::RIGHT = { 1, 0 };
-  const COORD World::ZERO = { 0, 0 };
 
   short World::limit_interval(int t_number, const int t_min, const int t_max)
   {
@@ -46,10 +45,11 @@ namespace G6037599
 
   //___ (de)constructors _____________________________________________
   World::World() : m_map_(std::make_shared<Map>())
-  , m_console_(std::make_shared<Console>())
-  , m_player_(std::make_unique<Unit>(std::make_shared<Type_data>(
-    PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
+    , m_console_(std::make_shared<Console>()), m_player_cursor_pos_({0, 0})
+    , m_player_(std::make_unique<Unit>(std::make_shared<Type_data>(
+      PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
     , PLAYER_MAX_HP, PLAYER_ATK, PLAYER_MAX_ATK, '&')))
+    , m_monster_count_(4), m_level_monsters_(4)
   {
     m_console_->show();
     
@@ -66,19 +66,6 @@ namespace G6037599
 
     spawn_spawners();
     spawners_spawn_monster();
-  }
-
-  World::World(const World& t_to_copy) 
-    : m_player_cursor_pos_(t_to_copy.m_player_cursor_pos_)
-  {
-    copy_from(t_to_copy);
-  }
-
-  World& World::operator=(const World& t_to_copy)
-  {
-    m_player_cursor_pos_ = t_to_copy.m_player_cursor_pos_;
-    copy_from(t_to_copy);
-    return *this;
   }
 
   //___ public _____________________________________________
@@ -186,24 +173,6 @@ namespace G6037599
   }
 
   //___ private _______________________________________________________
-  void World::copy_from(const World& t_to_copy)
-  {
-    *m_console_ = *t_to_copy.m_console_;
-    m_console_->show();
-
-    *m_map_ = *t_to_copy.m_map_;
-    *m_player_ = *t_to_copy.m_player_;
-
-    m_spawners_.clear();
-    for (unsigned i = 0; i < t_to_copy.m_spawners_.size(); ++i)
-    {
-      m_spawners_.push_back(std::make_unique<Spawn_to<Unit>>(
-        t_to_copy.m_spawners_[i]->share_type(), m_console_, m_map_) );
-    }
-
-    m_console_->move_player_cursor(m_player_->get_pos());
-  }
-
   std::shared_ptr<Type_data> World::tokenize(const std::string& t_line) const
   {
     std::istringstream string_cutter(t_line);

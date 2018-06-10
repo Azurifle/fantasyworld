@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Fantasy_Game">
+      <UniqueIdentifier>{dc1e16d6-99b0-4467-bd1c-da2bd9b5bd83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Fantasy_Game">
+      <UniqueIdentifier>{8966ded5-ad1e-4724-a284-67a16654cfc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -21,38 +27,38 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Console.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Console.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Hp_bar.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Status_panel.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Map.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Hp_bar.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Spawn_point.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Spawn_to.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Map.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Status_panel.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Tile_data.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Type_data.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Timer.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Tile_data.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Type_data.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Spawn_to.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\Unit.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Spawn_point.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Fantasy_Game\World.hpp">
+      <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,35 +68,35 @@
     <ClCompile Include="G6037599.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Console.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Console.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Hp_bar.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Status_panel.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Map.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Hp_bar.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Spawn_point.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Status_panel.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Tile_data.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Timer.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Type_data.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Type_data.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Tile_data.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\Unit.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Spawn_point.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Fantasy_Game\World.cpp">
+      <Filter>Source Files\Fantasy_Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
