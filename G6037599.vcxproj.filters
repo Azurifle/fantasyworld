@@ -60,6 +60,9 @@
     <ClInclude Include="Fantasy_Game\World.hpp">
       <Filter>Header Files\Fantasy_Game</Filter>
     </ClInclude>
+    <ClInclude Include="Car_game.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -97,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="Fantasy_Game\World.cpp">
       <Filter>Source Files\Fantasy_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Car_game.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

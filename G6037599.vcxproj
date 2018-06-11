@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Car_game.hpp" />
     <ClInclude Include="Fantasy_Game\Console.hpp" />
     <ClInclude Include="Fantasy_Game\Hp_bar.hpp" />
     <ClInclude Include="Fantasy_Game\Map.hpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Car_game.cpp" />
     <ClCompile Include="Fantasy_Game\Console.cpp" />
     <ClCompile Include="Fantasy_Game\Hp_bar.cpp" />
     <ClCompile Include="Fantasy_Game\Map.cpp" />
