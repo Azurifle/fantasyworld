@@ -1,10 +1,10 @@
-#ifndef TYPE_DATA
-#define TYPE_DATA
+#ifndef G6037599_TYPE_DATA_HPP
+#define G6037599_TYPE_DATA_HPP
 #pragma once
 
 namespace G6037599
 {
-  class Type_data
+  class Type_data final
   {
   public:
     const std::string NAME{}, DEAD_MESSAGE{}, ATK_NAME{};
@@ -15,18 +15,21 @@ namespace G6037599
       , const std::string& t_dead_message
       , const std::string& t_atk_name
       , int t_max_hp, int t_atk, int t_max_atk
-      , char t_symbol, int t_behavior=0);
+      , char t_symbol, int t_behavior = 0);
     ~Type_data() = default;
-    Type_data(const Type_data& t_to_copy) = default;
-    Type_data& operator=(const Type_data& t_to_copy);
 
     int get_max_hp() const;
     void increase_max_hp(int t_amount);
     int random_atk() const;
     void reset_max_hp();
   private:
-    int m_max_hp_ = 0;
-  };
-}
+    int m_max_hp_;
 
-#endif //TYPE_DATA
+    Type_data(const Type_data& t_to_copy) = default;
+    Type_data(Type_data&& t_to_move) noexcept = default;
+    Type_data& operator=(const Type_data& t_to_copy) = default;
+    Type_data& operator=(Type_data&& t_to_move) noexcept = default;
+  };
+}//G6037599
+
+#endif //G6037599_TYPE_DATA_HPP

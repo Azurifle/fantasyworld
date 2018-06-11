@@ -72,25 +72,6 @@ namespace G6037599
       - BACK_TO_COUNT_DOWN_COLUMN, cursor.Y + GAME_RESET_ROW };
   }
 
-  Console::Console(const Console& t_to_copy)
-  {
-    m_map_start_ = t_to_copy.m_map_start_;
-    *m_monster_status_ = *t_to_copy.m_monster_status_;
-    *m_cursor_status_ = *t_to_copy.m_cursor_status_;
-    *m_player_hp_ = *t_to_copy.m_player_hp_;
-    *m_timer_ = *t_to_copy.m_timer_;
-  }
-
-  Console& Console::operator=(const Console& t_to_copy)
-  {
-    m_map_start_ = t_to_copy.m_map_start_;
-    *m_monster_status_ = *t_to_copy.m_monster_status_;
-    *m_cursor_status_ = *t_to_copy.m_cursor_status_;
-    *m_player_hp_ = *t_to_copy.m_player_hp_;
-    *m_timer_ = *t_to_copy.m_timer_;
-    return *this;
-  }
-
   //___ public _______________________________________________________
   void Console::show() const
   {

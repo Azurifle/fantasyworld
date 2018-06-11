@@ -5,7 +5,8 @@
 namespace G6037599
 {
   //___ (de)constructors _____________________________________________
-  Timer::Timer(const COORD& t_pos) : m_start_(t_pos) {}
+  Timer::Timer(const COORD& t_pos) : m_start_(t_pos), m_day_(1)
+    , m_hour_(0), m_minute_(0) {}
 
   //___ public _______________________________________________________
   void Timer::show()

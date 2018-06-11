@@ -1,10 +1,10 @@
-#ifndef MAP
-#define MAP
+#ifndef G6037599_MAP_HPP
+#define G6037599_MAP_HPP
 #pragma once
 
 namespace G6037599
 {
-  class Map
+  class Map final
   {
   public:
     const enum Enum 
@@ -16,7 +16,9 @@ namespace G6037599
     Map();
     ~Map() = default;
     Map(const Map& t_to_copy);
+    Map(Map&& t_to_move) noexcept = default;
     Map& operator=(const Map& t_to_copy);
+    Map& operator=(Map&& t_to_move) noexcept = default;
 
     void marked(const COORD& t_pos, int t_id);
     bool is_attacker(const COORD& t_pos, int t_id) const;
@@ -31,4 +33,4 @@ namespace G6037599
   };
 }//G6037599
 
-#endif //MAP
+#endif //G6037599_MAP_HPP

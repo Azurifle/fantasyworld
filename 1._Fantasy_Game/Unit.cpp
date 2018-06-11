@@ -9,16 +9,12 @@ namespace G6037599
   Unit::Unit(const std::shared_ptr<Type_data> t_type) : m_type_(t_type)
     , m_tile_(std::make_unique<Tile_data>()), m_hp_(t_type->get_max_hp()) {}
 
-  Unit::Unit(const Unit& t_to_copy)
-  {
-    m_hp_ = t_to_copy.m_hp_;
-    m_type_ = t_to_copy.m_type_;//shared
-    m_tile_ = std::make_unique<Tile_data>(t_to_copy.m_tile_->get_pos());
-  }
+  Unit::Unit(const Unit& t_to_copy) : m_type_(t_to_copy.m_type_)//shared
+    , m_tile_(std::make_unique<Tile_data>(t_to_copy.m_tile_->get_pos()))
+    , m_hp_(t_to_copy.m_hp_) {}
 
   Unit& Unit::operator=(const Unit& t_to_copy)
   {
-    m_tile_.reset();
     m_hp_ = t_to_copy.m_hp_;
     m_type_ = t_to_copy.m_type_;//shared
     m_tile_ = std::make_unique<Tile_data>(t_to_copy.m_tile_->get_pos());

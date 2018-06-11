@@ -24,6 +24,7 @@ namespace G6037599
 
   Map& Map::operator=(const Map& t_to_copy)
   {
+    m_grid_.clear();
     copy_from(t_to_copy);
     return *this;
   }
@@ -106,20 +107,10 @@ namespace G6037599
   //___ private _______________________________________________________
   void Map::copy_from(const Map& t_to_copy)
   {
-    m_grid_.clear();
-
-    const auto ANY_COLUMN = 0;
-    for (unsigned row = 0; row < t_to_copy.m_grid_.size(); ++row)
+    for (auto row = 0; row < t_to_copy.SIZE; ++row)
     {
-      m_grid_.push_back( std::make_unique< std::vector<Tile> >(SIZE, Tile{}) );
-
-      for (unsigned col = 0; col < t_to_copy.m_grid_[ANY_COLUMN]->size(); ++col)
-      {
-        m_grid_[row]->at(col) = t_to_copy.m_grid_[row]->at(col);
-      }
-    }//row
-
-    PROMISE(m_grid_[0]->at(0).owner_id == NO_UNIT);
+      m_grid_.push_back(std::make_unique< std::vector<Tile> >(SIZE, Tile{}));
+    }
   }
 
 }//G6037599

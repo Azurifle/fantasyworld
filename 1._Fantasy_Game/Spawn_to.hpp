@@ -1,5 +1,5 @@
-#ifndef SPAWN_TO
-#define SPAWN_TO
+#ifndef G6037599_SPAWN_TO_HPP
+#define G6037599_SPAWN_TO_HPP
 #pragma once
 #include "Spawn_point.hpp"
 #include "Map.hpp"
@@ -7,22 +7,34 @@
 namespace G6037599
 {
   template <class T>
-  class Spawn_to : public Spawn_point
+  class Spawn_to final: public Spawn_point
   {
   public:
     //LNK2019 error when put definition in .cpp
     Spawn_to<T>(const std::shared_ptr<Type_data> t_type
-      , const std::shared_ptr<Console> t_m_console, const std::shared_ptr<Map> t_m_map)
-    : Spawn_point(t_type, t_m_console, t_m_map) {}
+      , const std::shared_ptr<Console> t_console, const std::shared_ptr<Map> t_map)
+    : Spawn_point(t_type, t_console, t_map) {}
     
     ~Spawn_to<T>() = default;
 
     Spawn_to<T>(const Spawn_to<T>& t_to_copy) : Spawn_point(t_to_copy) {
-      copy_from(t_to_copy);
+      Spawn_to<T>::spawn(t_to_copy.m_monsters_.size());
+    }
+
+    Spawn_to<T>(Spawn_to<T>&& t_to_move) noexcept : Spawn_point(t_to_move) {
+      m_monsters_ = std::move(t_to_move.m_monsters_);
     }
 
     Spawn_to<T>& operator=(const Spawn_to<T>& t_to_copy) {
-      copy_from(t_to_copy);
+      Spawn_to<T>::spawn(t_to_copy.m_monsters_.size());
+      return *this;
+    }
+
+    Spawn_to<T>& operator=(Spawn_to<T>&& t_to_move) noexcept {
+      if(this != &t_to_move)
+      {
+        m_monsters_ = std::move(t_to_move.m_monsters_);
+      }
       return *this;
     }
 
@@ -91,14 +103,6 @@ namespace G6037599
   private:
     std::vector<std::unique_ptr<T>> m_monsters_;
 
-    void copy_from(const Spawn_to<T>& t_to_copy) {
-      m_monsters_.clear();
-      for (unsigned i = 0; i < t_to_copy.m_monsters_.size(); ++i)
-      {
-        m_monsters_.push_back(std::make_unique<T>(*t_to_copy.m_monsters_[i]));
-      }
-    }
-
     int find_index(const int t_monster_id) const {
       REQUIRE(m_monsters_.size() > 0);
       REQUIRE(t_monster_id > Map::NO_UNIT);
@@ -116,4 +120,4 @@ namespace G6037599
   };
 }//G6037599
 
-#endif //SPAWN_TO
+#endif //G6037599_SPAWN_TO_HPP

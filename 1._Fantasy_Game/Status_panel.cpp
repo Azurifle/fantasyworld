@@ -6,23 +6,23 @@
 namespace G6037599
 {
   //___ (de)constructors _____________________________________________
-  Status_panel::Status_panel(COORD t_pos) : m_start_(t_pos)
+  Status_panel::Status_panel(COORD t_pos) : m_start_(t_pos), m_is_hide_(true)
   {
     ++t_pos.Y;
     ++t_pos.X;
     m_hp_ = std::make_unique<Hp_bar>(t_pos);
   }
 
-  Status_panel::Status_panel(const Status_panel& t_to_copy)
-  {
-    m_start_ = t_to_copy.m_start_;
-    *m_hp_ = *t_to_copy.m_hp_;
-  }
+  Status_panel::Status_panel(const Status_panel& t_to_copy) 
+    : m_start_(t_to_copy.m_start_)
+    , m_hp_(std::make_unique<Hp_bar>(t_to_copy.m_hp_->get_pos()))
+    , m_is_hide_(t_to_copy.m_is_hide_) {}
 
   Status_panel& Status_panel::operator=(const Status_panel& t_to_copy)
   {
     m_start_ = t_to_copy.m_start_;
-    *m_hp_ = *t_to_copy.m_hp_;
+    m_hp_ = std::make_unique<Hp_bar>(t_to_copy.m_hp_->get_pos());
+    m_is_hide_ = t_to_copy.m_is_hide_;
     return *this;
   }
 

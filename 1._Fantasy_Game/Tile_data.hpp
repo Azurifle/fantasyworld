@@ -4,7 +4,7 @@
 
 namespace G6037599
 {
-  class Tile_data
+  class Tile_data final
   {
   public:
     const int ID;
@@ -12,8 +12,6 @@ namespace G6037599
     Tile_data();
     explicit Tile_data(const COORD& t_pos);
     ~Tile_data() = default;
-    Tile_data(Tile_data&& t_to_move) = default;
-    Tile_data& operator=(Tile_data&& t_to_move) noexcept = default;
 
     COORD get_pos() const;
     void set_pos(const COORD& t_pos);
@@ -22,7 +20,9 @@ namespace G6037599
     static int m_id_count_;
 
     Tile_data(const Tile_data& t_to_copy) = default;
+    Tile_data(Tile_data&& t_to_move) noexcept = default;
     Tile_data& operator=(const Tile_data& t_to_copy) = default;
+    Tile_data& operator=(Tile_data&& t_to_move) noexcept = default;
   };
 }//G6037599
 

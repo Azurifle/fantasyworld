@@ -7,13 +7,15 @@ namespace G6037599
 {
   class Type_data;
 
-  class Unit
+  class Unit final
   {
   public:
     explicit Unit(std::shared_ptr<Type_data> t_type);
     ~Unit() = default;
-    Unit(const Unit& t_to_copy);
+    Unit(const Unit& t_to_copy);//unique can't copy
+    Unit(Unit&& t_to_move) noexcept = default;//unique & shared can move
     Unit& operator=(const Unit& t_to_copy);
+    Unit& operator=(Unit&& t_to_move) noexcept = default;
 
     COORD get_pos() const;
     int get_id() const;
@@ -28,8 +30,6 @@ namespace G6037599
     std::shared_ptr<Type_data> m_type_ = nullptr;
     std::unique_ptr<Tile_data> m_tile_ = nullptr;
     int m_hp_ = 0;
-
-    void copy_from(const Unit& t_to_copy);
   };
 }
 

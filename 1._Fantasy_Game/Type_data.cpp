@@ -8,15 +8,9 @@ namespace G6037599
     , const std::string& t_dead_message, const std::string& t_atk_name
     , const int t_max_hp, const int t_atk, const int t_max_atk
     , const char t_symbol, const int t_behavior)
-   : NAME(t_name), DEAD_MESSAGE(t_dead_message), ATK_NAME(t_atk_name)
-    , ATK(t_atk), MAX_ATK(t_max_atk), ORIGIN_MAX_HP(t_max_hp), BEHAVIOR(t_behavior)
-    , SYMBOL(t_symbol), m_max_hp_(t_max_hp) {}
-
-  Type_data& Type_data::operator=(const Type_data& t_to_copy)
-  {
-    m_max_hp_ = t_to_copy.m_max_hp_;
-    return *this;
-  }
+    : NAME(t_name), DEAD_MESSAGE(t_dead_message), ATK_NAME(t_atk_name)
+      , ATK(t_atk), MAX_ATK(t_max_atk), ORIGIN_MAX_HP(t_max_hp)
+      , BEHAVIOR(t_behavior), SYMBOL(t_symbol), m_max_hp_(t_max_hp) {}
 
   //___ public ________________________________________________
   int Type_data::get_max_hp() const

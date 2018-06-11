@@ -16,7 +16,9 @@ namespace G6037599
       , std::shared_ptr<Console> t_m_console, std::shared_ptr<Map> t_m_map);
     virtual ~Spawn_point() = default;
     Spawn_point(const Spawn_point& t_to_copy);
+    Spawn_point(Spawn_point&& t_to_move) noexcept = default;
     Spawn_point& operator=(const Spawn_point& t_to_copy);
+    Spawn_point& operator=(Spawn_point&& t_to_move) noexcept = default;
 
     COORD get_pos() const;
     int get_id() const;
@@ -46,10 +48,10 @@ namespace G6037599
     void mark_console(const COORD& t_pos, bool t_is_remove = false) const;
     void increase_type_max_hp(int t_amount) const;
   private:
-    std::shared_ptr<Type_data> m_type_ = nullptr;
-    std::shared_ptr<Console> m_console_ = nullptr;
-    std::shared_ptr<Map> m_map_ = nullptr;
-    std::unique_ptr<Tile_data> m_tile_ = nullptr;
+    std::shared_ptr<Type_data> m_type_{};
+    std::shared_ptr<Console> m_console_{};
+    std::shared_ptr<Map> m_map_{};
+    std::unique_ptr<Tile_data> m_tile_{};
   };
 }//G6037599
 

@@ -149,34 +149,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="1._Fantasy_Game\Console.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Hp_bar.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Map.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Spawn_point.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Spawn_to.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Status_panel.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Tile_data.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Timer.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Type_data.hpp" />
+    <ClInclude Include="1._Fantasy_Game\Unit.hpp" />
+    <ClInclude Include="1._Fantasy_Game\World.hpp" />
     <ClInclude Include="Car_game.hpp" />
-    <ClInclude Include="Fantasy_Game\Console.hpp" />
-    <ClInclude Include="Fantasy_Game\Hp_bar.hpp" />
-    <ClInclude Include="Fantasy_Game\Map.hpp" />
-    <ClInclude Include="Fantasy_Game\Spawn_point.hpp" />
-    <ClInclude Include="Fantasy_Game\Spawn_to.hpp" />
-    <ClInclude Include="Fantasy_Game\Status_panel.hpp" />
-    <ClInclude Include="Fantasy_Game\Tile_data.hpp" />
-    <ClInclude Include="Fantasy_Game\Timer.hpp" />
-    <ClInclude Include="Fantasy_Game\Type_data.hpp" />
-    <ClInclude Include="Fantasy_Game\Unit.hpp" />
-    <ClInclude Include="Fantasy_Game\World.hpp" />
+    <ClInclude Include="Game_engine.hpp" />
+    <ClInclude Include="Grid.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="1._Fantasy_Game\Console.cpp" />
+    <ClCompile Include="1._Fantasy_Game\Hp_bar.cpp" />
+    <ClCompile Include="1._Fantasy_Game\Map.cpp" />
+    <ClCompile Include="1._Fantasy_Game\Spawn_point.cpp" />
+    <ClCompile Include="1._Fantasy_Game\Status_panel.cpp" />
+    <ClCompile Include="1._Fantasy_Game\Tile_data.cpp" />
+    <ClCompile Include="1._Fantasy_Game\Timer.cpp" />
+    <ClCompile Include="1._Fantasy_Game\Type_data.cpp" />
+    <ClCompile Include="1._Fantasy_Game\Unit.cpp" />
+    <ClCompile Include="1._Fantasy_Game\World.cpp" />
     <ClCompile Include="Car_game.cpp" />
-    <ClCompile Include="Fantasy_Game\Console.cpp" />
-    <ClCompile Include="Fantasy_Game\Hp_bar.cpp" />
-    <ClCompile Include="Fantasy_Game\Map.cpp" />
-    <ClCompile Include="Fantasy_Game\Spawn_point.cpp" />
-    <ClCompile Include="Fantasy_Game\Status_panel.cpp" />
-    <ClCompile Include="Fantasy_Game\Tile_data.cpp" />
-    <ClCompile Include="Fantasy_Game\Timer.cpp" />
-    <ClCompile Include="Fantasy_Game\Type_data.cpp" />
-    <ClCompile Include="Fantasy_Game\Unit.cpp" />
-    <ClCompile Include="Fantasy_Game\World.cpp" />
     <ClCompile Include="G6037599.cpp" />
+    <ClCompile Include="Game_engine.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

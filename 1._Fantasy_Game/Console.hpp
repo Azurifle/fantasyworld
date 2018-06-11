@@ -1,5 +1,5 @@
-#ifndef CONSOLE
-#define CONSOLE
+#ifndef G6037599_CONSOLE_HPP
+#define G6037599_CONSOLE_HPP
 #pragma once
 #include "Hp_bar.hpp"
 #include "Status_panel.hpp"
@@ -8,7 +8,7 @@ namespace G6037599
 {
   class Timer;
 
-  class Console
+  class Console final
   {
   public:
     const enum Enum { SPACE_BETWEEN_TILE = 3, POP_UP_PANEL_WIDTH = 65 };
@@ -19,8 +19,6 @@ namespace G6037599
     
     Console();
     ~Console() = default;
-    Console(const Console& t_to_copy);
-    Console& operator=(const Console& t_to_copy);
     
     void show() const;
     void print_player_status() const;
@@ -52,9 +50,14 @@ namespace G6037599
     std::unique_ptr<Hp_bar> m_player_hp_ = nullptr;
     std::unique_ptr<Timer> m_timer_ = nullptr;
 
+    Console(const Console& t_to_copy) = default;
+    Console(Console&& t_to_move) noexcept = default;
+    Console& operator=(const Console& t_to_copy) = default;
+    Console& operator=(Console&& t_to_move) noexcept = default;
+
     COORD find_map_cursor_pos(const COORD& t_pos) const;
   };
 
 }//G6037599
 
-#endif //CONSOLE
+#endif //G6037599_CONSOLE_HPP
