@@ -25,10 +25,10 @@
     <Filter Include="Source Files\2._Car_Game">
       <UniqueIdentifier>{2a8dbb20-6fad-414a-8957-f82bd190cb61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game_Engine">
+    <Filter Include="Header Files\0._Game_Engine">
       <UniqueIdentifier>{9e747537-2fef-42fa-806b-18a7a78b0954}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game_Engine">
+    <Filter Include="Source Files\0._Game_Engine">
       <UniqueIdentifier>{07e7bf94-3526-4b1b-ba1a-219fe3c43fb9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -69,17 +69,17 @@
     <ClInclude Include="1._Fantasy_Game\Unit.hpp">
       <Filter>Header Files\1._Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\World.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game_Engine\Game_engine.hpp">
-      <Filter>Header Files\Game_Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Game_Engine\Grid.hpp">
-      <Filter>Header Files\Game_Engine</Filter>
-    </ClInclude>
     <ClInclude Include="2._Car_Game\Car_game.hpp">
       <Filter>Header Files\2._Car_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="0._Game_Engine\Grid.hpp">
+      <Filter>Header Files\0._Game_Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="0._Game_Engine\Game_engine.hpp">
+      <Filter>Header Files\0._Game_Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="1._Fantasy_Game\Fantasy_game.hpp">
+      <Filter>Header Files\1._Fantasy_Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -116,17 +116,17 @@
     <ClCompile Include="1._Fantasy_Game\Unit.cpp">
       <Filter>Source Files\1._Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\World.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game_Engine\Game_engine.cpp">
-      <Filter>Source Files\Game_Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Game_Engine\Grid.cpp">
-      <Filter>Source Files\Game_Engine</Filter>
-    </ClCompile>
     <ClCompile Include="2._Car_Game\Car_game.cpp">
       <Filter>Source Files\2._Car_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="0._Game_Engine\Grid.cpp">
+      <Filter>Source Files\0._Game_Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="0._Game_Engine\Game_engine.cpp">
+      <Filter>Source Files\0._Game_Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="1._Fantasy_Game\Fantasy_game.cpp">
+      <Filter>Source Files\1._Fantasy_Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

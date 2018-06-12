@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Console.hpp"
-#include "World.hpp"
+#include "Fantasy_game.hpp"
 #include "Map.hpp"
 #include "Timer.hpp"
 
@@ -37,7 +37,7 @@ namespace G6037599
   //___ (de)constructors _____________________________________________
   Console::Console()
   {
-    REQUIRE(std::strlen(World::PLAYER_NAME) <= Status_panel::MAX_NAME_LENGTH);
+    REQUIRE(std::strlen(Fantasy_game::PLAYER_NAME) <= Status_panel::MAX_NAME_LENGTH);
 
     auto cursor = get_cursor();
     const short TO_MONSTER_STATUS = 7;
@@ -163,17 +163,17 @@ namespace G6037599
     cursor.X -= BACK_TO_EDGE;
     --cursor.Y;
     set_cursor(cursor);
-    std::cout << "== \" " << World::PLAYER_NAME << " \" ==";
+    std::cout << "== \" " << Fantasy_game::PLAYER_NAME << " \" ==";
 
     ++cursor.Y;
     set_cursor(cursor);
     std::cout << '|';
-    m_player_hp_->set(World::PLAYER_MAX_HP, World::PLAYER_MAX_HP);
+    m_player_hp_->set(Fantasy_game::PLAYER_MAX_HP, Fantasy_game::PLAYER_MAX_HP);
     std::cout << std::setw(cursor.X + PLAYER_STATUS_WIDTH - get_cursor().X) << std::setfill(' ') << '|';
 
     ++cursor.Y;
     set_cursor(cursor);
-    std::cout << "| ATK: " << World::PLAYER_ATK << " - " << World::PLAYER_MAX_ATK;
+    std::cout << "| ATK: " << Fantasy_game::PLAYER_ATK << " - " << Fantasy_game::PLAYER_MAX_ATK;
     std::cout << std::setw(cursor.X + PLAYER_STATUS_WIDTH - get_cursor().X) << std::setfill(' ') << '|';
 
     ++cursor.Y;
@@ -295,7 +295,7 @@ namespace G6037599
     set_cursor(cursor);
 
     print_centered_text(POP_UP_PANEL_WIDTH,
-      (std::string("\" ") + World::PLAYER_NAME + std::string(" \" has fallen.")).c_str()
+      (std::string("\" ") + Fantasy_game::PLAYER_NAME + std::string(" \" has fallen.")).c_str()
       , ' ');
     ++cursor.Y;
     set_cursor(cursor);
@@ -336,7 +336,7 @@ namespace G6037599
     set_cursor(cursor);
 
     print_centered_text(POP_UP_PANEL_WIDTH,
-      (std::string("WELL DONE \" ") + World::PLAYER_NAME + std::string(" \" !!!.")).c_str()
+      (std::string("WELL DONE \" ") + Fantasy_game::PLAYER_NAME + std::string(" \" !!!.")).c_str()
       , ' ');
     ++cursor.Y;
     set_cursor(cursor);
@@ -359,14 +359,14 @@ namespace G6037599
 
   void Console::set_player_full_hp() const
   {
-    m_player_hp_->set(World::PLAYER_MAX_HP, World::PLAYER_MAX_HP);
+    m_player_hp_->set(Fantasy_game::PLAYER_MAX_HP, Fantasy_game::PLAYER_MAX_HP);
   }
 
   void Console::set_player_hp(const int t_hp) const
   {
-    REQUIRE(0 <= t_hp && t_hp <= World::PLAYER_MAX_HP);
+    REQUIRE(0 <= t_hp && t_hp <= Fantasy_game::PLAYER_MAX_HP);
 
-    m_player_hp_->set(t_hp, World::PLAYER_MAX_HP);
+    m_player_hp_->set(t_hp, Fantasy_game::PLAYER_MAX_HP);
     set_cursor(m_player_cursor_);
   }
 
