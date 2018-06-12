@@ -39,12 +39,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Car_game.hpp">
-      <Filter>Header Files\2._Car_Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game_engine.hpp">
-      <Filter>Header Files\Game_Engine</Filter>
-    </ClInclude>
     <ClInclude Include="1._Fantasy_Game\Console.hpp">
       <Filter>Header Files\1._Fantasy_Game</Filter>
     </ClInclude>
@@ -78,8 +72,14 @@
     <ClInclude Include="1._Fantasy_Game\World.hpp">
       <Filter>Header Files\1._Fantasy_Game</Filter>
     </ClInclude>
-    <ClInclude Include="Grid.hpp">
+    <ClInclude Include="Game_Engine\Game_engine.hpp">
       <Filter>Header Files\Game_Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_Engine\Grid.hpp">
+      <Filter>Header Files\Game_Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="2._Car_Game\Car_game.hpp">
+      <Filter>Header Files\2._Car_Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -88,12 +88,6 @@
     </ClCompile>
     <ClCompile Include="G6037599.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Car_game.cpp">
-      <Filter>Source Files\2._Car_Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game_engine.cpp">
-      <Filter>Source Files\Game_Engine</Filter>
     </ClCompile>
     <ClCompile Include="1._Fantasy_Game\Console.cpp">
       <Filter>Source Files\1._Fantasy_Game</Filter>
@@ -125,8 +119,14 @@
     <ClCompile Include="1._Fantasy_Game\World.cpp">
       <Filter>Source Files\1._Fantasy_Game</Filter>
     </ClCompile>
-    <ClCompile Include="Grid.cpp">
+    <ClCompile Include="Game_Engine\Game_engine.cpp">
       <Filter>Source Files\Game_Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_Engine\Grid.cpp">
+      <Filter>Source Files\Game_Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="2._Car_Game\Car_game.cpp">
+      <Filter>Source Files\2._Car_Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

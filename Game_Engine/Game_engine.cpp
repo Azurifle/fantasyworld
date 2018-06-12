@@ -16,5 +16,4 @@ namespace G6037599
     else if (t_number > t_max)
       t_number = t_max;
   }
-
 }//G6037599

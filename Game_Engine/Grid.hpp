@@ -7,11 +7,11 @@ namespace G6037599
   class Grid final
   {
   public:
-    struct Tile final { int owner_id, second_id; };
-
     Grid(const COORD& t_coord, int t_grid_cols, int t_grid_rows);
     ~Grid() = default;
   private:
+    struct Tile final { int slot_1, slot_2; };
+
     std::vector<std::vector<Tile>> m_tiles_;
     COORD m_coord_{};
 
