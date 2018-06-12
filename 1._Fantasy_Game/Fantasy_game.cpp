@@ -9,7 +9,7 @@
 namespace G6037599
 {
   //___ static _____________________________________________
-  const char* Fantasy_game::MONSTER_CONF_PATH = "Fantasy_Game/monster_conf.txt";
+  const char* Fantasy_game::MONSTER_CONF_PATH = "1._Fantasy_Game/monster_conf.txt";
   const char* Fantasy_game::PLAYER_NAME = "NoOne The Hero";
   const COORD Fantasy_game::UP = { 0, -1 };
   const COORD Fantasy_game::DOWN = { 0, 1 };
@@ -18,7 +18,46 @@ namespace G6037599
 
   void Fantasy_game::run()
   {
+    Fantasy_game world;
 
+    enum Wait_key
+    {
+      HALF_SECOND = 500, ESC = 27, ARROW = 224,
+      ARROW_UP = 72, ARROW_DOWN = 80, ARROW_LEFT = 75, ARROW_RIGHT = 77
+    };
+    while (true)
+    {
+      switch (wait_key(HALF_SECOND))//fix move key so that can check map pos printing
+      {
+      case NO_KEY_PRESS: world.update();
+        break;
+      case 'w': _getch();
+        world.player_move(UP);
+        break;
+      case 's': _getch();
+        world.player_move(DOWN);
+        break;
+      case 'a': _getch();
+        world.player_move(LEFT);
+        break;
+      case 'd': _getch();
+        world.player_move(RIGHT);
+        break;
+      case ARROW: switch (_getch())
+      {
+      case ARROW_UP: world.move_cursor(UP); break;
+      case ARROW_DOWN: world.move_cursor(DOWN); break;
+      case ARROW_LEFT: world.move_cursor(LEFT); break;
+      case ARROW_RIGHT: world.move_cursor(RIGHT); break;
+      default: world.update();
+      } break;
+      case ESC: _getch();
+        world.exit();
+        return;
+      default: _getch();
+        world.player_move();
+      }
+    }//game loop
   }
 
   short Fantasy_game::limit_interval(int t_number, const int t_min, const int t_max)

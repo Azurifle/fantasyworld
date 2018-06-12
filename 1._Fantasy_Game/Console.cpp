@@ -277,8 +277,6 @@ namespace G6037599
     puts("");
     puts("                      ////////////////////////////////////////////////////////////");
     puts("");
-    puts("");
-    puts("   Press <Any key> = exit ");
   }
 
   void Console::show_game_reset() const

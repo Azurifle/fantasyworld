@@ -8,43 +8,38 @@ namespace G6037599
   //___ static ___________________________________________________________
   void Game_engine::start()
   {
+    disable_mouse_editing();
     srand(GetTickCount());
 
     while (true)
     {
       show_header();
-      enum Option
+      const char OPTION_1 = '1', OPTION_LAST = '2', ESC = 27;
+      std::cout << "Press <" << OPTION_1 << " - " << OPTION_LAST << "> or [ESC] to exit: ";
+      auto wrong_input = true;
+      while (wrong_input)
       {
-        NOT_ASSIGN = -1, OPTION_0_EXIT, OPTION_1, OPTION_LAST
-      };
-      std::cout << "Input <" << OPTION_1 << " - " << OPTION_LAST << "> or <" << OPTION_0_EXIT << "> to exit: ";
-      int choice = NOT_ASSIGN;
-      do
-      {
-        std::cin >> choice;
-        std::cin.clear();
-        std::cin.ignore(INT_MAX, '\n');
-        switch (choice)
+        switch (_getch())
         {
-        case OPTION_1: system("CLS");
+        case OPTION_1: _getch(); system("CLS");
           Fantasy_game::run();
+          wrong_input = false;
           back_to_main_menu();
           break;
-        case OPTION_LAST: system("CLS");
+        case OPTION_LAST: _getch(); system("CLS");
           Car_game::run();
+          wrong_input = false;
           back_to_main_menu();
           break;
 
-        case OPTION_0_EXIT: puts("");
+        case ESC: _getch();
+          puts("\n");
           puts("============================ End of Program ====================================");
           _getch(); _getch();
           return;
-        default: puts("");
-          std::cout << "Please input only <" << OPTION_1 << " - " << OPTION_LAST
-            << "> or <" << OPTION_0_EXIT << "> to exit: ";
+        default: _getch();
         }
-      } while (choice < OPTION_0_EXIT || choice > OPTION_LAST);
-      system("CLS");
+      }//input loop
     }//menu loop
   }
 
@@ -57,9 +52,16 @@ namespace G6037599
   }
 
   //___ static private ___________________________________________________________
+  void Game_engine::disable_mouse_editing()
+  {
+    DWORD prev_mode;
+    PROMISE(GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), &prev_mode));
+    PROMISE(SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), prev_mode & ~ENABLE_QUICK_EDIT_MODE));
+  }
+
   void Game_engine::show_header()
   {
-    puts(" === Game Engine Project =======================");
+    puts("=== Game Engine =======================");
     puts("");
     puts("By: Darlyn Sirikasem G6037599");
     puts("");
@@ -78,7 +80,8 @@ namespace G6037599
   void Game_engine::back_to_main_menu()
   {
     std::cout << std::endl
-      << "Input <Any key> to main menu: ";
+      << "Press <Any key> to main menu: ";
     _getch(); _getch();
+    system("CLS");
   }
 }//G6037599

@@ -17,6 +17,7 @@ namespace G6037599
   private:
     std::shared_ptr<Grid> m_grid_;
 
+    static void disable_mouse_editing();
     static void show_header();
     static void back_to_main_menu();
 
