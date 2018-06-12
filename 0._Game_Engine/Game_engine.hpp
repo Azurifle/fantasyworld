@@ -17,6 +17,9 @@ namespace G6037599
   private:
     std::shared_ptr<Grid> m_grid_;
 
+    static void show_header();
+    static void back_to_main_menu();
+
     Game_engine(const Game_engine& t_to_copy) = default;
     Game_engine(Game_engine&& t_to_move) noexcept = default;
     Game_engine& operator=(const Game_engine& t_to_copy) = default;

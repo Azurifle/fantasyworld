@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "World.hpp"
+#include "Fantasy_game.hpp"
 #include "Console.hpp"
 #include "Map.hpp"
 #include "Type_data.hpp"
@@ -9,14 +9,19 @@
 namespace G6037599
 {
   //___ static _____________________________________________
-  const char* World::MONSTER_CONF_PATH = "Fantasy_Game/monster_conf.txt";
-  const char* World::PLAYER_NAME = "NoOne The Hero";
-  const COORD World::UP = { 0, -1 };
-  const COORD World::DOWN = { 0, 1 };
-  const COORD World::LEFT = { -1, 0 };
-  const COORD World::RIGHT = { 1, 0 };
+  const char* Fantasy_game::MONSTER_CONF_PATH = "Fantasy_Game/monster_conf.txt";
+  const char* Fantasy_game::PLAYER_NAME = "NoOne The Hero";
+  const COORD Fantasy_game::UP = { 0, -1 };
+  const COORD Fantasy_game::DOWN = { 0, 1 };
+  const COORD Fantasy_game::LEFT = { -1, 0 };
+  const COORD Fantasy_game::RIGHT = { 1, 0 };
 
-  short World::limit_interval(int t_number, const int t_min, const int t_max)
+  void Fantasy_game::run()
+  {
+
+  }
+
+  short Fantasy_game::limit_interval(int t_number, const int t_min, const int t_max)
   {
     if (t_number < t_min)
       t_number = t_min;
@@ -25,7 +30,7 @@ namespace G6037599
     return static_cast<short>(t_number);
   }
 
-  int World::wait_key(const int t_miliseconds)
+  int Fantasy_game::wait_key(const int t_miliseconds)
   {
     const auto TIME_UP = clock() + t_miliseconds;
     do
@@ -44,32 +49,29 @@ namespace G6037599
   }
 
   //___ (de)constructors _____________________________________________
-  World::World() : m_map_(std::make_shared<Map>())
-    , m_console_(std::make_shared<Console>()), m_player_cursor_pos_({0, 0})
+  Fantasy_game::Fantasy_game() : m_map_(std::make_shared<Map>())
+    , m_console_(std::make_shared<Console>())
     , m_player_(std::make_unique<Unit>(std::make_shared<Type_data>(
       PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
     , PLAYER_MAX_HP, PLAYER_ATK, PLAYER_MAX_ATK, '&')))
     , m_monster_count_(4), m_level_monsters_(4)
   {
     m_console_->show();
-    
+
     m_player_->set_pos(COORD{ Map::MIDDLE, Map::MIDDLE });
     m_player_cursor_pos_ = m_player_->get_pos();
     m_map_->marked(m_player_->get_pos(), m_player_->get_id());
 
     m_console_->move_player_cursor(m_player_->get_pos());
-    m_console_->marked(m_player_->get_pos(), std::string(1, m_player_->get_symbol()).c_str() );
+    m_console_->marked(m_player_->get_pos(), std::string(1, m_player_->get_symbol()).c_str());
 
     read_monster_types();
-
-    srand(static_cast<unsigned int>(time(nullptr)));
-
     spawn_spawners();
     spawners_spawn_monster();
   }
 
   //___ public _____________________________________________
-  void World::player_move()
+  void Fantasy_game::player_move()
   {
     switch (m_console_->update_hour())
     {
@@ -81,7 +83,7 @@ namespace G6037599
     }//switch update_hour
   }
 
-  void World::player_move(COORD t_move)
+  void Fantasy_game::player_move(COORD t_move)
   {
     t_move.X = limit_interval(m_player_->get_pos().X + t_move.X, 0, m_map_->SIZE -1);
     t_move.Y = limit_interval(m_player_->get_pos().Y + t_move.Y, 0, m_map_->SIZE -1);
@@ -121,7 +123,7 @@ namespace G6037599
     }//move into battle?    
   }
 
-  void World::move_cursor(const COORD& t_move)
+  void Fantasy_game::move_cursor(const COORD& t_move)
   {
     m_player_cursor_pos_.X = limit_interval(m_player_cursor_pos_.X + t_move.X, 0, m_map_->SIZE);
     m_player_cursor_pos_.Y = limit_interval(m_player_cursor_pos_.Y + t_move.Y, 0, m_map_->SIZE);
@@ -152,7 +154,7 @@ namespace G6037599
     }//has unit that not player
   }
 
-  void World::update()
+  void Fantasy_game::update()
   {
     switch (m_console_->update_minute())
     {
@@ -164,16 +166,14 @@ namespace G6037599
     }//switch update minute
   }
 
-  void World::exit() const
+  void Fantasy_game::exit() const
   {
     system("CLS");
     m_console_->thanks_user();
-    _getch();
-    _getch();
   }
 
   //___ private _______________________________________________________
-  std::shared_ptr<Type_data> World::tokenize(const std::string& t_line) const
+  std::shared_ptr<Type_data> Fantasy_game::tokenize(const std::string& t_line) const
   {
     std::istringstream string_cutter(t_line);
     std::string token, name, dead_message, atk_name;
@@ -199,7 +199,7 @@ namespace G6037599
       , max_hp, atk, max_atk, token[TO_CHAR], behavior);
   }
 
-  void World::read_monster_types()
+  void Fantasy_game::read_monster_types()
   {
     std::ifstream file_reader(MONSTER_CONF_PATH);
     REQUIRE(file_reader.is_open());
@@ -213,7 +213,7 @@ namespace G6037599
     file_reader.close();
   }
 
-  void World::spawn_spawners()
+  void Fantasy_game::spawn_spawners()
   {
     for (unsigned i = 0; i < m_spawners_.size(); ++i)
     {
@@ -224,7 +224,7 @@ namespace G6037599
     }
   }
 
-  void World::spawners_spawn_monster()
+  void Fantasy_game::spawners_spawn_monster()
   {
     REQUIRE(0 < m_monster_count_);
     REQUIRE(m_monster_count_ <= m_map_->SIZE * m_map_->SIZE);
@@ -248,7 +248,7 @@ namespace G6037599
     }
   }
 
-  void World::monsters_stronger()
+  void Fantasy_game::monsters_stronger()
   {
     for (auto it = m_spawners_.begin(); it != m_spawners_.end(); ++it)
     {
@@ -257,7 +257,7 @@ namespace G6037599
     }
   }
 
-  void World::game_reset()
+  void Fantasy_game::game_reset()
   {
     const auto THREE_SECOND = 3000, COUNT_DOWN = 9, ONE_SECOND = 1000;
     wait_key(THREE_SECOND);
@@ -289,7 +289,7 @@ namespace G6037599
     m_console_->move_player_cursor(m_player_->get_pos());
   }
 
-  void World::check_battle()
+  void Fantasy_game::check_battle()
   {
     const auto ENEMY_ID = m_map_->get(m_player_->get_pos());
     if(ENEMY_ID == m_player_->get_id())
@@ -315,7 +315,7 @@ namespace G6037599
     
   }
 
-  int World::find_spawner_index(const int t_monster_id) const
+  int Fantasy_game::find_spawner_index(const int t_monster_id) const
   {
     REQUIRE(t_monster_id > Map::NO_UNIT);
 
@@ -331,7 +331,7 @@ namespace G6037599
     return NO_SPAWNER;
   }
 
-  void World::update_monster_status_hp() const
+  void Fantasy_game::update_monster_status_hp() const
   {
     const auto ENEMY_ID = m_map_->get(m_player_->get_pos());
     if (ENEMY_ID != m_player_->get_id())
@@ -342,7 +342,7 @@ namespace G6037599
     }//player is attacker
   }
 
-  void World::update_cursor_status_hp() const
+  void Fantasy_game::update_cursor_status_hp() const
   {
     const auto ENEMY_ID = m_map_->get(m_player_cursor_pos_);
     if (ENEMY_ID > m_map_->NO_UNIT && ENEMY_ID != m_player_->get_id())
@@ -361,7 +361,7 @@ namespace G6037599
     }
   }
 
-  void World::player_move_into_battle()
+  void Fantasy_game::player_move_into_battle()
   {
     m_console_->marked(m_player_->get_pos()
       , std::string(1, m_player_->get_symbol()).c_str(), true);
@@ -375,7 +375,7 @@ namespace G6037599
       , m_spawners_[INDEX]->get_type_max_atk());
   }
 
-  void World::monster_dies(const int t_index)
+  void Fantasy_game::monster_dies(const int t_index)
   {
     const auto INSTANT_HEAL = 1;
     switch(m_spawners_[t_index]->get_type_behavior())
@@ -400,7 +400,7 @@ namespace G6037599
     switch (m_monster_count_) { case 0: next_stage(); default:; }
   }
 
-  void World::next_stage()
+  void Fantasy_game::next_stage()
   {
     const auto THREE_SECOND = 3000, COUNT_DOWN = 9, ONE_SECOND = 1000;
     wait_key(THREE_SECOND);

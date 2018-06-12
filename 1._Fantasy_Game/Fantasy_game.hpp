@@ -1,5 +1,5 @@
-#ifndef G6037599_WORLD_HPP
-#define G6037599_WORLD_HPP
+#ifndef G6037599_FANTASY_GAME_HPP
+#define G6037599_FANTASY_GAME_HPP
 #pragma once
 #include "Unit.hpp"
 #include "Spawn_point.hpp"
@@ -10,7 +10,7 @@ namespace G6037599
   class Map;
   class Type_data;
 
-	class World final
+	class Fantasy_game final
 	{
 	public:
     static const char* MONSTER_CONF_PATH, * PLAYER_NAME;
@@ -21,11 +21,12 @@ namespace G6037599
 	    , PLAYER_ATK = 20, PLAYER_MAX_ATK = 22
 	  };
 
+    static void run();
     static short limit_interval(int t_number, int t_min, int t_max);
     static int wait_key(int t_miliseconds);
 	  
-	  World();
-    ~World() = default;
+	  Fantasy_game();
+    ~Fantasy_game() = default;
 
     void player_move();
 	  void player_move(COORD t_move);
@@ -40,10 +41,10 @@ namespace G6037599
     std::unique_ptr<Unit> m_player_{};
     int m_monster_count_, m_level_monsters_;
 
-    World(const World& t_to_copy) = default;
-    World(World&& t_to_move) = default;
-    World& operator=(const World& t_to_copy) = default;
-    World& operator=(World&& t_to_move) noexcept = default;
+    Fantasy_game(const Fantasy_game& t_to_copy) = default;
+    Fantasy_game(Fantasy_game&& t_to_move) = default;
+    Fantasy_game& operator=(const Fantasy_game& t_to_copy) = default;
+    Fantasy_game& operator=(Fantasy_game&& t_to_move) noexcept = default;
 
     std::shared_ptr<Type_data> tokenize(const std::string& t_line) const;
     void read_monster_types();
@@ -61,4 +62,4 @@ namespace G6037599
 	};
 }//G6037599
 
-#endif //G6037599_WORLD_HPP
+#endif //G6037599_FANTASY_GAME_HPP

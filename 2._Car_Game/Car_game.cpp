@@ -3,6 +3,7 @@
 
 namespace G6037599
 {
+  //___ static _____________________________________________
   void Car_game::run()
   {
     std::vector<std::vector<int>> map;
