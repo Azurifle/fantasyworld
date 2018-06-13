@@ -18,44 +18,25 @@ namespace G6037599
 
   void Fantasy_game::run()
   {
+    REQUIRE(Game_engine::is_running());
     Fantasy_game world;
 
-    enum Wait_key
-    {
-      HALF_SECOND = 500, ESC = 27, ARROW = 224,
-      ARROW_UP = 72, ARROW_DOWN = 80, ARROW_LEFT = 75, ARROW_RIGHT = 77
-    };
     while (true)
     {
-      switch (wait_key(HALF_SECOND))//fix move key so that can check map pos printing
+      const auto HALF_SECOND = 500;
+      switch (Game_engine::wait_key(HALF_SECOND))
       {
-      case NO_KEY_PRESS: world.update();
-        break;
-      case 'w': _getch();
-        world.player_move(UP);
-        break;
-      case 's': _getch();
-        world.player_move(DOWN);
-        break;
-      case 'a': _getch();
-        world.player_move(LEFT);
-        break;
-      case 'd': _getch();
-        world.player_move(RIGHT);
-        break;
-      case ARROW: switch (_getch())
-      {
-      case ARROW_UP: world.move_cursor(UP); break;
-      case ARROW_DOWN: world.move_cursor(DOWN); break;
-      case ARROW_LEFT: world.move_cursor(LEFT); break;
-      case ARROW_RIGHT: world.move_cursor(RIGHT); break;
-      default: world.update();
-      } break;
-      case ESC: _getch();
-        world.exit();
-        return;
-      default: _getch();
-        world.player_move();
+      case Game_engine::KEY_NO_PRESS: world.update(); break;
+      case 'w': world.player_move(UP); break;
+      case 's': world.player_move(DOWN); break;
+      case 'a': world.player_move(LEFT); break;
+      case 'd': world.player_move(RIGHT); break;
+      case Game_engine::KEY_ARROW_UP: world.move_cursor(UP); break;
+      case Game_engine::KEY_ARROW_DOWN: world.move_cursor(DOWN); break;
+      case Game_engine::KEY_ARROW_LEFT: world.move_cursor(LEFT); break;
+      case Game_engine::KEY_ARROW_RIGHT: world.move_cursor(RIGHT); break;
+      case Game_engine::KEY_ESC: world.exit(); return;
+      default: world.player_move();
       }
     }//game loop
   }
@@ -69,31 +50,13 @@ namespace G6037599
     return static_cast<short>(t_number);
   }
 
-  int Fantasy_game::wait_key(const int t_miliseconds)
-  {
-    const auto TIME_UP = clock() + t_miliseconds;
-    do
-    {
-      switch (_kbhit())
-      {
-      case NO_KEY_PRESS: break;
-      default: return _getch();
-      }
-
-      const auto MILISEC_PER_KEY = 50;
-      Sleep(MILISEC_PER_KEY);
-    } while (clock() < TIME_UP);
-
-    return NO_KEY_PRESS;
-  }
-
   //___ (de)constructors _____________________________________________
   Fantasy_game::Fantasy_game() : m_map_(std::make_shared<Map>())
     , m_console_(std::make_shared<Console>())
     , m_player_(std::make_unique<Unit>(std::make_shared<Type_data>(
       PLAYER_NAME, "Ahhhhh, sh*t I'm dead.", "Punch!"
     , PLAYER_MAX_HP, PLAYER_ATK, PLAYER_MAX_ATK, '&')))
-    , m_monster_count_(4), m_level_monsters_(4)
+    , m_monster_count_(STAGE_1_MONSTERS), m_level_monsters_(STAGE_1_MONSTERS)
   {
     m_console_->show();
 
@@ -265,7 +228,7 @@ namespace G6037599
 
   void Fantasy_game::spawners_spawn_monster()
   {
-    REQUIRE(0 < m_monster_count_);
+    REQUIRE(m_monster_count_ > 0);
     REQUIRE(m_monster_count_ <= m_map_->SIZE * m_map_->SIZE);
 
     std::vector<int> size_per_types;
@@ -299,15 +262,15 @@ namespace G6037599
   void Fantasy_game::game_reset()
   {
     const auto THREE_SECOND = 3000, COUNT_DOWN = 9, ONE_SECOND = 1000;
-    wait_key(THREE_SECOND);
+    Game_engine::wait_key(THREE_SECOND);
 
     m_console_->show_game_reset();
     for(auto i = COUNT_DOWN; i > 0; --i)
     {
       m_console_->show_count_down(i);
-      switch (wait_key(ONE_SECOND))
+      switch (Game_engine::wait_key(ONE_SECOND))
       {
-      case NO_KEY_PRESS: break;
+      case Game_engine::KEY_NO_PRESS: break;
       default: _getch();
       }
     }
@@ -324,8 +287,10 @@ namespace G6037599
     m_console_->set_player_full_hp();
 
     spawn_spawners();
+    m_monster_count_ = m_level_monsters_;
     spawners_spawn_monster();
-    m_console_->move_player_cursor(m_player_->get_pos());
+    m_player_cursor_pos_ = m_player_->get_pos();
+    m_console_->move_player_cursor(m_player_cursor_pos_);
   }
 
   void Fantasy_game::check_battle()
@@ -442,15 +407,15 @@ namespace G6037599
   void Fantasy_game::next_stage()
   {
     const auto THREE_SECOND = 3000, COUNT_DOWN = 9, ONE_SECOND = 1000;
-    wait_key(THREE_SECOND);
+    Game_engine::wait_key(THREE_SECOND);
 
     m_console_->show_next_stage();
     for (auto i = COUNT_DOWN; i > 0; --i)
     {
       m_console_->show_count_down(i);
-      switch (wait_key(ONE_SECOND))
+      switch (Game_engine::wait_key(ONE_SECOND))
       {
-      case NO_KEY_PRESS: break;
+      case Game_engine::KEY_NO_PRESS: break;
       default: _getch();
       }
     }
@@ -465,12 +430,15 @@ namespace G6037599
     m_console_->marked(m_player_->get_pos()
       , std::string(1, m_player_->get_symbol()).c_str());
     m_console_->set_player_full_hp();
-    const auto MONSTER_MULTIPLY = 2;
-    m_level_monsters_ *= MONSTER_MULTIPLY;
-    m_monster_count_ = m_level_monsters_;
 
     spawn_spawners();
+
+    const auto MONSTER_MULTIPLY = 2;
+    m_level_monsters_ *= MONSTER_MULTIPLY;
+    m_monster_count_ = m_level_monsters_;    
     spawners_spawn_monster();
-    m_console_->move_player_cursor(m_player_->get_pos());
+
+    m_player_cursor_pos_ = m_player_->get_pos();
+    m_console_->move_player_cursor(m_player_cursor_pos_);
   }
 }//namespace G6037599

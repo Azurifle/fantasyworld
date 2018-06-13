@@ -6,7 +6,22 @@ namespace G6037599
   //___ static _____________________________________________
   void Car_game::run()
   {
-    std::vector<std::vector<int>> map;
+    REQUIRE(Game_engine::is_running());
+    Car_game game{};
+
+    while (true)
+    {
+      const auto A_QUARTER_SECOND = 250;
+      Sleep(A_QUARTER_SECOND);
+      switch (Game_engine::get_key())
+      {
+      case Game_engine::KEY_NO_PRESS: break;
+      case Game_engine::KEY_ESC: return;
+      default:;
+      }
+    }//game loop
+
+    /*std::vector<std::vector<int>> map;
     map.push_back(std::vector<int>({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
     map.push_back(std::vector<int>({ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }));
     map.push_back(std::vector<int>({ 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0 }));
@@ -31,8 +46,6 @@ namespace G6037599
       }
       std::cout << std::endl;
     }
-    _getch();
-
-
+    _getch();*/
   }
 }//G6037599

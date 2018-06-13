@@ -10,11 +10,11 @@ namespace G6037599
   public:
     static void run();
 
-    Car_game() = default;
     ~Car_game() = default;
   private:
     Game_engine m_engine_;
 
+    Car_game() = default;
     Car_game(const Car_game& t_to_copy) = default;
     Car_game(Car_game&& t_to_move) noexcept = default;
     Car_game& operator=(const Car_game& t_to_copy) = default;

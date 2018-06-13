@@ -8,6 +8,9 @@ namespace G6037599
   //___ static ___________________________________________________________
   void Game_engine::start()
   {
+    REQUIRE(!m_is_running_);
+    m_is_running_ = true;
+
     disable_mouse_editing();
     srand(GetTickCount());
 
@@ -19,28 +22,73 @@ namespace G6037599
       auto wrong_input = true;
       while (wrong_input)
       {
-        switch (_getch())
+        switch (get_key())
         {
-        case OPTION_1: _getch(); system("CLS");
+        case OPTION_1: system("CLS");
           Fantasy_game::run();
           wrong_input = false;
           back_to_main_menu();
           break;
-        case OPTION_LAST: _getch(); system("CLS");
+        case OPTION_LAST: system("CLS");
           Car_game::run();
           wrong_input = false;
           back_to_main_menu();
           break;
 
-        case ESC: _getch();
-          puts("\n");
+        case ESC: puts("\n");
           puts("============================ End of Program ====================================");
-          _getch(); _getch();
+          wait_key();
+          m_is_running_ = false;
           return;
-        default: _getch();
+        default:;
         }
       }//input loop
     }//menu loop
+  }
+
+  bool Game_engine::is_running() { return m_is_running_; }
+
+  int Game_engine::get_key()
+  {
+    switch (_kbhit())
+    {
+    case KEY_NO_PRESS: return KEY_NO_PRESS;
+    default: return wait_key();
+    }//switch 1st keyboard hit
+  }
+
+  int Game_engine::wait_key()
+  {
+    const auto FIRST_KEY = _getch();
+    switch (FIRST_KEY)
+    {
+    case KEY_ARROW: return _getch();
+    default: switch (_kbhit())
+      {
+      case KEY_NO_PRESS: break;
+      default: _getch();
+      }//switch 2nd keyboard hit
+      return FIRST_KEY;
+    }
+  }
+
+  int Game_engine::wait_key(const int t_miliseconds)
+  {
+    const auto TIME_UP = clock() + t_miliseconds;
+    do
+    {
+      const auto KEY = get_key();
+      switch (KEY)
+      {
+      case KEY_NO_PRESS: break;
+      default: return KEY;
+      }
+
+      const auto MILISEC_PER_KEY = 50;
+      Sleep(MILISEC_PER_KEY);
+    } while (clock() < TIME_UP);
+
+    return KEY_NO_PRESS;
   }
 
   void Game_engine::limit_interval(int& t_number, const int t_min, const int t_max)
@@ -51,7 +99,9 @@ namespace G6037599
       t_number = t_max;
   }
 
-  //___ static private ___________________________________________________________
+  //___ private static ___________________________________________________________
+  bool Game_engine::m_is_running_ = false;
+
   void Game_engine::disable_mouse_editing()
   {
     DWORD prev_mode;
