@@ -99,6 +99,23 @@ namespace G6037599
       t_number = t_max;
   }
 
+  void Game_engine::load_txt(const std::string& t_path, std::vector<std::string>& t_tokens)
+  {
+    std::ifstream file_reader(t_path);
+    REQUIRE(file_reader.is_open());//should change to popup warning later
+
+    std::string temp;
+    while (std::getline(file_reader, temp))
+    {
+      const auto TAB = '\t';
+      while(std::getline(std::istringstream(temp), temp, TAB))
+      {
+        t_tokens.push_back(temp);
+      }
+    }
+    file_reader.close();
+  }
+
   //___ private static ___________________________________________________________
   bool Game_engine::m_is_running_ = false;
 

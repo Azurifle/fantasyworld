@@ -204,7 +204,7 @@ namespace G6037599
   void Fantasy_game::read_monster_types()
   {
     std::ifstream file_reader(MONSTER_CONF_PATH);
-    REQUIRE(file_reader.is_open());
+    REQUIRE(file_reader.is_open());//should change to popup warning later
 
     std::string line;
     while (std::getline(file_reader, line))

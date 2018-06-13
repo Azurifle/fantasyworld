@@ -4,15 +4,49 @@
 
 namespace G6037599
 {
-  Grid::Grid(const COORD& t_coord, int t_grid_cols, int t_grid_rows)
-    : m_coord_(t_coord)
+  //___ (de)constructors _____________________________________________
+  Grid::Grid(const COORD& t_start_coord, const COORD& t_end_coord)
+    : m_start_coord_(t_start_coord), m_end_coord_(t_end_coord)
   {
-    const auto CMD_COLS_LIMIT = 40, CMD_ROWS_LIMIT = 30, MIN_TILES = 2;
-    REQUIRE(0 <= t_coord.X); REQUIRE(t_coord.X <= CMD_COLS_LIMIT);
-    REQUIRE(0 <= t_coord.Y); REQUIRE(t_coord.Y <= CMD_ROWS_LIMIT);
-    Game_engine::limit_interval(t_grid_cols, MIN_TILES, CMD_COLS_LIMIT - t_coord.X);
-    Game_engine::limit_interval(t_grid_rows, MIN_TILES, CMD_ROWS_LIMIT - t_coord.Y);
+    REQUIRE(0 <= t_start_coord.X); REQUIRE(t_end_coord.X <= Game_engine::CMD_LAST_COLS);
+    REQUIRE(0 <= t_start_coord.Y); REQUIRE(t_end_coord.Y <= Game_engine::CMD_LAST_ROWS);
+    REQUIRE(t_start_coord.X < t_end_coord.X);
+    REQUIRE(t_start_coord.Y < t_end_coord.Y);
+  }
 
-    m_tiles_.resize(t_grid_cols, std::vector<Tile>(t_grid_rows, Tile{ 0, 0 }));
+  //___ public _____________________________________________
+  void Grid::load(const std::string& t_bmp_path)
+  {
+    //https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file
+
+    std::ifstream bmp(t_bmp_path, std::ios::binary);
+
+    const size_t HEADER_SIZE = 54;
+    std::array<char, HEADER_SIZE> header;
+    bmp.read(header.data(), header.size());
+
+    const auto DATA_OFFSET = *reinterpret_cast<unsigned *>(&header[10])
+      , WIDTH = *reinterpret_cast<unsigned *>(&header[18])
+      , HEIGHT = *reinterpret_cast<unsigned *>(&header[22]);
+
+    std::vector<char> img(DATA_OFFSET - HEADER_SIZE);
+    bmp.read(img.data(), img.size());
+
+    const auto ROW_PADDED = WIDTH * 3 + 3 & ~3
+      , DATA_SIZE = ROW_PADDED * HEIGHT;
+    img.resize(DATA_SIZE);
+    bmp.read(img.data(), img.size());
+
+    for (auto i = DATA_SIZE - 4; i >= 0; i -= 3)
+    {
+      const auto TEMP = img[i];
+      img[i] = img[i + 2];
+      img[i + 2] = TEMP;
+
+      std::cout << "R: " << int(img[i] & 0xff) << " G: " << int(img[i + 1] & 0xff) << " B: " << int(img[i + 2] & 0xff) << std::endl;
+    }
+   
+    m_tiles_.resize(m_end_coord_.X - m_start_coord_.X
+      , std::vector<Tile>(m_end_coord_.Y - m_start_coord_.Y, Tile{ 0, 0 }));
   }
 }//G6037599
