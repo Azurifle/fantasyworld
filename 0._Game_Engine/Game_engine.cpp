@@ -117,6 +117,21 @@ namespace G6037599
     file_reader.close();
   }
 
+  COORD Game_engine::get_cursor()
+  {
+    CONSOLE_SCREEN_BUFFER_INFO console_info;
+    PROMISE(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &console_info));
+    return console_info.dwCursorPosition;
+  }
+
+  void Game_engine::set_cursor(const COORD& t_coord)
+  {
+    REQUIRE(0 <= t_coord.X); REQUIRE(t_coord.X <= CMD_LAST_COLS);
+    REQUIRE(0 <= t_coord.Y); REQUIRE(t_coord.Y <= CMD_LAST_ROWS);
+
+    PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), t_coord));
+  }
+
   //___ private static ___________________________________________________________
   bool Game_engine::m_is_running_ = false;
 

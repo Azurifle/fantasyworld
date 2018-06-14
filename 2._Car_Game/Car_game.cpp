@@ -2,6 +2,7 @@
 #include "Car_game.hpp"
 #include "0._Game_Engine/Game_engine.hpp"
 #include "0._Game_Engine/Grid.hpp"
+#include "0._Game_Engine/json.hpp"
 
 namespace G6037599
 {
@@ -23,22 +24,6 @@ namespace G6037599
       default:;
       }
     }//game loop
-
-    /*
-    for (auto row : map)
-    {
-      for (auto i : row)
-      {
-        std::cout << ' ';
-        switch (i)
-        {
-        case 0: std::cout << ' '; break;
-        default: std::cout << '-'; break;
-        }
-      }
-      std::cout << std::endl;
-    }
-    _getch();*/
   }
 
   //___ private static _____________________________________________
@@ -47,15 +32,27 @@ namespace G6037599
   //___ private constructor _____________________________________________
   Car_game::Car_game()
   {
-    puts("Car_game constructor");//***
-    const COORD TRACK_START = { 1, 2 }, TRACK_END = { 75, 30 };
+    const COORD TRACK_START = { 1, 3 }, TRACK_END = { 85, 35 };
     m_track_ = std::make_shared<Grid>(TRACK_START, TRACK_END);
+    
+    const std::string GAME_FOLDER("2._Car_Game/");
+    const auto JSON_CONFIG = nlohmann::json::parse(std::ifstream(GAME_FOLDER + "0. Config.json"));
 
-    const std::string GAME_FOLDER("2._Car_Game/"), TRACKS_FOLDER("Tracks/");
-    std::vector<std::string> track_names;
-    puts("load txt");//***
-    Game_engine::load_txt(GAME_FOLDER+ TRACKS_FOLDER+"List.txt", track_names);
-    puts("load bmp header");//***
-    m_track_->load(GAME_FOLDER + TRACKS_FOLDER + track_names[0]+".bmp");
+    std::vector<std::string> track_names = JSON_CONFIG["track_names"];
+    m_track_->load(GAME_FOLDER + track_names[0] +".bmp");
+    m_track_->print();
+
+    std::vector<std::string> car_names = JSON_CONFIG["car_names"];
+    for(unsigned i = 0; i < car_names.size(); ++i)
+    {
+      const auto JSON_CAR = nlohmann::json::parse(
+        std::ifstream(GAME_FOLDER + car_names[i] +".json"));
+
+      m_cars_.push_back(std::make_unique<Car>(
+          car_names[i]
+          , JSON_CAR["shape"].get<std::string>()
+          , JSON_CAR["max_fuel"].get<int>(), JSON_CAR["speed"].get<int>()
+        ));
+    }
   }
 }//G6037599

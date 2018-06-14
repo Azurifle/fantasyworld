@@ -186,12 +186,13 @@ namespace G6037599
 
     enum Enum 
     { 
-      NAME, DEAD_MESSAGE, ATK_NAME, MAX_HP, ATK, MAX_ATK, SYMBOL, BEHAVIOR
+      NAME, DEAD_MESSAGE, ATK_NAME, MAX_HP, ATK, MAX_ATK, BEHAVIOR, SYMBOL
       , TOKENS_PER_LINE
     };
-    for(unsigned line = 0; line <= tokens.size(); line += TOKENS_PER_LINE)
-    { 
-      m_spawners_.push_back(std::make_unique<Spawn_to<Unit>>( 
+
+    for(unsigned line = 0; line < tokens.size(); line += TOKENS_PER_LINE)
+    {
+      m_spawners_.push_back(std::make_unique< Spawn_to<Unit> >( 
         std::make_shared<Type_data>(tokens[NAME+ line], tokens[DEAD_MESSAGE + line]
           , tokens[ATK_NAME + line], std::stoi(tokens[MAX_HP + line])
           , std::stoi(tokens[ATK + line]), std::stoi(tokens[MAX_ATK + line])

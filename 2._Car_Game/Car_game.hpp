@@ -1,6 +1,7 @@
 #ifndef G6037599_CAR_GAME_HPP
 #define G6037599_CAR_GAME_HPP
 #pragma once
+#include "Car.hpp"
 
 namespace G6037599
 {
@@ -15,6 +16,7 @@ namespace G6037599
   private:
     static bool m_is_running_;
 
+    std::vector<std::unique_ptr<Car>> m_cars_;
     std::shared_ptr<Grid> m_track_{};
 
     Car_game();

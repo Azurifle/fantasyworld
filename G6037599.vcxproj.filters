@@ -81,6 +81,12 @@
     <ClInclude Include="1._Fantasy_Game\Fantasy_game.hpp">
       <Filter>Header Files\1._Fantasy_Game</Filter>
     </ClInclude>
+    <ClInclude Include="0._Game_Engine\json.hpp">
+      <Filter>Header Files\0._Game_Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Car.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -127,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="1._Fantasy_Game\Fantasy_game.cpp">
       <Filter>Source Files\1._Fantasy_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Car.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

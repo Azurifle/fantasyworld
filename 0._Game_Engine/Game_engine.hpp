@@ -25,11 +25,13 @@ namespace G6037599
     static int get_key();
     static int wait_key();
     static int wait_key(int t_miliseconds);
+    static COORD get_cursor();
+    static void set_cursor(const COORD& t_coord);
 
     static void limit_interval(int& t_number, int t_min, int t_max);
 
     static void load_txt(const std::string& t_path, std::vector<std::string>& t_tokens_out);
-
+    
     ~Game_engine() = default;
   private:
     static bool m_is_running_;

@@ -1658,7 +1658,8 @@ class wide_string_input_adapter : public input_adapter_protocol
         // check if buffer needs to be filled
         if (utf8_bytes_index == utf8_bytes_filled)
         {
-            if (sizeof(typename WideStringType::value_type) == 2)
+            auto value_type = sizeof(typename WideStringType::value_type);
+            if (value_type == 2)
             {
                 fill_buffer_utf16();
             }
