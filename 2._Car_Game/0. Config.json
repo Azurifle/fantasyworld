@@ -3,5 +3,5 @@
     , "2. Little Monster"
     , "3. Naga Drift"]
 
-  "car_names": ["Benz", "Tuk Tuk"]
+  , "car_names": ["Benz", "Tuk Tuk"]
 }

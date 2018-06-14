@@ -37,7 +37,7 @@ namespace G6037599
     
     const std::string GAME_FOLDER("2._Car_Game/");
     const auto JSON_CONFIG = nlohmann::json::parse(std::ifstream(GAME_FOLDER + "0. Config.json"));
-
+    
     std::vector<std::string> track_names = JSON_CONFIG["track_names"];
     m_track_->load(GAME_FOLDER + track_names[0] +".bmp");
     m_track_->print();
@@ -49,10 +49,12 @@ namespace G6037599
         std::ifstream(GAME_FOLDER + car_names[i] +".json"));
 
       m_cars_.push_back(std::make_unique<Car>(
-          car_names[i]
-          , JSON_CAR["shape"].get<std::string>()
-          , JSON_CAR["max_fuel"].get<int>(), JSON_CAR["speed"].get<int>()
+        car_names[i], JSON_CAR["shape"].get<std::string>(), i
+        , JSON_CAR["max_fuel"].get<int>(), JSON_CAR["speed"].get<int>()
         ));
     }
+    
+    m_cars_.push_back(std::make_unique<Car>(*m_cars_[0]));
+    m_cars_[2]->spawned(m_track_);
   }
 }//G6037599

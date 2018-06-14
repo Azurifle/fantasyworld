@@ -4,6 +4,9 @@
 
 namespace G6037599
 {
+  //___ static _____________________________________________
+  const COORD Grid::NOT_SPAWN = { -1, -1 };
+
   //___ (de)constructors _____________________________________________
   Grid::Grid(const COORD& t_start_coord, const COORD& t_end_coord)
     : m_start_coord_(t_start_coord), m_end_coord_(t_end_coord)
@@ -53,7 +56,7 @@ namespace G6037599
       }//col loop
     }//row loop
 
-    if(m_start_coord_.X + WIDTH * COLS_PER_POS - 1 
+    if(m_start_coord_.X + WIDTH * COLS_PER_TILE - 1 
       >= static_cast<unsigned>(m_end_coord_.X))
     {
       m_print_coord_.X = m_start_coord_.X;
@@ -61,7 +64,7 @@ namespace G6037599
     else
     {
       const auto COLS_BEFORE = (m_end_coord_.X - m_start_coord_.X + 1 
-        - WIDTH * COLS_PER_POS) / 2;
+        - WIDTH * COLS_PER_TILE) / 2;
       m_print_coord_.X = static_cast<short>(m_start_coord_.X + COLS_BEFORE);
     }
 
@@ -86,15 +89,41 @@ namespace G6037599
       Game_engine::set_cursor({ m_print_coord_.X, m_print_coord_.Y + row });
 
       for (unsigned col = 0; col < m_tiles_[row].size() 
-        && m_print_coord_.X + col* COLS_PER_POS <= m_end_coord_.X; ++col)
+        && m_print_coord_.X + col* COLS_PER_TILE <= 
+        static_cast<unsigned>(m_end_coord_.X); ++col)
       {
         switch (m_tiles_[row][col].slot_1)
         {
-        case NO_TILE: std::cout << "#-#"; break;
+        case NO_TILE: std::cout << "##+"; break;
         default: std::cout << ".  ";
         }
       }
       ++row;
-    } while (static_cast<unsigned>(row) < m_tiles_.size() && m_print_coord_.Y + row <= m_end_coord_.Y);
+    } while (static_cast<unsigned>(row) < m_tiles_.size() 
+      && m_print_coord_.Y + row <= m_end_coord_.Y);
+  }
+
+  COORD Grid::spawns(const int t_id, const std::string& t_symbol)
+  {
+    COORD pos;
+    do
+    {
+      pos.Y = static_cast<short>(rand() % m_tiles_.size());
+      pos.X = static_cast<short>(rand() % m_tiles_[0].size());
+      switch (Game_engine::get_key())
+      {
+      case 0: break;
+      default: switch (rand() & 3) 
+        { case 0: return NOT_SPAWN; default:; }//change to find nearest available tile if have time
+      }
+    } while (m_tiles_[pos.Y][pos.X].slot_1 != NO_GAME_OBJECT
+      || m_tiles_[pos.Y][pos.X].slot_2 != NO_GAME_OBJECT);
+
+    m_tiles_[pos.Y][pos.X].slot_1 = t_id;
+    Game_engine::set_cursor(COORD{ m_print_coord_.X + pos.X * COLS_PER_TILE
+      , m_print_coord_.Y + pos.Y });
+    std::cout << t_symbol;
+
+    return pos;
   }
 }//G6037599
