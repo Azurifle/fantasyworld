@@ -33,6 +33,8 @@ namespace G6037599
 	  void update();
 	  void exit() const;
 	private:
+    static bool m_is_running_;
+
     std::vector<std::unique_ptr<Spawn_point>> m_spawners_;
     Game_engine m_game_engine_{};
     std::shared_ptr<Map> m_map_{};
@@ -47,7 +49,6 @@ namespace G6037599
     Fantasy_game& operator=(const Fantasy_game& t_to_copy) = default;
     Fantasy_game& operator=(Fantasy_game&& t_to_move) noexcept = default;
 
-    std::shared_ptr<Type_data> tokenize(const std::string& t_line) const;
     void read_monster_types();
     void spawn_spawners();
     void spawners_spawn_monster();

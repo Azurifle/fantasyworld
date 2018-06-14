@@ -13,6 +13,8 @@ namespace G6037599
 
     ~Car_game() = default;
   private:
+    static bool m_is_running_;
+
     std::shared_ptr<Grid> m_track_{};
 
     Car_game();

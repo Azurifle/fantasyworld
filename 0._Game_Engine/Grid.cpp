@@ -29,24 +29,21 @@ namespace G6037599
       , WIDTH = *reinterpret_cast<unsigned *>(&header[18])
       , HEIGHT = *reinterpret_cast<unsigned *>(&header[22]);
 
-    std::vector<char> img(DATA_OFFSET - HEADER_SIZE);
+    std::vector<char> img(DATA_OFFSET - HEADER_SIZE); puts("read each BGR");//***
     bmp.read(img.data(), img.size());
 
-    const auto ROW_PADDED = WIDTH * 3 + 3 & ~3
-      , DATA_SIZE = ROW_PADDED * HEIGHT;
+    const unsigned BGR = 3, DATA_SIZE = (WIDTH * BGR + BGR & ~BGR) * HEIGHT;
     img.resize(DATA_SIZE);
     bmp.read(img.data(), img.size());
 
-    for (auto i = DATA_SIZE - 4; i >= 0; i -= 3)
-    {
-      const auto TEMP = img[i];
-      img[i] = img[i + 2];
-      img[i + 2] = TEMP;
+    m_tiles_.resize(WIDTH, std::vector<Tile>(HEIGHT, Tile{ 0, 0 }));
 
-      std::cout << "R: " << int(img[i] & 0xff) << " G: " << int(img[i + 1] & 0xff) << " B: " << int(img[i + 2] & 0xff) << std::endl;
+    puts("get each BGR");//***
+    for (auto i = DATA_SIZE - BGR -1; i >= 0; i -= BGR)
+    {
+      enum Enum{B, G, R};
+      std::cout << "B: " << int(img[i+ B] & 0xff) << " G: " << int(img[i + G] & 0xff)
+        << " R: " << int(img[i + R] & 0xff) << std::endl;
     }
-   
-    m_tiles_.resize(m_end_coord_.X - m_start_coord_.X
-      , std::vector<Tile>(m_end_coord_.Y - m_start_coord_.Y, Tile{ 0, 0 }));
   }
 }//G6037599

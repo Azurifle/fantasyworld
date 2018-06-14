@@ -19,6 +19,7 @@ namespace G6037599
   void Fantasy_game::run()
   {
     REQUIRE(Game_engine::is_running());
+    REQUIRE(!m_is_running_);
     Fantasy_game world;
 
     while (true)
@@ -174,45 +175,29 @@ namespace G6037599
     m_console_->thanks_user();
   }
 
+  //___ private static ________________________________________________
+  bool Fantasy_game::m_is_running_ = false;
+
   //___ private _______________________________________________________
-  std::shared_ptr<Type_data> Fantasy_game::tokenize(const std::string& t_line) const
-  {
-    std::istringstream string_cutter(t_line);
-    std::string token, name, dead_message, atk_name;
-    const auto TAB = '\t';
-    std::getline(string_cutter, name, TAB);
-    std::getline(string_cutter, dead_message, TAB);
-    std::getline(string_cutter, atk_name, TAB);
-
-    std::getline(string_cutter, token, TAB);
-    auto max_hp = std::stoi(token);
-    std::getline(string_cutter, token, TAB);
-    auto atk = std::stoi(token);
-    std::getline(string_cutter, token, TAB);
-    auto max_atk = std::stoi(token);
-
-    std::getline(string_cutter, token, TAB);
-    auto behavior = std::stoi(token);
-
-    std::getline(string_cutter, token, TAB);
-    const auto TO_CHAR = 0;
-
-    return std::make_shared<Type_data>(name.c_str(), dead_message.c_str(), atk_name.c_str()
-      , max_hp, atk, max_atk, token[TO_CHAR], behavior);
-  }
-
   void Fantasy_game::read_monster_types()
   {
-    std::ifstream file_reader(MONSTER_CONF_PATH);
-    REQUIRE(file_reader.is_open());//should change to popup warning later
+    std::vector<std::string> tokens;
+    Game_engine::load_txt(MONSTER_CONF_PATH, tokens);
 
-    std::string line;
-    while (std::getline(file_reader, line))
-    {
+    enum Enum 
+    { 
+      NAME, DEAD_MESSAGE, ATK_NAME, MAX_HP, ATK, MAX_ATK, SYMBOL, BEHAVIOR
+      , TOKENS_PER_LINE
+    };
+    for(unsigned line = 0; line <= tokens.size(); line += TOKENS_PER_LINE)
+    { 
       m_spawners_.push_back(std::make_unique<Spawn_to<Unit>>( 
-        tokenize(line), m_console_, m_map_) );
+        std::make_shared<Type_data>(tokens[NAME+ line], tokens[DEAD_MESSAGE + line]
+          , tokens[ATK_NAME + line], std::stoi(tokens[MAX_HP + line])
+          , std::stoi(tokens[ATK + line]), std::stoi(tokens[MAX_ATK + line])
+          , tokens[SYMBOL + line][0], std::stoi(tokens[BEHAVIOR + line]) )
+        , m_console_, m_map_) );
     }
-    file_reader.close();
   }
 
   void Fantasy_game::spawn_spawners()
