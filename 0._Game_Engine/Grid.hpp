@@ -19,6 +19,7 @@ namespace G6037599
     void despawns(const COORD& t_pos, int t_id);
     bool moved(COORD& t_pos, int t_id
       , const std::string& t_symbol, COORD t_moved);
+    void set(const COORD& t_pos, int t_id, int t_new_id);
   private:
     struct Tile final { int slot_1, slot_2; };
 

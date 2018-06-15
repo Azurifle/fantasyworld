@@ -22,7 +22,7 @@ namespace G6037599
 	    , STAGE_1_MONSTERS = 4
 	  };
 
-    static void run();
+    static void runs();
     static short limit_interval(int t_number, int t_min, int t_max);
 	  
     ~Fantasy_game() = default;

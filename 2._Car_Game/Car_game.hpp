@@ -10,7 +10,7 @@ namespace G6037599
   class Car_game final
   {
   public:
-    static void run();
+    static void runs();
 
     ~Car_game() = default;
   private:
@@ -27,6 +27,7 @@ namespace G6037599
     Car_game& operator=(Car_game&& t_to_move) noexcept = default;
 
     void update();
+    void spawns_car();
   };
 }//G6037599
 

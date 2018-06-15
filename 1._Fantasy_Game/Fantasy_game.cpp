@@ -16,7 +16,7 @@ namespace G6037599
   const COORD Fantasy_game::LEFT = { -1, 0 };
   const COORD Fantasy_game::RIGHT = { 1, 0 };
 
-  void Fantasy_game::run()
+  void Fantasy_game::runs()
   {
     REQUIRE(Game_engine::is_running());
     REQUIRE(!m_is_running_);

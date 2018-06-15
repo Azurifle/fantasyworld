@@ -130,7 +130,7 @@ namespace G6037599
 
   void Grid::despawns(const COORD& t_pos, const int t_id)
   {
-    REQUIRE(t_pos.X != NOT_SPAWN.X && t_pos.Y != NOT_SPAWN.Y);
+    REQUIRE(t_pos.X != NOT_SPAWN.X);
     REQUIRE(t_id > NO_GAME_OBJECT);
 
     if (m_tiles_[t_pos.Y][t_pos.X].slot_1 == t_id)
@@ -178,6 +178,23 @@ namespace G6037599
     }
     t_pos = t_moved;
     return true;
+  }
+
+  void Grid::set(const COORD& t_pos, const int t_id, const int t_new_id)
+  {
+    REQUIRE(t_pos.X != NOT_SPAWN.X && t_pos.Y != NOT_SPAWN.Y);
+    REQUIRE(t_id > NO_GAME_OBJECT); REQUIRE(t_new_id > NO_GAME_OBJECT);
+    REQUIRE(t_id != t_new_id);
+
+    if (m_tiles_[t_pos.Y][t_pos.X].slot_1 == t_id)
+    {
+      m_tiles_[t_pos.Y][t_pos.X].slot_1 = t_new_id;
+    }
+    else
+    {
+      REQUIRE(m_tiles_[t_pos.Y][t_pos.X].slot_2 == t_id);
+      m_tiles_[t_pos.Y][t_pos.X].slot_2 = t_new_id;
+    }
   }
 
   //___ private _____________________________________________

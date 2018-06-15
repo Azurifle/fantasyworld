@@ -7,7 +7,7 @@
 namespace G6037599
 {
   //___ static _____________________________________________
-  void Car_game::run()
+  void Car_game::runs()
   {
     REQUIRE(Game_engine::is_running());
     REQUIRE(!m_is_running_);
@@ -15,12 +15,14 @@ namespace G6037599
 
     while (true)
     {
+      Game_engine::reset_delta_milisec();
       Sleep(Game_engine::FPS_50);
       switch (Game_engine::get_key())
       {
-      case Game_engine::KEY_ESC: return;
-      default: game.update();
+      case Game_engine::KEY_SPACE: game.spawns_car(); break;
+      case Game_engine::KEY_ESC: return; default:;
       }
+      game.update();
     }//game loop
   }
 
@@ -49,15 +51,13 @@ namespace G6037599
 
       m_cars_.push_back(std::make_unique<Car>(
         car_types[i], JSON_CAR["shape"].get<std::string>()
+        , m_track_
         , JSON_CAR["speed"].get<float>()
         , i, JSON_CAR["max_fuel"].get<int>()
         ));
     }
 
     m_1_st_spawned_ = m_cars_.size();
-    m_cars_.push_back(std::make_unique<Car>(*m_cars_[rand() % car_types.size()]));
-    m_cars_[m_1_st_spawned_]->set_id(m_1_st_spawned_);
-    m_cars_[m_1_st_spawned_]->spawned(m_track_);
   }
 
   //___ private _____________________________________________
@@ -65,7 +65,7 @@ namespace G6037599
   {
     for(auto i = m_1_st_spawned_; i < m_cars_.size(); ++i)
     {
-      switch (m_cars_[i]->runs(m_track_))
+      switch (m_cars_[i]->runs())
       {
       case 0: m_cars_.erase(m_cars_.begin() + i); 
         for (auto replace = i; replace < m_cars_.size(); ++replace)
@@ -75,5 +75,12 @@ namespace G6037599
         default:;
       }//fuel empty
     }//each cars runs
+  }
+
+  void Car_game::spawns_car()
+  {
+    m_cars_.push_back(std::make_unique<Car>(*m_cars_[rand() % m_1_st_spawned_]));
+    m_cars_[m_cars_.size() -1]->set_id(m_cars_.size() - 1);
+    m_cars_[m_cars_.size() - 1]->spawned();
   }
 }//G6037599

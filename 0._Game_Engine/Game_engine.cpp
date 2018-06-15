@@ -6,7 +6,7 @@
 namespace G6037599
 {
   //___ static ___________________________________________________________
-  void Game_engine::start()
+  void Game_engine::starts()
   {
     REQUIRE(!m_is_running_);
     m_is_running_ = true;
@@ -25,12 +25,12 @@ namespace G6037599
         switch (get_key())
         {
         case OPTION_1: system("CLS");
-          Fantasy_game::run();
+          Fantasy_game::runs();
           wrong_input = false;
           back_to_main_menu();
           break;
         case OPTION_LAST: system("CLS");
-          Car_game::run();
+          Car_game::runs();
           wrong_input = false;
           back_to_main_menu();
           break;
@@ -90,6 +90,32 @@ namespace G6037599
     return KEY_NO_PRESS;
   }
 
+  COORD Game_engine::get_cursor()
+  {
+    CONSOLE_SCREEN_BUFFER_INFO console_info;
+    PROMISE(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &console_info));
+    return console_info.dwCursorPosition;
+  }
+
+  /*char Game_engine::get_cursor_char()
+  {
+  const LPWSTR CHAR_OUT = nullptr;
+  if(ReadConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE)
+  , CHAR_OUT, 1, get_cursor(), nullptr))
+  {
+  return static_cast<char>(*CHAR_OUT);
+  }
+  return ' ';
+  }*/
+
+  void Game_engine::set_cursor(const COORD& t_coord)
+  {
+    REQUIRE(0 <= t_coord.X); REQUIRE(t_coord.X <= CMD_LAST_COLS);
+    REQUIRE(0 <= t_coord.Y); REQUIRE(t_coord.Y <= CMD_LAST_ROWS);
+
+    PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), t_coord));
+  }
+
   short Game_engine::limit_interval(const short t_number, const short t_min, const short t_max)
   {
     if (t_number <= t_min)
@@ -121,42 +147,18 @@ namespace G6037599
     file_reader.close();
   }
 
-  int Game_engine::find_elapsed_milisec()
+  void Game_engine::reset_delta_milisec()
   {
-    static auto last_milisec = clock();
-
-    const int ELAPSED = clock() - last_milisec;
-    last_milisec = clock();
-    return ELAPSED;
+    m_delta_milisec_ = clock();
   }
 
-  COORD Game_engine::get_cursor()
+  int Game_engine::get_delta_milisec()
   {
-    CONSOLE_SCREEN_BUFFER_INFO console_info;
-    PROMISE(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &console_info));
-    return console_info.dwCursorPosition;
-  }
-
-  /*char Game_engine::get_cursor_char()
-  {
-    const LPWSTR CHAR_OUT = nullptr;
-    if(ReadConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE)
-      , CHAR_OUT, 1, get_cursor(), nullptr))
-    {
-      return static_cast<char>(*CHAR_OUT);
-    }
-    return ' ';
-  }*/
-
-  void Game_engine::set_cursor(const COORD& t_coord)
-  {
-    REQUIRE(0 <= t_coord.X); REQUIRE(t_coord.X <= CMD_LAST_COLS);
-    REQUIRE(0 <= t_coord.Y); REQUIRE(t_coord.Y <= CMD_LAST_ROWS);
-
-    PROMISE(SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), t_coord));
+    return clock() - m_delta_milisec_;
   }
 
   //___ private static ___________________________________________________________
+  clock_t Game_engine::m_delta_milisec_ = 0;
   bool Game_engine::m_is_running_ = false;
 
   void Game_engine::disable_mouse_editing()

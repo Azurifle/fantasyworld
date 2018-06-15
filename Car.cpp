@@ -7,16 +7,17 @@ namespace G6037599
 {
   //___ constructors _____________________________________________
   Car::Car(const std::string& t_name, const std::string& t_shape
+    , const std::shared_ptr<Grid>& t_track
     , const float t_speed, const int t_id, const int t_max_fuel)
     : m_name_(t_name), m_shape_(t_shape)
-      , m_pos_(Grid::NOT_SPAWN), m_face_(COORD{0, 0})
+      , m_pos_(Grid::NOT_SPAWN), m_face_(COORD{0, 0}), m_track_(t_track)
       , m_speed_(t_speed), m_wait_milisecs_(0.0f), m_id_(t_id)
       , m_max_fuel_(t_max_fuel), m_fuel_(t_max_fuel) {}
 
   //___ public _____________________________________________
-  void Car::spawned(const std::shared_ptr<Grid>& t_grid)
+  void Car::spawned()
   {
-    m_pos_ = t_grid->spawns(m_id_, m_shape_);
+    m_pos_ = m_track_->spawns(m_id_, m_shape_);
     //m_face_
   }
 
@@ -25,9 +26,14 @@ namespace G6037599
   | Fastest speed: 500.0 = 1 tiles/20 milisecs |
   |___________________________________________*/
 
-  int Car::runs(const std::shared_ptr<Grid>& t_grid)
+  int Car::runs()
   {
-    m_wait_milisecs_ += Game_engine::find_elapsed_milisec();
+    if (m_pos_.X == Grid::NOT_SPAWN.X)
+    {
+      return 0;
+    }
+
+    m_wait_milisecs_ += Game_engine::get_delta_milisec();
     const auto SECOND = 1000.0f;
     if(m_wait_milisecs_ >= SECOND/m_speed_)
     {
@@ -54,26 +60,36 @@ namespace G6037599
         case SOUTH_WEST: --moved.X; ++moved.Y; break;
         default: --moved.X;
         }
-      } while (!t_grid->moved(m_pos_, m_id_, m_shape_, moved));
+
+        switch (Game_engine::get_key())
+        {
+        case 0: break;
+        default: switch (rand() & 3)
+          {
+          case 0: return m_fuel_; default:;
+          }
+        }
+      } while (!m_track_->moved(m_pos_, m_id_, m_shape_, moved));
 
       --m_fuel_;
       switch (m_fuel_)
       {
-      case 0: t_grid->despawns(m_pos_, m_id_); 
-        return 0; default:;
+      case 0: m_track_->despawns(m_pos_, m_id_); default:;
       }
 
-      //where am i in NSWE
-      //north - pos
-      //south - pos
+      //change to follow 4 points if have time
     }
     return m_fuel_;
   }
 
-  void Car::set_id(const int t_new)
+  void Car::set_id(const int t_id)
   {
-    REQUIRE(t_new > 0);
+    REQUIRE(t_id > 0);
 
-    m_id_ = t_new;
+    if(m_pos_.X != Grid::NOT_SPAWN.X)
+    {
+      m_track_->set(m_pos_, m_id_, t_id);
+    }//already spawned on track
+    m_id_ = t_id;
   }
 }//G6037599
