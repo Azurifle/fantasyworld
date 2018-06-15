@@ -10,14 +10,13 @@ namespace G6037599
   {
   public:
     Car(const std::string& t_name, const std::string& t_shape
-      , const std::shared_ptr<Grid>& t_track
       , float t_speed, int t_id, int t_max_fuel);
     ~Car() = default;
     Car(const Car& t_to_copy) = default;
     Car& operator=(const Car& t_to_copy) = default;
     Car& operator=(Car&& t_to_move) noexcept = default;
 
-    void spawned();
+    void spawned(const std::shared_ptr<Grid>& t_track);
     int runs();
     void set_id(int t_id);
   private:

@@ -7,10 +7,13 @@
 namespace G6037599
 {
   //___ static _____________________________________________
+  const std::string Car_game::GAME_FOLDER("2._Car_Game/");
+
   void Car_game::runs()
   {
     REQUIRE(Game_engine::is_running());
     REQUIRE(!m_is_running_);
+    m_is_running_ = true;
     Car_game game;
 
     while (true)
@@ -20,7 +23,10 @@ namespace G6037599
       switch (Game_engine::get_key())
       {
       case Game_engine::KEY_SPACE: game.spawns_car(); break;
-      case Game_engine::KEY_ESC: return; default:;
+      case 'w': game.changes_track(-1); break;
+      case 's': game.changes_track(1); break;
+      case Game_engine::KEY_ESC: m_is_running_ = false; 
+        return; default:;
       }
       game.update();
     }//game loop
@@ -31,16 +37,16 @@ namespace G6037599
 
   //___ private constructor _____________________________________________
   Car_game::Car_game() : m_1_st_spawned_(Grid::NO_GAME_OBJECT+1)
+    , m_current_track_(0)
   {
-    const COORD TRACK_START = { 1, 3 }, TRACK_END = { 85, 35 };
+    const COORD TRACK_START = { 1, 3 }, TRACK_END = { 90, 35 };
     m_track_ = std::make_shared<Grid>(TRACK_START, TRACK_END);
     
-    const std::string GAME_FOLDER("2._Car_Game/");
     const auto JSON_CONFIG = nlohmann::json::parse(std::ifstream(
       GAME_FOLDER + "0. Config.json"));
-    
-    std::vector<std::string> track_names = JSON_CONFIG["track_names"];
-    m_track_->load(GAME_FOLDER + track_names[0] +".bmp");
+
+    m_track_names_ = std::move(JSON_CONFIG["track_names"].get<std::vector<std::string>>());
+    m_track_->load(GAME_FOLDER + m_track_names_[m_current_track_] +".bmp");
     m_track_->print();
 
     std::vector<std::string> car_types = JSON_CONFIG["car_names"];
@@ -51,12 +57,10 @@ namespace G6037599
 
       m_cars_.push_back(std::make_unique<Car>(
         car_types[i], JSON_CAR["shape"].get<std::string>()
-        , m_track_
         , JSON_CAR["speed"].get<float>()
         , i, JSON_CAR["max_fuel"].get<int>()
         ));
     }
-
     m_1_st_spawned_ = m_cars_.size();
   }
 
@@ -81,6 +85,20 @@ namespace G6037599
   {
     m_cars_.push_back(std::make_unique<Car>(*m_cars_[rand() % m_1_st_spawned_]));
     m_cars_[m_cars_.size() -1]->set_id(m_cars_.size() - 1);
-    m_cars_[m_cars_.size() - 1]->spawned();
+    m_cars_[m_cars_.size() - 1]->spawned(m_track_);
+  }
+
+  void Car_game::changes_track(int t_move)
+  {
+    t_move = Game_engine::limit_interval(m_current_track_ + t_move
+      , 0, m_track_names_.size() - 1);
+
+    if(t_move != m_current_track_)
+    {
+      m_cars_.erase(m_cars_.begin() + m_1_st_spawned_, m_cars_.end());
+      m_track_->load(GAME_FOLDER + m_track_names_[t_move] + ".bmp");
+      m_track_->print();
+      m_current_track_ = t_move;
+    }
   }
 }//G6037599

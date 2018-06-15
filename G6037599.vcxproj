@@ -163,8 +163,8 @@
     <ClInclude Include="1._Fantasy_Game\Type_data.hpp" />
     <ClInclude Include="1._Fantasy_Game\Unit.hpp" />
     <ClInclude Include="1._Fantasy_Game\Fantasy_game.hpp" />
+    <ClInclude Include="2._Car_Game\Car.hpp" />
     <ClInclude Include="2._Car_Game\Car_game.hpp" />
-    <ClInclude Include="Car.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -181,8 +181,8 @@
     <ClCompile Include="1._Fantasy_Game\Type_data.cpp" />
     <ClCompile Include="1._Fantasy_Game\Unit.cpp" />
     <ClCompile Include="1._Fantasy_Game\Fantasy_game.cpp" />
+    <ClCompile Include="2._Car_Game\Car.cpp" />
     <ClCompile Include="2._Car_Game\Car_game.cpp" />
-    <ClCompile Include="Car.cpp" />
     <ClCompile Include="G6037599.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

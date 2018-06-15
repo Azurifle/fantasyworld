@@ -20,6 +20,7 @@ namespace G6037599
   {
     REQUIRE(Game_engine::is_running());
     REQUIRE(!m_is_running_);
+    m_is_running_ = true;
     Fantasy_game world;
 
     while (true)
@@ -36,7 +37,8 @@ namespace G6037599
       case Game_engine::KEY_ARROW_DOWN: world.move_cursor(DOWN); break;
       case Game_engine::KEY_ARROW_LEFT: world.move_cursor(LEFT); break;
       case Game_engine::KEY_ARROW_RIGHT: world.move_cursor(RIGHT); break;
-      case Game_engine::KEY_ESC: world.exit(); return;
+      case Game_engine::KEY_ESC: world.exit(); 
+        m_is_running_ = false; return;
       default: world.player_move();
       }
     }//game loop

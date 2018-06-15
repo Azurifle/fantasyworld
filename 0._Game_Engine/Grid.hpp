@@ -21,6 +21,11 @@ namespace G6037599
       , const std::string& t_symbol, COORD t_moved);
     void set(const COORD& t_pos, int t_id, int t_new_id);
   private:
+    static void align_center(short& t_print_coord_out
+      , short& t_print_size_out
+      , short t_start_coord, short t_end_coord,
+      short t_size, short t_tile_size = 1);
+
     struct Tile final { int slot_1, slot_2; };
 
     std::vector<std::vector<Tile>> m_tiles_;
@@ -33,6 +38,7 @@ namespace G6037599
     Grid& operator=(Grid&& t_to_move) noexcept = default;
 
     COORD get_coord(const COORD& t_pos, bool t_is_slot_2 = false) const;
+    void clean_canvas() const;
   };
 }//G6037599
 

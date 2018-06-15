@@ -7,16 +7,16 @@ namespace G6037599
 {
   //___ constructors _____________________________________________
   Car::Car(const std::string& t_name, const std::string& t_shape
-    , const std::shared_ptr<Grid>& t_track
     , const float t_speed, const int t_id, const int t_max_fuel)
     : m_name_(t_name), m_shape_(t_shape)
-      , m_pos_(Grid::NOT_SPAWN), m_face_(COORD{0, 0}), m_track_(t_track)
+      , m_pos_(Grid::NOT_SPAWN), m_face_(COORD{0, 0})
       , m_speed_(t_speed), m_wait_milisecs_(0.0f), m_id_(t_id)
       , m_max_fuel_(t_max_fuel), m_fuel_(t_max_fuel) {}
 
   //___ public _____________________________________________
-  void Car::spawned()
+  void Car::spawned(const std::shared_ptr<Grid>& t_track)
   {
+    m_track_ = t_track;
     m_pos_ = m_track_->spawns(m_id_, m_shape_);
     //m_face_
   }
@@ -46,6 +46,8 @@ namespace G6037599
       };
 
       COORD moved;
+      auto i = 0;
+      const auto LOOP_LIMIT = 10;
       do
       {
         moved = m_pos_;
@@ -60,15 +62,8 @@ namespace G6037599
         case SOUTH_WEST: --moved.X; ++moved.Y; break;
         default: --moved.X;
         }
-
-        switch (Game_engine::get_key())
-        {
-        case 0: break;
-        default: switch (rand() & 3)
-          {
-          case 0: return m_fuel_; default:;
-          }
-        }
+        ++i;
+        if(i > LOOP_LIMIT) { return m_fuel_; }
       } while (!m_track_->moved(m_pos_, m_id_, m_shape_, moved));
 
       --m_fuel_;

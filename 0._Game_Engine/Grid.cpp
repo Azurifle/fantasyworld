@@ -20,6 +20,10 @@ namespace G6037599
   //___ public _____________________________________________
   void Grid::load(const std::string& t_bmp_path)
   {
+    m_tiles_.clear(); 
+    clean_canvas();
+    //std::vector<std::vector<std::vector<int>>> image = Game_engine::load_bmp(t_bmp_path);
+
     //https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file
 
     std::ifstream bmp_stream(t_bmp_path, std::ios::binary);
@@ -56,33 +60,11 @@ namespace G6037599
       }//col loop
     }//row loop
 
-    const short LAST_PRINT_COLS = m_start_coord_.X + WIDTH * COLS_PER_TILE - 1;
-    if(LAST_PRINT_COLS >= m_end_coord_.X)
-    {
-      m_print_coord_.X = m_start_coord_.X;
-      m_print_size_.X = WIDTH - (m_end_coord_.X - LAST_PRINT_COLS);
-    }
-    else
-    {
-      const short COLS_BEFORE = (m_end_coord_.X - m_start_coord_.X + 1 
-        - WIDTH * COLS_PER_TILE) / 2;
-      m_print_coord_.X = m_start_coord_.X + COLS_BEFORE;
-      m_print_size_.X = WIDTH;
-    }
+    align_center(m_print_coord_.X, m_print_size_.X
+      , m_start_coord_.X, m_end_coord_.X, WIDTH, COLS_PER_TILE);
 
-    const short LAST_PRINT_ROWS = m_start_coord_.Y + HEIGHT - 1;
-    if (LAST_PRINT_ROWS >= m_end_coord_.Y)
-    {
-      m_print_coord_.Y = m_start_coord_.Y;
-      m_print_size_.Y = HEIGHT - (m_end_coord_.Y - LAST_PRINT_ROWS);
-    }
-    else
-    {
-      const short ROWS_BEFORE = (m_end_coord_.Y - m_start_coord_.Y + 1
-        - HEIGHT) / 2;
-      m_print_coord_.Y = m_start_coord_.Y + ROWS_BEFORE;
-      m_print_size_.Y = HEIGHT;
-    }
+    align_center(m_print_coord_.Y, m_print_size_.Y
+      , m_start_coord_.Y, m_end_coord_.Y, HEIGHT);
   }
 
   void Grid::print() const
@@ -108,16 +90,14 @@ namespace G6037599
   {
     REQUIRE(t_id > NO_GAME_OBJECT);
     COORD pos;
+    unsigned i = 0;
+    const auto LOOP_LIMIT = m_tiles_.size();
     do
-    {
+    {//change to find nearest available tile if have time
       pos.Y = static_cast<short>(rand()) % m_print_size_.Y;
       pos.X = static_cast<short>(rand()) % m_print_size_.X;
-      switch (Game_engine::get_key())
-      {
-      case 0: break;
-      default: switch (rand() & 3) 
-        { case 0: return NOT_SPAWN; default:; }//change to find nearest available tile if have time
-      }
+      ++i;
+      if(i > LOOP_LIMIT) { return NOT_SPAWN; }
     } while (m_tiles_[pos.Y][pos.X].slot_1 != NO_GAME_OBJECT
       || m_tiles_[pos.Y][pos.X].slot_2 != NO_GAME_OBJECT);
 
@@ -197,6 +177,26 @@ namespace G6037599
     }
   }
 
+  //___ private static ______________________________________
+  void Grid::align_center(short& t_print_coord_out, short& t_print_size_out
+    , const short t_start_coord, const short t_end_coord
+    , const short t_size, const short t_tile_size)
+  {
+    const short LAST_PRINT_COORD = t_start_coord + t_size * t_tile_size - 1;
+    if (LAST_PRINT_COORD >= t_end_coord)
+    {
+      t_print_coord_out = t_start_coord;
+      t_print_size_out = (t_end_coord - t_start_coord) / t_tile_size;
+    }
+    else
+    {
+      const short SPACE_BEFORE = (t_end_coord - t_start_coord + 1
+        - t_size * t_tile_size) / 2;
+      t_print_coord_out = t_start_coord + SPACE_BEFORE;
+      t_print_size_out = t_size;
+    }
+  }
+
   //___ private _____________________________________________
   COORD Grid::get_coord(const COORD& t_pos, const bool t_is_slot_2) const
   {
@@ -206,4 +206,16 @@ namespace G6037599
     return COORD{ m_print_coord_.X + t_pos.X * COLS_PER_TILE + (t_is_slot_2 ? 1: 0)
       , m_print_coord_.Y + t_pos.Y };
   }
+
+  void Grid::clean_canvas() const
+  {
+    short row = 0;
+    do
+    {
+      Game_engine::set_cursor({ m_start_coord_.X, m_start_coord_.Y + row });
+      std::cout << std::setw(m_end_coord_.X - m_start_coord_.X + 1) << std::setfill(' ') << ' ';
+      ++row;
+    } while (row < m_end_coord_.Y);
+  }
+
 }//G6037599
