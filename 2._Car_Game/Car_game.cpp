@@ -90,10 +90,12 @@ namespace G6037599
 
   void Car_game::changes_track(int t_move)
   {
-    t_move = Game_engine::limit_interval(m_current_track_ + t_move
-      , 0, m_track_names_.size() - 1);
+    t_move = Game_engine::limit_interval(
+      static_cast<short>(m_current_track_ + t_move)
+      , 0, static_cast<short>(m_track_names_.size()) - 1
+    );
 
-    if(t_move != m_current_track_)
+    if(t_move != static_cast<int>(m_current_track_))
     {
       m_cars_.erase(m_cars_.begin() + m_1_st_spawned_, m_cars_.end());
       m_track_->load(GAME_FOLDER + m_track_names_[t_move] + ".bmp");

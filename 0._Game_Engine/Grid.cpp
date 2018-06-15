@@ -22,37 +22,26 @@ namespace G6037599
   {
     m_tiles_.clear(); 
     clean_canvas();
-    //std::vector<std::vector<std::vector<int>>> image = Game_engine::load_bmp(t_bmp_path);
 
-    //https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file
+    std::vector<std::vector<std::vector<int>>> image;
+    Game_engine::load_bmp(t_bmp_path, image);
 
-    std::ifstream bmp_stream(t_bmp_path, std::ios::binary);
-    REQUIRE(bmp_stream.is_open());//should change to popup warning later
+    m_tiles_.resize(image.size()
+      , std::vector<Tile>(image[0].size(), Tile{ NO_TILE, NO_TILE })
+    );
 
-    const size_t HEADER_SIZE = 54;
-    std::array<char, HEADER_SIZE> header;
-    bmp_stream.read(header.data(), header.size());
+    enum Color{ 
+      B, G, R
+      , CAN_MOVE_B = 176, CAN_MOVE_G = 228, CAN_MOVE_R = 239 
+    };
 
-    const auto WIDTH = *reinterpret_cast<short *>(&header[18])
-      , HEIGHT = *reinterpret_cast<short *>(&header[22]);
-
-    const short BGR = 3, DATA_SIZE = (WIDTH * BGR + BGR & ~BGR) * HEIGHT;
-    std::vector<char> inverse_row_img(DATA_SIZE);
-    bmp_stream.read(inverse_row_img.data(), inverse_row_img.size());
-
-    m_tiles_.resize(HEIGHT, std::vector<Tile>(WIDTH, Tile{NO_TILE, NO_TILE}));
-
-    enum Enum { B, G, R, COLOR_VALUE = 255, ROW_PADDING = 2 };
-    for (short row = 0; row < HEIGHT; ++row)
+    for (unsigned row = 0; row < m_tiles_.size(); ++row)
     {
-      for (short col = 0; col < WIDTH; ++col)
+      for (unsigned col = 0; col < m_tiles_[0].size(); ++col)
       {
-        const auto INDEX = (HEIGHT -1 -row) * (WIDTH * BGR + ROW_PADDING) + col * BGR
-          , CAN_MOVE_B = 176, CAN_MOVE_G = 228, CAN_MOVE_R = 239;
-        
-        if(static_cast<unsigned>(inverse_row_img[INDEX + B] & COLOR_VALUE) == CAN_MOVE_B
-          && static_cast<unsigned>(inverse_row_img[INDEX + G] & COLOR_VALUE) == CAN_MOVE_G
-          && static_cast<unsigned>(inverse_row_img[INDEX + R] & COLOR_VALUE) == CAN_MOVE_R)
+        if (image[row][col][B] == CAN_MOVE_B
+          && image[row][col][G] == CAN_MOVE_G
+          && image[row][col][R] == CAN_MOVE_R)
         {
           m_tiles_[row][col].slot_1 = NO_GAME_OBJECT;
           m_tiles_[row][col].slot_2 = NO_GAME_OBJECT;
@@ -61,10 +50,10 @@ namespace G6037599
     }//row loop
 
     align_center(m_print_coord_.X, m_print_size_.X
-      , m_start_coord_.X, m_end_coord_.X, WIDTH, COLS_PER_TILE);
+      , m_start_coord_.X, m_end_coord_.X, static_cast<short>(m_tiles_[0].size()), COLS_PER_TILE);
 
     align_center(m_print_coord_.Y, m_print_size_.Y
-      , m_start_coord_.Y, m_end_coord_.Y, HEIGHT);
+      , m_start_coord_.Y, m_end_coord_.Y, static_cast<short>(m_tiles_.size()) );
   }
 
   void Grid::print() const

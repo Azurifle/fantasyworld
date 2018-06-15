@@ -33,7 +33,10 @@ namespace G6037599
 
     static short limit_interval(short t_number, short t_min, short t_max);
 
-    static void load_txt(const std::string& t_path, std::vector<std::string>& t_tokens_out);
+    static void load_txt(const std::string& t_path
+      , std::vector<std::string>& t_tokens_out);
+    static void load_bmp(const std::string& t_path
+      , std::vector<std::vector<std::vector<int>>>& t_image);
 
     static void reset_delta_milisec();
     static int get_delta_milisec();
