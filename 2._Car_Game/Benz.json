@@ -1,5 +1,5 @@
 {
   "shape": "B"
+  , "speed": 10.0
   , "max_fuel": 100
-  , "speed": 100
 }

@@ -16,6 +16,7 @@ namespace G6037599
       , KEY_ARROW_UP = 72, KEY_ARROW_DOWN = 80
       , KEY_ARROW_LEFT = 75, KEY_ARROW_RIGHT = 77
       , KEY_ESC = 27
+      , FPS_50 = 20
       , CMD_LAST_COLS = 140, CMD_LAST_ROWS = 40
     };
 
@@ -26,11 +27,14 @@ namespace G6037599
     static int wait_key();
     static int wait_key(int t_miliseconds);
     static COORD get_cursor();
+    static char get_cursor_char();
     static void set_cursor(const COORD& t_coord);
 
-    static void limit_interval(int& t_number, int t_min, int t_max);
+    static short limit_interval(short t_number, short t_min, short t_max);
 
     static void load_txt(const std::string& t_path, std::vector<std::string>& t_tokens_out);
+
+    static int find_elapsed_milisec();
     
     ~Game_engine() = default;
   private:

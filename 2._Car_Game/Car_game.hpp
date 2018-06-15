@@ -18,12 +18,15 @@ namespace G6037599
 
     std::vector<std::unique_ptr<Car>> m_cars_;
     std::shared_ptr<Grid> m_track_{};
+    unsigned m_1_st_spawned_;
 
     Car_game();
     Car_game(const Car_game& t_to_copy) = default;
     Car_game(Car_game&& t_to_move) noexcept = default;
     Car_game& operator=(const Car_game& t_to_copy) = default;
     Car_game& operator=(Car_game&& t_to_move) noexcept = default;
+
+    void update();
   };
 }//G6037599
 

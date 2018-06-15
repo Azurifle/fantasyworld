@@ -1,5 +1,6 @@
 {
   "shape": "t"
+  , "speed": 4.0
   , "max_fuel": 80
-  , "speed": 40
+  
 }

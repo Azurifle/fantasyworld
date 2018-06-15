@@ -84,19 +84,23 @@ namespace G6037599
       default: return KEY;
       }
 
-      const auto MILISEC_PER_KEY = 50;
-      Sleep(MILISEC_PER_KEY);
+      Sleep(FPS_50);
     } while (clock() < TIME_UP);
 
     return KEY_NO_PRESS;
   }
 
-  void Game_engine::limit_interval(int& t_number, const int t_min, const int t_max)
+  short Game_engine::limit_interval(const short t_number, const short t_min, const short t_max)
   {
-    if (t_number < t_min)
-      t_number = t_min;
-    else if (t_number > t_max)
-      t_number = t_max;
+    if (t_number <= t_min)
+    {
+      return t_min;
+    }
+    if (t_number >= t_max)
+    {
+      return t_max;
+    }
+    return t_number;
   }
 
   void Game_engine::load_txt(const std::string& t_path, std::vector<std::string>& t_tokens_out)
@@ -117,12 +121,32 @@ namespace G6037599
     file_reader.close();
   }
 
+  int Game_engine::find_elapsed_milisec()
+  {
+    static auto last_milisec = clock();
+
+    const int ELAPSED = clock() - last_milisec;
+    last_milisec = clock();
+    return ELAPSED;
+  }
+
   COORD Game_engine::get_cursor()
   {
     CONSOLE_SCREEN_BUFFER_INFO console_info;
     PROMISE(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &console_info));
     return console_info.dwCursorPosition;
   }
+
+  /*char Game_engine::get_cursor_char()
+  {
+    const LPWSTR CHAR_OUT = nullptr;
+    if(ReadConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE)
+      , CHAR_OUT, 1, get_cursor(), nullptr))
+    {
+      return static_cast<char>(*CHAR_OUT);
+    }
+    return ' ';
+  }*/
 
   void Game_engine::set_cursor(const COORD& t_coord)
   {
