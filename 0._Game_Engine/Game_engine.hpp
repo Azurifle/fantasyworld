@@ -20,6 +20,7 @@ namespace G6037599
       , FPS_50 = 20
       , CMD_LAST_COLS = 140, CMD_LAST_ROWS = 40
     };
+    static const float SECOND;
 
     static void starts();
     static bool is_running();
@@ -38,8 +39,8 @@ namespace G6037599
     static void load_bmp(const std::string& t_path
       , std::vector<std::vector<std::vector<int>>>& t_image);
 
-    static void reset_delta_milisec();
-    static int get_delta_milisec();
+    static void reset_delta_time();
+    static float get_delta_time();
     
     ~Game_engine() = default;
   private:

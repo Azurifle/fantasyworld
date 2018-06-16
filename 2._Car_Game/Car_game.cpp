@@ -19,7 +19,7 @@ namespace G6037599
 
     while (true)
     {
-      Game_engine::reset_delta_milisec();
+      Game_engine::reset_delta_time();
       Sleep(Game_engine::FPS_50);
       switch (Game_engine::get_key())
       {
@@ -70,14 +70,13 @@ namespace G6037599
   {
     for(auto i = m_1_st_spawned_; i < m_cars_.size(); ++i)
     {
-      switch (m_cars_[i]->runs())
+      if(m_cars_[i]->runs() <= 0.0f)
       {
-      case 0: m_cars_.erase(m_cars_.begin() + i); 
+        m_cars_.erase(m_cars_.begin() + i); 
         for (auto replace = i; replace < m_cars_.size(); ++replace)
         {
           m_cars_[replace]->set_id(replace);
         }
-        default:;
       }//fuel empty
     }//each cars runs
   }

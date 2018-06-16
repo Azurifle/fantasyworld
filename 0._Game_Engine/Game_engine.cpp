@@ -6,6 +6,8 @@
 namespace G6037599
 {
   //___ static ___________________________________________________________
+  const float Game_engine::SECOND = 1000.0f;
+
   void Game_engine::starts()
   {
     REQUIRE(!m_is_running_);
@@ -183,14 +185,14 @@ namespace G6037599
     }//row loop
   }
 
-  void Game_engine::reset_delta_milisec()
+  void Game_engine::reset_delta_time()
   {
     m_delta_milisec_ = clock();
   }
 
-  int Game_engine::get_delta_milisec()
+  float Game_engine::get_delta_time()
   {
-    return clock() - m_delta_milisec_;
+    return (clock() - m_delta_milisec_)/SECOND;
   }
 
   //___ private static ___________________________________________________________

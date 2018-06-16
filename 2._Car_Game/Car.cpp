@@ -10,8 +10,9 @@ namespace G6037599
     , const float t_speed, const int t_id, const int t_max_fuel)
     : m_name_(t_name), m_shape_(t_shape)
       , m_pos_(Grid::NOT_SPAWN), m_face_(COORD{0, 0})
-      , m_speed_(t_speed), m_wait_milisecs_(0.0f), m_id_(t_id)
-      , m_max_fuel_(t_max_fuel), m_fuel_(t_max_fuel) {}
+      , m_speed_(t_speed), m_wait_milisecs_(0.0f)
+      , m_fuel_(static_cast<float>(t_max_fuel))
+      , m_id_(t_id), m_max_fuel_(t_max_fuel) {}
 
   //___ public _____________________________________________
   void Car::spawned(const std::shared_ptr<Grid>& t_track)
@@ -35,27 +36,39 @@ namespace G6037599
   | Fastest speed: 500.0 = 1 tiles/20 milisecs |
   |___________________________________________*/
 
-  int Car::runs()
+  float Car::runs()
   {
     if (m_pos_.X == Grid::NOT_SPAWN.X)
     {
       return 0;
     }
 
-    m_wait_milisecs_ += Game_engine::get_delta_milisec();
-    const auto SECOND = 1000.0f;
-    if(m_wait_milisecs_ >= SECOND/m_speed_)
+    m_wait_milisecs_ += Game_engine::get_delta_time() * Game_engine::SECOND;
+    if(m_wait_milisecs_ >= Game_engine::SECOND/m_speed_)
     {
-      m_wait_milisecs_ -= SECOND / m_speed_;
+      m_wait_milisecs_ -= Game_engine::SECOND / m_speed_;
       /*
       switch(m_track_->moved(m_pos_, m_id_, m_shape_, m_face_))
       {
       case true: break; 
-      default: if(m_face_.X == 1 && m_face_.Y == 0)//EAST
+      default: enum Direction { WEST = -1, EAST = 1, NORTH = -1, SOUTH = 1};
+        switch (m_face_.X)
         {
-          --m_face_.Y;//south EAST
+        case 0: switch (m_face_.Y)
+        {
+          case SOUTH: m_face_.Y = 0;
+            m_face_.X = WEST;
+          break;
+          default: m_face_.Y = 0;
+            m_face_.X = EAST;
+        };
+        case EAST: m_face_.X = 0;
+          m_face_.Y = SOUTH;
+          break;
+        default: m_face_.X = 0;
+          m_face_.Y = NORTH;
         }
-        //if west check south west, north west, south, north, NORTH_EAST, NORTH_WEST, EAST
+        //if east check south, north, west
       }*/
 
       enum Enum
@@ -86,10 +99,11 @@ namespace G6037599
       } while (!m_track_->moved(m_pos_, m_id_, m_shape_, moved));
     }
 
-    --m_fuel_;
-    switch (m_fuel_)
+    const auto FUEL_PER_SECOND = 10.0f;
+    m_fuel_ -= Game_engine::get_delta_time()*FUEL_PER_SECOND;
+    if(m_fuel_ <= 0.0f)
     {
-    case 0: m_track_->despawns(m_pos_, m_id_); default:;
+      m_track_->despawns(m_pos_, m_id_);
     }
     return m_fuel_;
   }
