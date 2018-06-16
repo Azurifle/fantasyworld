@@ -166,6 +166,12 @@ namespace G6037599
     }
   }
 
+  COORD Grid::find_middle_pos()
+  {
+    return COORD{static_cast<short>(m_tiles_[0].size()/2)
+      , static_cast<short>(m_tiles_.size()/2)};
+  }
+
   //___ private static ______________________________________
   void Grid::align_center(short& t_print_coord_out, short& t_print_size_out
     , const short t_start_coord, const short t_end_coord

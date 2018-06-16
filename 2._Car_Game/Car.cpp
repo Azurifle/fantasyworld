@@ -18,7 +18,16 @@ namespace G6037599
   {
     m_track_ = t_track;
     m_pos_ = m_track_->spawns(m_id_, m_shape_);
-    //m_face_
+    if(m_pos_.Y < m_track_->find_middle_pos().Y)
+    {
+      const auto EAST = COORD{ 1, 0 };
+      m_face_ = EAST;
+    }
+    else
+    {
+      const auto WEST = COORD{ -1, 0 };
+      m_face_ = WEST;
+    }
   }
 
   /*___ Speed _________________________________
@@ -38,8 +47,18 @@ namespace G6037599
     if(m_wait_milisecs_ >= SECOND/m_speed_)
     {
       m_wait_milisecs_ -= SECOND / m_speed_;
-      
-      enum Enum 
+      /*
+      switch(m_track_->moved(m_pos_, m_id_, m_shape_, m_face_))
+      {
+      case true: break; 
+      default: if(m_face_.X == 1 && m_face_.Y == 0)//EAST
+        {
+          --m_face_.Y;//south EAST
+        }
+        //if west check south west, north west, south, north, NORTH_EAST, NORTH_WEST, EAST
+      }*/
+
+      enum Enum
       {
         NORTH_WEST, NORTH, NORTH_EAST, EAST
         , SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, DIRECTIONS
@@ -49,7 +68,7 @@ namespace G6037599
       auto i = 0;
       const auto LOOP_LIMIT = 10;
       do
-      {
+      {//change to follow 4 points if have time
         moved = m_pos_;
         switch (rand() % DIRECTIONS)
         {
@@ -65,14 +84,12 @@ namespace G6037599
         ++i;
         if(i > LOOP_LIMIT) { return m_fuel_; }
       } while (!m_track_->moved(m_pos_, m_id_, m_shape_, moved));
+    }
 
-      --m_fuel_;
-      switch (m_fuel_)
-      {
-      case 0: m_track_->despawns(m_pos_, m_id_); default:;
-      }
-
-      //change to follow 4 points if have time
+    --m_fuel_;
+    switch (m_fuel_)
+    {
+    case 0: m_track_->despawns(m_pos_, m_id_); default:;
     }
     return m_fuel_;
   }

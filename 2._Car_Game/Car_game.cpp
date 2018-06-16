@@ -14,6 +14,7 @@ namespace G6037599
     REQUIRE(Game_engine::is_running());
     REQUIRE(!m_is_running_);
     m_is_running_ = true;
+
     Car_game game;
 
     while (true)

@@ -20,6 +20,7 @@ namespace G6037599
     bool moved(COORD& t_pos, int t_id
       , const std::string& t_symbol, COORD t_moved);
     void set(const COORD& t_pos, int t_id, int t_new_id);
+    COORD find_middle_pos();
   private:
     static void align_center(short& t_print_coord_out
       , short& t_print_size_out
