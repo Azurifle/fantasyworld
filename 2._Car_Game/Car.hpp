@@ -17,14 +17,14 @@ namespace G6037599
     Car& operator=(Car&& t_to_move) noexcept = default;
 
     void spawned(const std::shared_ptr<Grid>& t_track);
-    float runs();
+    int runs();
     void set_id(int t_id);
   private:
     std::string m_name_{}, m_shape_{};
     COORD m_pos_{}, m_face_{};
     std::shared_ptr<Grid> m_track_{};
-    float m_speed_, m_wait_milisecs_, m_fuel_;
-    int m_id_, m_max_fuel_;
+    float m_speed_, m_wait_to_run_;
+    int m_id_, m_max_fuel_, m_fuel_;
 
     Car(Car&& t_to_move) noexcept = default;
   };

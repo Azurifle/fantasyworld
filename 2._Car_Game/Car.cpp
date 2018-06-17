@@ -10,25 +10,17 @@ namespace G6037599
     , const float t_speed, const int t_id, const int t_max_fuel)
     : m_name_(t_name), m_shape_(t_shape)
       , m_pos_(Grid::NOT_SPAWN), m_face_(COORD{0, 0})
-      , m_speed_(t_speed), m_wait_milisecs_(0.0f)
-      , m_fuel_(static_cast<float>(t_max_fuel))
-      , m_id_(t_id), m_max_fuel_(t_max_fuel) {}
+      , m_speed_(t_speed), m_wait_to_run_(0.0f)
+      , m_id_(t_id), m_max_fuel_(t_max_fuel), m_fuel_(t_max_fuel) {}
 
   //___ public _____________________________________________
   void Car::spawned(const std::shared_ptr<Grid>& t_track)
   {
     m_track_ = t_track;
     m_pos_ = m_track_->spawns(m_id_, m_shape_);
-    if(m_pos_.Y < m_track_->find_middle_pos().Y)
-    {
-      const auto EAST = COORD{ 1, 0 };
-      m_face_ = EAST;
-    }
-    else
-    {
-      const auto WEST = COORD{ -1, 0 };
-      m_face_ = WEST;
-    }
+
+    const auto EAST = COORD{ 1, 0 }, WEST = COORD{ -1, 0 };
+    m_face_ = m_pos_.Y < m_track_->find_middle_pos().Y ? EAST : WEST;
   }
 
   /*___ Speed _________________________________
@@ -36,74 +28,52 @@ namespace G6037599
   | Fastest speed: 500.0 = 1 tiles/20 milisecs |
   |___________________________________________*/
 
-  float Car::runs()
+  int Car::runs()
   {
     if (m_pos_.X == Grid::NOT_SPAWN.X)
     {
       return 0;
     }
 
-    m_wait_milisecs_ += Game_engine::get_delta_time() * Game_engine::SECOND;
-    if(m_wait_milisecs_ >= Game_engine::SECOND/m_speed_)
+    m_wait_to_run_ += m_speed_ * Game_engine::get_delta_time();
+
+    const auto RUN = 1.0f;
+    if(m_wait_to_run_ >= RUN)
     {
-      m_wait_milisecs_ -= Game_engine::SECOND / m_speed_;
-      /*
-      switch(m_track_->moved(m_pos_, m_id_, m_shape_, m_face_))
+      --m_wait_to_run_;
+
+      switch (--m_fuel_)
       {
-      case true: break; 
-      default: enum Direction { WEST = -1, EAST = 1, NORTH = -1, SOUTH = 1};
-        switch (m_face_.X)
-        {
-        case 0: switch (m_face_.Y)
-        {
-          case SOUTH: m_face_.Y = 0;
-            m_face_.X = WEST;
-          break;
-          default: m_face_.Y = 0;
-            m_face_.X = EAST;
-        };
-        case EAST: m_face_.X = 0;
-          m_face_.Y = SOUTH;
-          break;
-        default: m_face_.X = 0;
-          m_face_.Y = NORTH;
-        }
-        //if east check south, north, west
-      }*/
+      case 0: m_track_->despawns(m_pos_, m_id_); 
+        return m_fuel_; default:;
+      }
 
-      enum Enum
+      const auto FORWARD = COORD{ m_pos_.X + m_face_.X, m_pos_.Y + m_face_.Y };
+      switch (m_track_->moved(m_pos_, m_id_, m_shape_, FORWARD))
       {
-        NORTH_WEST, NORTH, NORTH_EAST, EAST
-        , SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, DIRECTIONS
-      };
-
-      COORD moved;
-      auto i = 0;
-      const auto LOOP_LIMIT = 10;
-      do
-      {//change to follow 4 points if have time
-        moved = m_pos_;
-        switch (rand() % DIRECTIONS)
+      case true: break;
+      default: //random front until 10 then back
+        const auto STOP_RANDOM_FACE = 8;
+        for (auto i = 1; i <= STOP_RANDOM_FACE; ++i)
         {
-        case NORTH_WEST: --moved.X; --moved.Y; break;
-        case NORTH: --moved.Y; break;
-        case NORTH_EAST: ++moved.X; --moved.Y; break;
-        case EAST: ++moved.X; break;
-        case SOUTH_EAST: ++moved.X; ++moved.Y; break;
-        case SOUTH: ++moved.Y; break;
-        case SOUTH_WEST: --moved.X; ++moved.Y; break;
-        default: --moved.X;
-        }
-        ++i;
-        if(i > LOOP_LIMIT) { return m_fuel_; }
-      } while (!m_track_->moved(m_pos_, m_id_, m_shape_, moved));
-    }
+          enum Direction
+          {
+            EAST = 1, SOUTH = 1, WEST = -1, NORTH = -1
+          };
+          std::vector<COORD> directions(8);
+          directions.push_back(COORD{ EAST, 0 });
+          directions.push_back(COORD{ EAST, SOUTH });
+          directions.push_back(COORD{ 0, SOUTH });
+          directions.push_back(COORD{ WEST, SOUTH });
+          directions.push_back(COORD{ WEST, 0 });
+          directions.push_back(COORD{ WEST, NORTH });
+          directions.push_back(COORD{ 0, NORTH });
 
-    const auto FUEL_PER_SECOND = 10.0f;
-    m_fuel_ -= Game_engine::get_delta_time()*FUEL_PER_SECOND;
-    if(m_fuel_ <= 0.0f)
-    {
-      m_track_->despawns(m_pos_, m_id_);
+          //switch face
+          //random 4 faces 8 times ! change face
+          //random 3 backs 4 times change face to slight right
+        }
+      }
     }
     return m_fuel_;
   }

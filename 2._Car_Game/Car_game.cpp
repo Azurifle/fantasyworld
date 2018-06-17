@@ -70,13 +70,13 @@ namespace G6037599
   {
     for(auto i = m_1_st_spawned_; i < m_cars_.size(); ++i)
     {
-      if(m_cars_[i]->runs() <= 0.0f)
+      switch(m_cars_[i]->runs())
       {
-        m_cars_.erase(m_cars_.begin() + i); 
+      case 0: m_cars_.erase(m_cars_.begin() + i); 
         for (auto replace = i; replace < m_cars_.size(); ++replace)
         {
           m_cars_[replace]->set_id(replace);
-        }
+        } break; default:;
       }//fuel empty
     }//each cars runs
   }
