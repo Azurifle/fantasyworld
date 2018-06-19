@@ -185,6 +185,15 @@ namespace G6037599
     }//row loop
   }
 
+  int Game_engine::random(int t_min, int t_max)
+  {
+    if(t_min > t_max)
+    {
+      std::swap(t_min, t_max);
+    }
+    return t_min + (rand() & t_max - t_min);
+  }
+
   void Game_engine::reset_delta_time()
   {
     m_delta_milisec_ = clock();

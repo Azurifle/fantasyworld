@@ -20,7 +20,7 @@ namespace G6037599
     bool moved(COORD& t_pos, int t_id
       , const std::string& t_symbol, COORD t_moved);
     void set(const COORD& t_pos, int t_id, int t_new_id);
-    COORD find_middle_pos();
+    COORD get_middle_pos();
   private:
     static void align_center(short& t_print_coord_out
       , short& t_print_size_out
@@ -40,6 +40,13 @@ namespace G6037599
 
     COORD get_coord(const COORD& t_pos, bool t_is_slot_2 = false) const;
     void clean_canvas() const;
+    void move_symbol_n_despawn(const COORD& t_pos, int t_id
+      , const std::string& t_symbol
+      , const COORD& t_moved, bool t_is_slot2 = false);
+    void move_to_slot_1(const COORD& t_pos, int t_id
+      , const std::string& t_symbol, const COORD& t_moved);
+    void move_to_slot_2(const COORD& t_pos, int t_id
+      , const std::string& t_symbol, const COORD& t_moved);
   };
 }//G6037599
 

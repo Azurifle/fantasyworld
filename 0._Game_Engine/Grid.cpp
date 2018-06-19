@@ -119,9 +119,10 @@ namespace G6037599
     }
   }
 
-  bool Grid::moved(COORD& t_pos, const int t_id, const std::string& t_symbol, COORD t_moved)
+  bool Grid::moved(COORD& t_pos, const int t_id
+    , const std::string& t_symbol, COORD t_moved)
   {
-    REQUIRE(t_pos.X != NOT_SPAWN.X && t_pos.Y != NOT_SPAWN.Y);
+    REQUIRE(t_pos.X != NOT_SPAWN.X);
     REQUIRE(t_id > NO_GAME_OBJECT);
 
     t_moved.X = Game_engine::limit_interval(t_moved.X, 0, m_print_size_.X);
@@ -129,24 +130,16 @@ namespace G6037599
 
     switch (m_tiles_[t_moved.Y][t_moved.X].slot_1)
     {
-    case NO_GAME_OBJECT: m_tiles_[t_moved.Y][t_moved.X].slot_1 = t_id;
-      despawns(t_pos, t_id);
-      Game_engine::set_cursor(get_coord(t_moved));
-      std::cout << t_symbol;
-      break;
+    case NO_GAME_OBJECT: move_to_slot_1(t_pos, t_id, t_symbol, t_moved); break;
     case NO_TILE: return false;
     default: switch (m_tiles_[t_moved.Y][t_moved.X].slot_2)
       {
-      case NO_GAME_OBJECT: m_tiles_[t_moved.Y][t_moved.X].slot_2 = t_id;
-        despawns(t_pos, t_id);
-        Game_engine::set_cursor(get_coord(t_moved, true));
-        std::cout << t_symbol;
-        break;
+      case NO_GAME_OBJECT: move_to_slot_2(t_pos, t_id, t_symbol, t_moved); break;
       default: return false;
       }
     }
     t_pos = t_moved;
-    return true;
+    return true;    
   }
 
   void Grid::set(const COORD& t_pos, const int t_id, const int t_new_id)
@@ -166,7 +159,7 @@ namespace G6037599
     }
   }
 
-  COORD Grid::find_middle_pos()
+  COORD Grid::get_middle_pos()
   {
     return COORD{static_cast<short>(m_tiles_[0].size()/2)
       , static_cast<short>(m_tiles_.size()/2)};
@@ -211,6 +204,28 @@ namespace G6037599
       std::cout << std::setw(m_end_coord_.X - m_start_coord_.X + 1) << std::setfill(' ') << ' ';
       ++row;
     } while (row < m_end_coord_.Y);
+  }
+
+  void Grid::move_symbol_n_despawn(const COORD& t_pos, const int t_id
+    , const std::string& t_symbol, const COORD& t_moved, const bool t_is_slot2)
+  {
+    Game_engine::set_cursor(get_coord(t_moved, t_is_slot2));
+    std::cout << t_symbol;
+    despawns(t_pos, t_id);
+  }
+
+  void Grid::move_to_slot_1(const COORD& t_pos, const int t_id
+    , const std::string& t_symbol, const COORD& t_moved)
+  {
+    m_tiles_[t_moved.Y][t_moved.X].slot_1 = t_id;
+    move_symbol_n_despawn(t_pos, t_id, t_symbol, t_moved);
+  }
+
+  void Grid::move_to_slot_2(const COORD& t_pos, const int t_id
+    , const std::string& t_symbol, const COORD& t_moved)
+  {
+    m_tiles_[t_moved.Y][t_moved.X].slot_2 = t_id;
+    move_symbol_n_despawn(t_pos, t_id, t_symbol, t_moved, true);
   }
 
 }//G6037599

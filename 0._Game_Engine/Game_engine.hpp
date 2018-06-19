@@ -39,6 +39,8 @@ namespace G6037599
     static void load_bmp(const std::string& t_path
       , std::vector<std::vector<std::vector<int>>>& t_image);
 
+    static int random(int t_min, int t_max);
+
     static void reset_delta_time();
     static float get_delta_time();
     

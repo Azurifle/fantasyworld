@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Type_data.hpp"
+#include "0._Game_Engine/Game_engine.hpp"
 
 namespace G6037599
 {
@@ -23,14 +24,13 @@ namespace G6037599
     m_max_hp_ += t_amount;
   }
 
-  int Type_data::random_atk() const
-  {
-    const auto RANDOM_SIZE = MAX_ATK + 1 - ATK;
-    return ATK + rand() % RANDOM_SIZE;
-  }
-
   void Type_data::reset_max_hp()
   {
     m_max_hp_ = ORIGIN_MAX_HP;
+  }
+
+  int Type_data::random_atk() const
+  {
+    return Game_engine::random(ATK, MAX_ATK);
   }
 }//G6037599
