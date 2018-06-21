@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Week_9">
       <UniqueIdentifier>{8c75fbfb-77bf-41da-b18d-81a0acb36e32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Demo_Center">
+      <UniqueIdentifier>{d003312d-c644-43d3-8c30-b17d20bd248c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Demo_Center">
+      <UniqueIdentifier>{649dda88-f4a5-44c2-bf35-e329c5047589}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -66,6 +72,9 @@
     <ClInclude Include="Week_9\Vec2_i.hpp">
       <Filter>Header Files\Week_9</Filter>
     </ClInclude>
+    <ClInclude Include="Demo_Center\Demo_Center.hpp">
+      <Filter>Header Files\Demo_Center</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -94,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="Week_9\Vec2_i.cpp">
       <Filter>Source Files\Week_9</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Center\Demo_Center.cpp">
+      <Filter>Source Files\Demo_Center</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

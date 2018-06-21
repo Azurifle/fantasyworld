@@ -21,16 +21,14 @@ namespace G6037599
 
     Vec2_i operator += (const Vec2_i& t_other);
     Vec2_i operator -= (const Vec2_i& t_other);
-    Vec2_i operator *= (const Vec2_i& t_other);
-    Vec2_i operator /= (const Vec2_i& t_other);
+    Vec2_i operator *= (int t_scalar);
+    Vec2_i operator /= (int t_scalar);
 
     Vec2_i operator << (const Vec2_i& t_other) const;
     Vec2_i operator + (const Vec2_i& t_other) const;
     Vec2_i operator - (const Vec2_i& t_other) const;
-    Vec2_i operator * (const Vec2_i& t_other) const;
-    Vec2_i operator / (const Vec2_i& t_other) const;
-    Vec2_i operator * (float t_scalar) const;
-    Vec2_i operator / (float t_scalar) const;
+    Vec2_i operator * (int t_scalar) const;
+    Vec2_i operator / (int t_scalar) const;
 
     bool operator <= (const Vec2_i& t_other) const;
     bool operator >= (const Vec2_i& t_other) const;
@@ -39,13 +37,17 @@ namespace G6037599
     bool operator < (const Vec2_i& t_other) const;
     bool operator > (const Vec2_i& t_other) const;
 
-    int dot_product(const Vec2_i& t_other) const;
-    Vec2_i closs_product(const Vec2_i& t_other) const;
-    int get_magnitude() const;
+    std::string to_string() const;
+    int dot(const Vec2_i& t_other) const;
+    int cross(const Vec2_i& t_other) const;
+    double size() const;
+    double squared_size() const;
+    Vec2_i normalize();
+    double radian_angle() const;
+    double radian_angle_to(const Vec2_i& t_other) const;
   };
 
-  void vec2_i_demo();
-  void print(const Vec2_i& t_vector);
+  void vec2_i_test_unit();
 }//G6037599
 
 #endif //G6037599_VEC2_I_HPP
