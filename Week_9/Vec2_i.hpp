@@ -4,6 +4,8 @@
 
 namespace G6037599
 {
+  void vec2_i_test_unit();
+
   class Vec2_i final
   {
   public:
@@ -11,7 +13,7 @@ namespace G6037599
 
     int x, y;//if there is no setter constraint make it public
 
-    Vec2_i() = default;
+    Vec2_i();
     ~Vec2_i() = default;
     Vec2_i(int t_x, int t_y);
     Vec2_i(const Vec2_i& t_to_copy) = default;
@@ -46,8 +48,6 @@ namespace G6037599
     double radian_angle() const;
     double radian_angle_to(const Vec2_i& t_other) const;
   };
-
-  void vec2_i_test_unit();
 }//G6037599
 
 #endif //G6037599_VEC2_I_HPP

@@ -159,6 +159,7 @@
     <ClInclude Include="Week_7\Logger.hpp" />
     <ClInclude Include="Week_7\Stopwatch.hpp" />
     <ClInclude Include="Week_9\Vec2_i.hpp" />
+    <ClInclude Include="Week_9\Vec3_i.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demo_Center\Demo_Center.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Week_7\Logger.cpp" />
     <ClCompile Include="Week_7\Stopwatch.cpp" />
     <ClCompile Include="Week_9\Vec2_i.cpp" />
+    <ClCompile Include="Week_9\Vec3_i.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

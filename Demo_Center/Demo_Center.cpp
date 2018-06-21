@@ -5,6 +5,7 @@
 #include "Week_7/Logger.hpp"
 #include "Week_7/Stopwatch.hpp"
 #include "Week_9/Vec2_i.hpp"
+#include "Week_9/Vec3_i.hpp"
 
 // ___ static ___________________________________________________________
 void G6037599::Demo_center::start()
@@ -33,10 +34,52 @@ int G6037599::Demo_center::wait_key()
   return FIRST_KEY;
 }
 
+void G6037599::Demo_center::press_to_continue()
+{
+  puts("");
+  const std::string HINT("Press <Any key> to continue: ");
+  std::cout << HINT.c_str();
+  wait_key();
+  std::cout << '\r' << std::setw(HINT.size()) << std::setfill(' ')
+    << ' ' << '\r';
+}
+
+void G6037599::Demo_center::test_case(const std::string& t_operator, const int t_actual
+  , const int t_expected)
+{
+  show_test_case(t_operator, std::to_string(t_expected)
+    , t_actual == t_expected);
+}
+
+void G6037599::Demo_center::test_case(const std::string& t_operator, const double t_actual
+  , const double t_expected)
+{
+  std::stringstream double_2_decimal_points;
+  double_2_decimal_points << std::fixed << std::setprecision(2)
+    << t_expected;
+  const auto PRECISION = 0.01;
+  show_test_case(t_operator, double_2_decimal_points.str()
+    , abs(t_actual - t_expected) <= PRECISION);
+}
+
+void G6037599::Demo_center::test_case(const std::string& t_operator, const bool t_actual
+  , const bool t_expected)
+{
+  show_test_case(t_operator, t_expected ? "true" : "false"
+    , t_actual == t_expected);
+}
+
+void G6037599::Demo_center::show_test_case(const std::string& t_operator
+  , const std::string& t_expected, const bool t_condition)
+{
+  std::cout << "  " << t_operator.c_str() << " == " << t_expected.c_str()
+    << " ?: " << (t_condition ? "Pass" : "Fail")
+    << '.' << std::endl;
+}
+
 // ___ private static ____________________________________________________
 bool G6037599::Demo_center::m_is_running_ = false;
 
-// ___ private ___________________________________________________________
 void G6037599::Demo_center::disable_mouse_editing()
 {
   DWORD prev_mode;
@@ -57,11 +100,10 @@ void G6037599::Demo_center::show_header()
   puts("");
   puts("                    2. Week 2 Memory Manager.");
   puts("");
-  puts("                    3. Week 7 Singleton Logger.");
+  puts("                    3. Week 7 Singleton Logger and");
+  puts("                              High-Resolution-Time Stopwatch.");
   puts("");
-  puts("                    4. Week 7 High-Resolution-Time Stopwatch.");
-  puts("");
-  puts("                    5. Week 9 Vec2i.");
+  puts("                    4. Week 9 Vec 2 - 3 i.");
   puts("");
   puts("         //////////////////////////////////////////////////////////////////");
   puts("");
@@ -112,11 +154,24 @@ void G6037599::Demo_center::do_option(const int t_option)
   {
   case OPTION_1: oop_demo(); break;
   case OPTION_2: memory_pool_demo(); break;
-  case OPTION_3: logger_demo(); break;
-  case OPTION_4: Stopwatch::demo();  break;
-  default: vec2_i_test_unit();
+  case OPTION_3: do_option3(); break;
+  default: do_option4();
   }
   back_to_main_menu();
+}
+
+void G6037599::Demo_center::do_option3()
+{
+  logger_demo();
+  press_to_continue();
+  Stopwatch::demo();
+}
+
+void G6037599::Demo_center::do_option4()
+{
+  vec2_i_test_unit();
+  press_to_continue();
+  vec3_i_test_unit();
 }
 
 void G6037599::Demo_center::back_to_main_menu()

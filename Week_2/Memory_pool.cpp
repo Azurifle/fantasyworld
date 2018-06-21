@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Memory_pool.hpp"
+#include "Demo_Center/Demo_Center.hpp"
 
 namespace G6037599
 {
@@ -11,7 +12,7 @@ namespace G6037599
     Memory_pool something(START_BYTE_SIZE);
     printf("Memory location 0 initialized with size of %d bytes.", something.get_size());
     something.print();
-    _getch(); _getch();
+    Demo_center::press_to_continue();
     puts(" -------------------------------------------------- ");
 
     enum Enum { N = 'N', O, P, Q, R};
@@ -25,7 +26,7 @@ namespace G6037599
     puts("Memory location 1 initialized.");
     printf("Now memory pool has size of %d bytes.", something.get_size());
     something.print();
-    _getch(); _getch();
+    Demo_center::press_to_continue();
     puts(" -------------------------------------------------- ");
 
     const auto EXPAND_BYTE_SIZE = 100;
@@ -33,14 +34,14 @@ namespace G6037599
     puts("Test expanding memory pool 100 bytes");
     printf("Now memory pool has size of %d bytes.", something.get_size());
     something.print();
-    _getch(); _getch();
+    Demo_center::press_to_continue();
     puts(" -------------------------------------------------- ");
 
     something.add(Q);
     something.add(R);
     printf(R"('%c' & '%c' added to memory location 1 & 2.)", Q, R);
     something.print();
-    _getch(); _getch();
+    Demo_center::press_to_continue();
     puts(" -------------------------------------------------- ");
   }
 
