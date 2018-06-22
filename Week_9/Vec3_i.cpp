@@ -7,11 +7,13 @@ namespace G6037599
   //___ static ________________________________________________________
   const Vec3_i Vec3_i::ZEROS = { 0, 0, 0 };
   const Vec3_i Vec3_i::ONES = { 1, 1, 1 };
+  const Vec3_i Vec3_i::UP = { 0, 1, 0 };
 
   void Vec3_i::test_unit()
   {
     test_case("A vector of ones", ONES, Vec3_i(1, 1, 1));
     test_case("A vector of zeros", ZEROS, Vec3_i(0, 0, 0));
+    test_case("Up vector", UP, Vec3_i(0, 1, 0));
     Demo_center::press_to_continue();
 
     Vec3_i v1(0, 9, 0);

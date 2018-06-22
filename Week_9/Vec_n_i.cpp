@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "Vec_n_i.hpp"
+#include "Demo_Center/Demo_Center.hpp"
 #include "Vec3_i.hpp"
 #include "Vec2_i.hpp"
-#include "Demo_Center/Demo_Center.hpp"
+#include "Vec4_i.hpp"
 
 namespace G6037599
 {
@@ -15,6 +16,10 @@ namespace G6037599
 
     show_header(3);
     Vec3_i::test_unit();
+    Demo_center::press_to_continue();
+
+    show_header(4);
+    Vec4_i::test_unit();
   }
 
   void Vec_n_i::show(const char* t_name, const Vec_n_i& t_vec_i)

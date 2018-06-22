@@ -102,7 +102,7 @@ void G6037599::Demo_center::show_header()
   puts("                    3. Week 7 Singleton Logger and");
   puts("                              High-Resolution-Time Stopwatch.");
   puts("");
-  puts("                    4. Week 9 Vec 2 - 3 i.");
+  puts("                    4. Week 9 Vec 2 - 4D of int.");
   puts("");
   puts("         //////////////////////////////////////////////////////////////////");
   puts("");

@@ -160,6 +160,7 @@
     <ClInclude Include="Week_7\Stopwatch.hpp" />
     <ClInclude Include="Week_9\Vec2_i.hpp" />
     <ClInclude Include="Week_9\Vec3_i.hpp" />
+    <ClInclude Include="Week_9\Vec4_i.hpp" />
     <ClInclude Include="Week_9\Vec_n_i.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +180,7 @@
     <ClCompile Include="Week_7\Stopwatch.cpp" />
     <ClCompile Include="Week_9\Vec2_i.cpp" />
     <ClCompile Include="Week_9\Vec3_i.cpp" />
+    <ClCompile Include="Week_9\Vec4_i.cpp" />
     <ClCompile Include="Week_9\Vec_n_i.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

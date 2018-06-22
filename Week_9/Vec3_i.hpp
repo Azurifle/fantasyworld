@@ -8,7 +8,7 @@ namespace G6037599
   class Vec3_i final : Vec_n_i
   {
   public:
-    static const Vec3_i ZEROS, ONES;
+    static const Vec3_i ZEROS, ONES, UP;
 
     static void test_unit();
 
