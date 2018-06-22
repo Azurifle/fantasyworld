@@ -1,5 +1,5 @@
 # Fantasy World
-- A Game Engine project from Game Engine Development class
+A Game Engine project from Game Engine Development class
 >The name _Fantasy World_ come from the first game that run on this game engine.
 
 In this repository, all projects are separated into branches. Start from:
