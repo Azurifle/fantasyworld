@@ -14,7 +14,7 @@ In this repository, all projects are separated into branches. Start from:
 
 ## Branches
 #### 1. "master"
-Backup of the lastest working version of a main game engine project.
+Backup of the latest working version of a main game engine project.
 
 #### 2. "Others" [:star:Latest Update]
 List of mini-projects that are not related to the main game engine project:
