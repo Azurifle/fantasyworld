@@ -6,6 +6,7 @@ namespace G6037599
 {
   //___ non-member static _______________________________________________________
   void test_case(const std::string& t_operator, const Vec3_i& t_actual, const Vec3_i& t_expected);
+  void show(const char* t_name, const Vec3_i& t_vec3_i);
 
   void vec3_i_test_unit()
   {
@@ -16,12 +17,11 @@ namespace G6037599
     Demo_center::press_to_continue();
 
     Vec3_i v1(0, 9, 0);
-    std::cout << " --------- v1: " << v1.to_string() << " --------" << std::endl
-      << std::endl;
+    show("v1", v1);
     auto v2(v1);
     test_case("auto v2(v1)", v2, v1);
     const Vec3_i COPY_ASSIGN(4, 5, 7);
-    test_case("( v2 = Vec2_i(4, 5, 7) )", v2 = COPY_ASSIGN, COPY_ASSIGN);
+    test_case("( v2 = Vec3_i(4, 5, 7) )", v2 = COPY_ASSIGN, COPY_ASSIGN);
     Demo_center::press_to_continue();
 
     std::cout << " --------- v1: " << v1.to_string()//0, 9, 0
@@ -35,6 +35,11 @@ namespace G6037599
 
     Demo_center::test_case("v1 dot v2", v1.dot(v2), 45);
     test_case("v1 cross v2", v1.cross(v2), Vec3_i(63, 0, -36));
+    Demo_center::press_to_continue();
+
+    const Vec3_i V3(2, 4, 6);
+    show("v3", V3);
+    Demo_center::test_case("v1 cross v2, v3", v1.cross(v2, V3), -90);
     Demo_center::press_to_continue();
 
     Demo_center::test_case("Size of v1", v1.size(), 9.0);
@@ -71,6 +76,12 @@ namespace G6037599
   {
     Demo_center::show_test_case(t_operator, "Vec3_i" + t_expected.to_string()
       , t_actual == t_expected);
+  }
+
+  void show(const char* t_name, const Vec3_i& t_vec3_i)
+  {
+    std::cout << " --------- " << t_name << ": " << t_vec3_i.to_string()
+      << " --------" << std::endl << std::endl;
   }
 
   //___ member public static __________________________________________
@@ -176,6 +187,11 @@ namespace G6037599
   {
     return { y * t_other.z - z * t_other.y, z * t_other.x - x * t_other.z
       , x * t_other.y - y * t_other.x };
+  }
+
+  int Vec3_i::cross(const Vec3_i& t_v2, const Vec3_i& t_v3) const
+  {
+    return cross(t_v2).dot(t_v3);
   }
 
   double Vec3_i::size() const//duplicate

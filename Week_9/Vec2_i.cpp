@@ -35,6 +35,7 @@ namespace G6037599
 
     Demo_center::test_case("v1 dot v2", v1.dot(v2), 45);
     Demo_center::test_case("v1 cross v2", v1.cross(v2), -36);
+    test_case("det of v1 ", v1.get_det(), Vec2_i(9, 0));
     Demo_center::press_to_continue();
 
     Demo_center::test_case("Size of v1", v1.size(), 9.0);
@@ -173,6 +174,11 @@ namespace G6037599
   int Vec2_i::cross(const Vec2_i& t_other) const
   {
     return x * t_other.y - y * t_other.x;
+  }
+
+  Vec2_i Vec2_i::get_det() const
+  {
+    return {y, -x};
   }
 
   double Vec2_i::size() const

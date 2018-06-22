@@ -42,6 +42,7 @@ namespace G6037599
     std::string to_string() const;
     int dot(const Vec2_i& t_other) const;
     int cross(const Vec2_i& t_other) const;
+    Vec2_i get_det() const;
     double size() const;
     double squared_size() const;
     Vec2_i normalize();
