@@ -38,7 +38,6 @@ namespace G6037599
     static void clear_2_nd_key_if_has();
     static void do_option(int t_option = OPTION_LAST);
     static void do_option3();
-    static void do_option4();
     static void back_to_main_menu();
 
     Demo_center() = default;

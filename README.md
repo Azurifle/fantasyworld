@@ -3,14 +3,14 @@ A Game Engine project from Game Engine Development class
 >The name _Fantasy World_ come from the first game that run on this game engine.
 
 In this repository, all projects are separated into branches. Start from:
-1. "[master](https://github.com/Azurifle/fantasyworld/new/master?readme=1#1-master)"
-2. "[Others](https://github.com/Azurifle/fantasyworld/new/master?readme=1#2-others-starlatest-update)" **[:star:Latest Update]**
-3. "[1.\_Fantasy\_World](https://github.com/Azurifle/fantasyworld/new/master?readme=1#3-1_fantasy_world)"
-4. "[2.\_2D\_Grid\_+\_Refactor1](https://github.com/Azurifle/fantasyworld/new/master?readme=1#4-2_2d_grid__refactor1)"
-5. "[3.\_Hero\_in\_Fantasy\_World](https://github.com/Azurifle/fantasyworld/new/master?readme=1#5-3_hero_in_fantasy_world)"
-6. "[4.\_Rich\_Fantasy\_World](https://github.com/Azurifle/fantasyworld/new/master?readme=1#6-4_rich_fantasy_world)"
-7. "[5.\_The\_Fantasy\_World](https://github.com/Azurifle/fantasyworld/new/master?readme=1#7-5_the_fantasy_world)"
-8. "[6.\_Bit\_Auto\_Car](https://github.com/Azurifle/fantasyworld/new/master?readme=1#8-6_bit_auto_car)"
+1. "[master](https://github.com/Azurifle/fantasyworld/tree/Others#1-master)"
+2. "[Others](https://github.com/Azurifle/fantasyworld/tree/Others#2-others-starlatest-update)" **[:star:Latest Update]**
+3. "[1.\_Fantasy\_World](https://github.com/Azurifle/fantasyworld/tree/Others#3-1_fantasy_world)"
+4. "[2.\_2D\_Grid\_+\_Refactor1](https://github.com/Azurifle/fantasyworld/tree/Others#4-2_2d_grid__refactor1)"
+5. "[3.\_Hero\_in\_Fantasy\_World](https://github.com/Azurifle/fantasyworld/tree/Others#5-3_hero_in_fantasy_world)"
+6. "[4.\_Rich\_Fantasy\_World](https://github.com/Azurifle/fantasyworld/tree/Others#6-4_rich_fantasy_world)"
+7. "[5.\_The\_Fantasy\_World](https://github.com/Azurifle/fantasyworld/tree/Others#7-5_the_fantasy_world)"
+8. "[6.\_Bit\_Auto\_Car](https://github.com/Azurifle/fantasyworld/tree/Others#8-6_bit_auto_car)"
 
 ## Branches
 #### 1. "master"

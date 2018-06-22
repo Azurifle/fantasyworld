@@ -78,6 +78,9 @@
     <ClInclude Include="Week_9\Vec3_i.hpp">
       <Filter>Header Files\Week_9</Filter>
     </ClInclude>
+    <ClInclude Include="Week_9\Vec_n_i.hpp">
+      <Filter>Header Files\Week_9</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files\Demo_Center</Filter>
     </ClCompile>
     <ClCompile Include="Week_9\Vec3_i.cpp">
+      <Filter>Source Files\Week_9</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_9\Vec_n_i.cpp">
       <Filter>Source Files\Week_9</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,8 +4,7 @@
 #include "Week_2/Memory_pool.hpp"
 #include "Week_7/Logger.hpp"
 #include "Week_7/Stopwatch.hpp"
-#include "Week_9/Vec2_i.hpp"
-#include "Week_9/Vec3_i.hpp"
+#include "Week_9/Vec_n_i.hpp"
 
 // ___ static ___________________________________________________________
 void G6037599::Demo_center::start()
@@ -155,7 +154,7 @@ void G6037599::Demo_center::do_option(const int t_option)
   case OPTION_1: oop_demo(); break;
   case OPTION_2: memory_pool_demo(); break;
   case OPTION_3: do_option3(); break;
-  default: do_option4();
+  default: Vec_n_i::test_units();
   }
   back_to_main_menu();
 }
@@ -165,13 +164,6 @@ void G6037599::Demo_center::do_option3()
   logger_demo();
   press_to_continue();
   Stopwatch::demo();
-}
-
-void G6037599::Demo_center::do_option4()
-{
-  vec2_i_test_unit();
-  press_to_continue();
-  vec3_i_test_unit();
 }
 
 void G6037599::Demo_center::back_to_main_menu()

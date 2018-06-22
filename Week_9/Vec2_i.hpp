@@ -1,15 +1,16 @@
 #ifndef G6037599_VEC2_I_HPP
 #define G6037599_VEC2_I_HPP
 #pragma once
+#include "Vec_n_i.hpp"
 
 namespace G6037599
 {
-  void vec2_i_test_unit();
-
-  class Vec2_i final
+  class Vec2_i final: Vec_n_i
   {
   public:
     static const Vec2_i ZEROS, ONES;
+
+    static void test_unit();
 
     int x, y;//if there is no setter constraint make it public
 
@@ -39,15 +40,23 @@ namespace G6037599
     bool operator < (const Vec2_i& t_other) const;
     bool operator > (const Vec2_i& t_other) const;
 
-    std::string to_string() const;
+    std::string to_string() const override;
+    double squared_size() const override;
+    void normalize() override;
+
     int dot(const Vec2_i& t_other) const;
     int cross(const Vec2_i& t_other) const;
     Vec2_i get_det() const;
-    double size() const;
-    double squared_size() const;
-    Vec2_i normalize();
     double radian_angle() const;
     double radian_angle_to(const Vec2_i& t_other) const;
+  private:
+    static void test_case(const std::string& t_operator
+      , const Vec2_i& t_actual, const Vec2_i& t_expected);
+    static void test_copy_n_assign(const Vec2_i& t_v1, Vec2_i& t_v2);
+    static void test_basic_operators(const Vec2_i& t_v1, const Vec2_i& t_v2);
+    static void test_vector_operators(Vec2_i& t_v1, const Vec2_i& t_v2);
+    static void test_other_operators(Vec2_i& t_v1, Vec2_i& t_v2);
+    static void test_boolean_operators(const Vec2_i& t_v1, const Vec2_i& t_v2);
   };
 }//G6037599
 
