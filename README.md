@@ -22,7 +22,7 @@ List of mini-projects that are not related to the main game engine project:
 1. Week 1 Object Oriented Programming.
 2. Week 2 Memory Manager.
 3. Week 7 Singleton Logger and High-Resolution-Time Stopwatch.
-4. Week 9 Vec 2 - 3 i. **[:star:Latest Update]**
+4. Week 9 Vec 2 - 4D of int. **[:star:Latest Update]**
 
 #### 3. "1.\_Fantasy\_World"
 The first version of the Fantasy World game. All monsters attack player via printing texts :laughing:.
