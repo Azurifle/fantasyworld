@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Vec_test_units.hpp"
 #include "Demo_Center/Demo_Center.hpp"
-#include "Vec2_i.hpp"
 #include "Vec3_i.hpp"
 #include "Vec4_i.hpp"
 
@@ -54,11 +53,11 @@ namespace G6037599
   //___ vec2_test_unit _______________________________________________
   void Vec_test_units::vec2_test_unit()
   {
-    vec2_test_case("A vector of ones", Vec2_i(Vec2_i::ONES), Vec2_i(1, 1));
-    vec2_test_case("A vector of zeros", Vec2_i(), Vec2_i(0, 0));
+    vec2_test_case("A vector of ones", Vec2<int>(Vec_n::ONES), Vec2<int>(1, 1));
+    vec2_test_case("A vector of zeros", Vec2<int>(), Vec2<int>(0, 0));
     Demo_center::press_to_continue();
 
-    Vec2_i v1(0, 9);
+    Vec2<int> v1(0, 9);
     auto v2(v1);
     vec2_test_copy_n_assign(v1, v2);
     vec2_test_basic_operators(v1, v2);
@@ -66,41 +65,41 @@ namespace G6037599
     vec2_test_other_operators(v1, v2);
   }
 
-  void Vec_test_units::vec2_test_case(const std::string& t_operator, const Vec2_i& t_actual
-    , const Vec2_i& t_expected)
+  void Vec_test_units::vec2_test_case(const std::string& t_operator, const Vec2<int>& t_actual
+    , const Vec2<int>& t_expected)
   {
-    Demo_center::show_test_case(t_operator, "Vec2_i" + t_expected.to_string()
+    Demo_center::show_test_case(t_operator, "Vec2" + t_expected.to_string()
       , t_actual == t_expected);
   }
 
-  void Vec_test_units::vec2_test_copy_n_assign(const Vec2_i& t_v1, Vec2_i& t_v2)
+  void Vec_test_units::vec2_test_copy_n_assign(const Vec2<int>& t_v1, Vec2<int>& t_v2)
   {
     show("v1", t_v1);
     vec2_test_case("auto v2(v1)", t_v2, t_v1);
-    const Vec2_i COPY_ASSIGN(4, 5);
+    const Vec2<int> COPY_ASSIGN(4, 5);
     vec2_test_case("( v2 = Vec3_i(4, 5) )", t_v2 = COPY_ASSIGN, COPY_ASSIGN);
     Demo_center::press_to_continue();
   }
 
-  void Vec_test_units::vec2_test_basic_operators(const Vec2_i& t_v1, const Vec2_i& t_v2)
+  void Vec_test_units::vec2_test_basic_operators(const Vec2<int>& t_v1, const Vec2<int>& t_v2)
   {
     show(t_v1, t_v2);//0, 9; 4, 5
-    vec2_test_case("v1 + v2", t_v1 + t_v2, Vec2_i(4, 14));
-    vec2_test_case("v1 - v2", t_v1 - t_v2, Vec2_i(-4, 4));
-    vec2_test_case("v1 * 2", t_v1 * 2, Vec2_i(0, 18));
-    vec2_test_case("v1 / 2", t_v1 / 2, Vec2_i(0, 4));
+    vec2_test_case("v1 + v2", t_v1 + t_v2, Vec2<int>(4, 14));
+    vec2_test_case("v1 - v2", t_v1 - t_v2, Vec2<int>(-4, 4));
+    vec2_test_case("v1 * 2", t_v1 * 2, Vec2<int>(0, 18));
+    vec2_test_case("v1 / 2", t_v1 / 2, Vec2<int>(0, 4));
     Demo_center::press_to_continue();
   }
 
-  void Vec_test_units::vec2_test_vector_operators(Vec2_i& t_v1, const Vec2_i& t_v2)
+  void Vec_test_units::vec2_test_vector_operators(Vec2<int>& t_v1, const Vec2<int>& t_v2)
   {
     Demo_center::test_case("v1 dot v2", t_v1.dot(t_v2), 45);
     Demo_center::test_case("v1 cross v2", t_v1.cross(t_v2), -36);
-    vec2_test_case("det of v1 ", t_v1.get_det(), Vec2_i(9, 0));
+    vec2_test_case("det of v1 ", t_v1.get_det(), Vec2<int>(9, 0));
     Demo_center::press_to_continue();
 
     test_sizes_n_normalize(t_v1, 9.0, 81.0);
-    vec2_test_case("Normalized v1", t_v1, Vec2_i(0, 1));
+    vec2_test_case("Normalized v1", t_v1, Vec2<int>(0, 1));
     Demo_center::press_to_continue();
 
     Demo_center::test_case("Direction of v2", t_v2.radian_angle(), 0.79);
@@ -108,21 +107,21 @@ namespace G6037599
     Demo_center::press_to_continue();
   }
 
-  void Vec_test_units::vec2_test_other_operators(Vec2_i& t_v1, Vec2_i& t_v2)
+  void Vec_test_units::vec2_test_other_operators(Vec2<int>& t_v1, Vec2<int>& t_v2)
   {
     show(t_v1, t_v2);//0, 1; 4, 5
-    vec2_test_case("v1 << v2", t_v1 << t_v2, Vec2_i(0, 32));
+    //vec2_test_case("v1 << v2", t_v1 << t_v2, Vec2<int>(0, 32));
     Demo_center::press_to_continue();
 
     vec2_test_boolean_operators(t_v1, t_v2);
 
-    vec2_test_case("(v2 /= 2)", t_v2 /= 2, Vec2_i(2, 2));
-    vec2_test_case("(v1 *= 5)", t_v1 *= 5, Vec2_i(0, 5));
-    vec2_test_case("(v1 += v2)", t_v1 += t_v2, Vec2_i(2, 7));
-    vec2_test_case("(v2 -= v1)", t_v2 -= t_v1, Vec2_i(0, -5));
+    vec2_test_case("(v2 /= 2)", t_v2 /= 2, Vec2<int>(2, 2));
+    vec2_test_case("(v1 *= 5)", t_v1 *= 5, Vec2<int>(0, 5));
+    vec2_test_case("(v1 += v2)", t_v1 += t_v2, Vec2<int>(2, 7));
+    vec2_test_case("(v2 -= v1)", t_v2 -= t_v1, Vec2<int>(0, -5));
   }
 
-  void Vec_test_units::vec2_test_boolean_operators(const Vec2_i& t_v1, const Vec2_i& t_v2)
+  void Vec_test_units::vec2_test_boolean_operators(const Vec2<int>& t_v1, const Vec2<int>& t_v2)
   {
     Demo_center::test_case("(v1 <= v2)", t_v1 <= t_v2, true);
     Demo_center::test_case("(v1 >= v2)", t_v1 >= t_v2, false);
@@ -147,6 +146,7 @@ namespace G6037599
     vec3_test_vector_operators(v1, v2);
     vec3_test_other_operators(v1, v2);
   }
+
   void Vec_test_units::vec3_test_case(const std::string& t_operator, const Vec3_i& t_actual
     , const Vec3_i& t_expected)
   {
@@ -232,6 +232,7 @@ namespace G6037599
     vec4_test_vector_operators(v1, v2);
     vec4_test_other_operators(v1, v2);
   }
+
   void Vec_test_units::vec4_test_case(const std::string& t_operator, const Vec4_i& t_actual
     , const Vec4_i& t_expected)
   {

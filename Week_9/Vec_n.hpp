@@ -7,6 +7,8 @@ namespace G6037599
   class Vec_n
   {
   public:
+    enum Type { ZEROS, ONES, UP };
+
     Vec_n() = default;
     virtual ~Vec_n() = default;
     Vec_n(const Vec_n& t_to_copy) = default;

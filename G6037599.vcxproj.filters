@@ -69,9 +69,6 @@
     <ClInclude Include="Week_2\Memory_pool.hpp">
       <Filter>Header Files\Week_2</Filter>
     </ClInclude>
-    <ClInclude Include="Week_9\Vec2_i.hpp">
-      <Filter>Header Files\Week_9</Filter>
-    </ClInclude>
     <ClInclude Include="Demo_Center\Demo_Center.hpp">
       <Filter>Header Files\Demo_Center</Filter>
     </ClInclude>
@@ -85,6 +82,9 @@
       <Filter>Header Files\Week_9</Filter>
     </ClInclude>
     <ClInclude Include="Week_9\Vec_n.hpp">
+      <Filter>Header Files\Week_9</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_9\Vec2.hpp">
       <Filter>Header Files\Week_9</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,9 +113,6 @@
     <ClCompile Include="Week_2\Memory_pool.cpp">
       <Filter>Source Files\Week_2</Filter>
     </ClCompile>
-    <ClCompile Include="Week_9\Vec2_i.cpp">
-      <Filter>Source Files\Week_9</Filter>
-    </ClCompile>
     <ClCompile Include="Demo_Center\Demo_Center.cpp">
       <Filter>Source Files\Demo_Center</Filter>
     </ClCompile>
@@ -129,6 +126,9 @@
       <Filter>Source Files\Week_9</Filter>
     </ClCompile>
     <ClCompile Include="Week_9\Vec_n.cpp">
+      <Filter>Source Files\Week_9</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_9\Vec2.cpp">
       <Filter>Source Files\Week_9</Filter>
     </ClCompile>
   </ItemGroup>

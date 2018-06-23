@@ -8,8 +8,6 @@ namespace G6037599
   class Vec4_i final : public Vec_n
   {
   public:
-    enum Type { ZEROS, ONES, UP };
-
     int x, y, z, t;
 
     explicit Vec4_i(Type t_typ = ZEROS);

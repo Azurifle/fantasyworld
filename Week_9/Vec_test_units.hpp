@@ -1,13 +1,14 @@
 #ifndef G6037599_VEC_TEST_UNITS_HPP
 #define G6037599_VEC_TEST_UNITS_HPP
 #pragma once
-#include "Vec3_i.hpp"
-#include "Vec4_i.hpp"
+
+#include "Vec2.hpp"
 
 namespace G6037599
 {
   class Vec_n;
-  class Vec2_i;
+  class Vec3_i;
+  class Vec4_i;
 
   class Vec_test_units
   {
@@ -22,12 +23,12 @@ namespace G6037599
     static void test_sizes_n_normalize(Vec_n& t_v1, double t_size, double t_squared_size);
 
     static void vec2_test_unit();
-    static void vec2_test_case(const std::string& t_operator, const Vec2_i& t_actual, const Vec2_i& t_expected);
-    static void vec2_test_copy_n_assign(const Vec2_i& t_v1, Vec2_i& t_v2);
-    static void vec2_test_basic_operators(const Vec2_i& t_v1, const Vec2_i& t_v2);
-    static void vec2_test_vector_operators(Vec2_i& t_v1, const Vec2_i& t_v2);
-    static void vec2_test_other_operators(Vec2_i& t_v1, Vec2_i& t_v2);
-    static void vec2_test_boolean_operators(const Vec2_i& t_v1, const Vec2_i& t_v2);
+    static void vec2_test_case(const std::string& t_operator, const Vec2<int>& t_actual, const Vec2<int>& t_expected);
+    static void vec2_test_copy_n_assign(const Vec2<int>& t_v1, Vec2<int>& t_v2);
+    static void vec2_test_basic_operators(const Vec2<int>& t_v1, const Vec2<int>& t_v2);
+    static void vec2_test_vector_operators(Vec2<int>& t_v1, const Vec2<int>& t_v2);
+    static void vec2_test_other_operators(Vec2<int>& t_v1, Vec2<int>& t_v2);
+    static void vec2_test_boolean_operators(const Vec2<int>& t_v1, const Vec2<int>& t_v2);
 
     static void vec3_test_unit();
     static void vec3_test_case(const std::string& t_operator, const Vec3_i& t_actual, const Vec3_i& t_expected);
