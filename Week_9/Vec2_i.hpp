@@ -5,16 +5,16 @@
 
 namespace G6037599
 {
-  class Vec2_i final: Vec_n_i
+  class Vec2_i: Vec_n_i
   {
   public:
-    static const Vec2_i ZEROS, ONES;
+    enum Type { ZEROS, ONES };
 
     static void test_unit();
 
     int x, y;//if there is no setter constraint make it public
 
-    Vec2_i();
+    explicit Vec2_i(Type t_typ = ZEROS);
     ~Vec2_i() = default;
     Vec2_i(int t_x, int t_y);
     Vec2_i(const Vec2_i& t_to_copy) = default;

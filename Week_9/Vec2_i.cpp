@@ -5,13 +5,10 @@
 namespace G6037599
 {
   //___ static ________________________________________________________
-  const Vec2_i Vec2_i::ZEROS = { 0, 0 };
-  const Vec2_i Vec2_i::ONES = { 1, 1 };
-
   void Vec2_i::test_unit()
   {
-    test_case("A vector of ones", ONES, Vec2_i(1, 1));
-    test_case("A vector of zeros", ZEROS, Vec2_i(0, 0));
+    test_case("A vector of ones", Vec2_i(ONES), Vec2_i(1, 1));
+    test_case("A vector of zeros", Vec2_i(), Vec2_i(0, 0));
     Demo_center::press_to_continue();
 
     Vec2_i v1(0, 9);
@@ -23,7 +20,7 @@ namespace G6037599
   }
 
   //___ (de)constructors/operators ____________________________________
-  Vec2_i::Vec2_i(): x(0), y(0) {}
+  Vec2_i::Vec2_i(const Type t_typ): x(t_typ), y(t_typ) {}
 
   Vec2_i::Vec2_i(const int t_x, const int t_y): x(t_x), y(t_y) {}
 
