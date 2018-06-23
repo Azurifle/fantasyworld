@@ -24,7 +24,7 @@ namespace G6037599
     Vec2 operator *= (T t_scalar);
     Vec2 operator /= (T t_scalar);
 
-    //Vec2 operator << (const Vec2<T>& t_other) const;
+    //Vec2<int> operator << (const Vec2<int>& t_other) const;
     Vec2 operator + (const Vec2<T>& t_other) const;
     Vec2 operator - (const Vec2<T>& t_other) const;
     Vec2 operator * (T t_scalar) const;

@@ -36,8 +36,7 @@ namespace G6037599
   }
 
   /*
-  template <class T>
-  Vec2<T> Vec2<T>::operator<<(const Vec2<T>& t_other) const
+  Vec2<int> Vec2<int>::operator<<(const Vec2<int>& t_other) const
   {
     return { x << t_other.x, y << t_other.y };
   }*/
@@ -158,10 +157,4 @@ namespace G6037599
   template class Vec2<int>;
   template class Vec2<float>;
   template class Vec2<double>;
-  void explicit_instantialtion()
-  {
-    Vec2<int> vec2_i;
-    Vec2<float> vec2_f;
-    Vec2<double> vec2_d;
-  }
 }//G6037599
