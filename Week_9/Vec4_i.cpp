@@ -5,15 +5,11 @@
 namespace G6037599
 {
   //___ static ________________________________________________________
-  const Vec4_i Vec4_i::ZEROS = { 0, 0, 0, 0 };
-  const Vec4_i Vec4_i::ONES = { 1, 1, 1, 1 };
-  const Vec4_i Vec4_i::UP = { 0, 1, 0, 0 };
-
   void Vec4_i::test_unit()
   {
-    test_case("A vector of ones", ONES, Vec4_i(1, 1, 1, 1));
-    test_case("A vector of zeros", ZEROS, Vec4_i(0, 0, 0, 0));
-    test_case("Up vector", UP, Vec4_i(0, 1, 0, 0));
+    test_case("A vector of ones", Vec4_i(ONES), Vec4_i(1, 1, 1, 1));
+    test_case("A vector of zeros", Vec4_i(), Vec4_i(0, 0, 0, 0));
+    test_case("Up vector", Vec4_i(UP), Vec4_i(0, 1, 0, 0));
     Demo_center::press_to_continue();
 
     Vec4_i v1(0, 9, 0, 0);
@@ -25,7 +21,13 @@ namespace G6037599
   }
 
   //___ (de)constructors/operators ____________________________________
-  Vec4_i::Vec4_i() : x(0), y(0), z(0), t(0) {}
+  Vec4_i::Vec4_i(const Type t_typ) : x(t_typ), y(t_typ), z(t_typ), t(t_typ)
+  {
+    switch (t_typ)
+    {
+    case UP: x = 0; y = 1; z = 0, t = 0; default:;
+    }
+  }
 
   Vec4_i::Vec4_i(const int t_x, const int t_y, const int t_z, const int t_t)
     : x(t_x), y(t_y), z(t_z), t(t_t) {}

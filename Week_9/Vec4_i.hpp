@@ -8,13 +8,13 @@ namespace G6037599
   class Vec4_i final : Vec_n_i
   {
   public:
-    static const Vec4_i ZEROS, ONES, UP;
+    enum Type { ZEROS, ONES, UP };
 
     static void test_unit();
 
     int x, y, z, t;
 
-    Vec4_i();
+    explicit Vec4_i(Type t_typ = ZEROS);
     ~Vec4_i() = default;
     Vec4_i(int t_x, int t_y, int t_z, int t_t);
     Vec4_i(const Vec4_i& t_to_copy) = default;
