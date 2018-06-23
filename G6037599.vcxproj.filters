@@ -78,10 +78,13 @@
     <ClInclude Include="Week_9\Vec3_i.hpp">
       <Filter>Header Files\Week_9</Filter>
     </ClInclude>
-    <ClInclude Include="Week_9\Vec_n_i.hpp">
+    <ClInclude Include="Week_9\Vec4_i.hpp">
       <Filter>Header Files\Week_9</Filter>
     </ClInclude>
-    <ClInclude Include="Week_9\Vec4_i.hpp">
+    <ClInclude Include="Week_9\Vec_test_units.hpp">
+      <Filter>Header Files\Week_9</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_9\Vec_n.hpp">
       <Filter>Header Files\Week_9</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,10 +122,13 @@
     <ClCompile Include="Week_9\Vec3_i.cpp">
       <Filter>Source Files\Week_9</Filter>
     </ClCompile>
-    <ClCompile Include="Week_9\Vec_n_i.cpp">
+    <ClCompile Include="Week_9\Vec4_i.cpp">
       <Filter>Source Files\Week_9</Filter>
     </ClCompile>
-    <ClCompile Include="Week_9\Vec4_i.cpp">
+    <ClCompile Include="Week_9\Vec_test_units.cpp">
+      <Filter>Source Files\Week_9</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_9\Vec_n.cpp">
       <Filter>Source Files\Week_9</Filter>
     </ClCompile>
   </ItemGroup>

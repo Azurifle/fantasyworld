@@ -1,16 +1,14 @@
 #ifndef G6037599_VEC3_I_HPP
 #define G6037599_VEC3_I_HPP
 #pragma once
-#include "Vec_n_i.hpp"
+#include "Vec_n.hpp"
 
 namespace G6037599
 {
-  class Vec3_i final : Vec_n_i
+  class Vec3_i final : public Vec_n
   {
   public:
     enum Type { ZEROS, ONES, UP };
-
-    static void test_unit();
 
     int x, y, z;
 
@@ -49,14 +47,6 @@ namespace G6037599
     int cross(const Vec3_i& t_v2, const Vec3_i& t_v3) const;
     Vec3_i radian_angles() const;
     double radian_angle_to(const Vec3_i& t_other) const;
-  private:
-    static void test_case(const std::string& t_operator
-      , const Vec3_i& t_actual, const Vec3_i& t_expected);
-    static void test_copy_n_assign(const Vec3_i& t_v1, Vec3_i& t_v2);
-    static void test_basic_operators(const Vec3_i& t_v1, const Vec3_i& t_v2);
-    static void test_vector_operators(Vec3_i& t_v1, const Vec3_i& t_v2);
-    static void test_other_operators(Vec3_i& t_v1, Vec3_i& t_v2);
-    static void test_boolean_operators(const Vec3_i& t_v1, const Vec3_i& t_v2);
   };
 }//G6037599
 

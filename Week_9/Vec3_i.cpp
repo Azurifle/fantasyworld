@@ -4,22 +4,6 @@
 
 namespace G6037599
 {
-  //___ static ________________________________________________________
-  void Vec3_i::test_unit()
-  {
-    test_case("A vector of ones", Vec3_i(ONES), Vec3_i(1, 1, 1));
-    test_case("A vector of zeros", Vec3_i(), Vec3_i(0, 0, 0));
-    test_case("Up vector", Vec3_i(UP), Vec3_i(0, 1, 0));
-    Demo_center::press_to_continue();
-
-    Vec3_i v1(0, 9, 0);
-    auto v2(v1);
-    test_copy_n_assign(v1, v2);
-    test_basic_operators(v1, v2);
-    test_vector_operators(v1, v2);
-    test_other_operators(v1, v2);
-  }
-
   //___ (de)constructors/operators ____________________________________
   Vec3_i::Vec3_i(const Type t_typ) : x(t_typ), y(t_typ), z(t_typ)
   {
@@ -163,77 +147,6 @@ namespace G6037599
     REQUIRE(t_other.size() != 0);
 
     return acos(dot(t_other) / (size() * t_other.size()));
-  }
-
-  //___ private static __________________________________________________
-  void Vec3_i::test_case(const std::string& t_operator, const Vec3_i& t_actual
-    , const Vec3_i& t_expected)
-  {
-    Demo_center::show_test_case(t_operator, "Vec3_i" + t_expected.to_string()
-      , t_actual == t_expected);
-  }
-
-  void Vec3_i::test_copy_n_assign(const Vec3_i& t_v1, Vec3_i& t_v2)
-  {
-    show("v1", t_v1);
-    test_case("auto v2(v1)", t_v2, t_v1);
-    const Vec3_i COPY_ASSIGN(4, 5, 7);
-    test_case("( v2 = Vec3_i(4, 5, 7) )", t_v2 = COPY_ASSIGN, COPY_ASSIGN);
-    Demo_center::press_to_continue();
-  }
-
-  void Vec3_i::test_basic_operators(const Vec3_i& t_v1, const Vec3_i& t_v2)
-  {
-    show(t_v1, t_v2);//0, 9, 0; 4, 5, 7
-    test_case("v1 + v2", t_v1 + t_v2, Vec3_i(4, 14, 7));
-    test_case("v1 - v2", t_v1 - t_v2, Vec3_i(-4, 4, -7));
-    test_case("v1 * 2", t_v1 * 2, Vec3_i(0, 18, 0));
-    test_case("v1 / 2", t_v1 / 2, Vec3_i(0, 4, 0));
-    Demo_center::press_to_continue();
-  }
-
-  void Vec3_i::test_vector_operators(Vec3_i& t_v1, const Vec3_i& t_v2)
-  {
-    Demo_center::test_case("v1 dot v2", t_v1.dot(t_v2), 45);
-    test_case("v1 cross v2", t_v1.cross(t_v2), Vec3_i(63, 0, -36));
-    Demo_center::press_to_continue();
-
-    const Vec3_i V3(2, 4, 6);
-    show("v3", V3);
-    Demo_center::test_case("v1 cross v2, v3", t_v1.cross(t_v2, V3), -90);
-    Demo_center::press_to_continue();
-
-    test_sizes_n_normalize(t_v1, 9.0, 81.0);
-    test_case("Normalized v1", t_v1, Vec3_i(0, 1, 0));
-    Demo_center::press_to_continue();
-
-    test_case("Direction of v2", t_v2.radian_angles(), Vec3_i(5, 5, 7));
-    Demo_center::test_case("v1.radian_angle_to(v2)", t_v1.radian_angle_to(t_v2), 1.02);
-    Demo_center::press_to_continue();
-  }
-
-  void Vec3_i::test_other_operators(Vec3_i& t_v1, Vec3_i& t_v2)
-  {
-    show(t_v1, t_v2);//0, 1, 0; 4, 5, 7
-    test_case("v1 << v2", t_v1 << t_v2, Vec3_i(0, 32, 0));
-    Demo_center::press_to_continue();
-
-    test_boolean_operators(t_v1, t_v2);
-
-    test_case("(v2 /= 2)", t_v2 /= 2, Vec3_i(2, 2, 3));
-    test_case("(v2 *= 5)", t_v2 *= 5, Vec3_i(10, 10, 15));
-    test_case("(v1 += v2)", t_v1 += t_v2, Vec3_i(10, 11, 15));
-    test_case("(v2 -= v1)", t_v2 -= t_v1, Vec3_i(0, -1, 0));
-  }
-
-  void Vec3_i::test_boolean_operators(const Vec3_i& t_v1, const Vec3_i& t_v2)
-  {
-    Demo_center::test_case("(v1 <= v2)", t_v1 <= t_v2, true);
-    Demo_center::test_case("(v1 >= v2)", t_v1 >= t_v2, false);
-    Demo_center::test_case("(v1 != v2)", t_v1 != t_v2, true);
-    Demo_center::test_case("(v1 < v2)", t_v1 < t_v2, true);
-    Demo_center::test_case("(v1 > v2)", t_v1 > t_v2, false);
-    Demo_center::press_to_continue();
   }
 
 }//G6037599
