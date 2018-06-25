@@ -5,19 +5,19 @@ namespace G6037599
 {
   //___ (de)constructors/operators ____________________________________
   template <class T>
-  Vec2<T>::Vec2(const Type t_typ): x(static_cast<T>(t_typ)), y(static_cast<T>(t_typ)) {}
+  Vec2<T>::Vec2(const T t_x_y): x(t_x_y), y(t_x_y) {}
 
   template <class T>
   Vec2<T>::Vec2(const T t_x, const T t_y): x(t_x), y(t_y) {}
 
   template <class T>
-  Vec2<T> Vec2<T>::operator+=(const Vec2<T>& t_other)
+  Vec2<T> Vec2<T>::operator+=(const Vec2& t_other)
   {
     return { x += t_other.x, y += t_other.y };
   }
 
   template <class T>
-  Vec2<T> Vec2<T>::operator-=(const Vec2<T>& t_other)
+  Vec2<T> Vec2<T>::operator-=(const Vec2& t_other)
   {
     return { x -= t_other.x, y -= t_other.y };
   }
@@ -35,20 +35,14 @@ namespace G6037599
     return { x /= t_scalar, y /= t_scalar };
   }
 
-  /*
-  Vec2<int> Vec2<int>::operator<<(const Vec2<int>& t_other) const
-  {
-    return { x << t_other.x, y << t_other.y };
-  }*/
-
   template <class T>
-  Vec2<T> Vec2<T>::operator+(const Vec2<T>& t_other) const
+  Vec2<T> Vec2<T>::operator+(const Vec2& t_other) const
   {
     return { x + t_other.x, y + t_other.y };
   }
 
   template <class T>
-  Vec2<T> Vec2<T>::operator-(const Vec2<T>& t_other) const
+  Vec2<T> Vec2<T>::operator-(const Vec2& t_other) const
   {
     return { x - t_other.x, y - t_other.y };
   }
@@ -67,37 +61,37 @@ namespace G6037599
   }
 
   template <class T>
-  bool Vec2<T>::operator<=(const Vec2<T>& t_other) const
+  bool Vec2<T>::operator<=(const Vec2& t_other) const
   {
     return x <= t_other.x && y <= t_other.y;
   }
 
   template <class T>
-  bool Vec2<T>::operator>=(const Vec2<T>& t_other) const
+  bool Vec2<T>::operator>=(const Vec2& t_other) const
   {
     return x >= t_other.x && y >= t_other.y;
   }
 
   template <class T>
-  bool Vec2<T>::operator==(const Vec2<T>& t_other) const
+  bool Vec2<T>::operator==(const Vec2& t_other) const
   {
     return x == t_other.x && y == t_other.y;
   }
 
   template <class T>
-  bool Vec2<T>::operator!=(const Vec2<T>& t_other) const
+  bool Vec2<T>::operator!=(const Vec2& t_other) const
   {
     return x != t_other.x && y != t_other.y;
   }
 
   template <class T>
-  bool Vec2<T>::operator<(const Vec2<T>& t_other) const
+  bool Vec2<T>::operator<(const Vec2& t_other) const
   {
     return x < t_other.x && y < t_other.y;
   }
 
   template <class T>
-  bool Vec2<T>::operator>(const Vec2<T>& t_other) const
+  bool Vec2<T>::operator>(const Vec2& t_other) const
   {
     return x > t_other.x && y > t_other.y;
   }
@@ -116,6 +110,12 @@ namespace G6037599
   }
 
   template <class T>
+  double Vec2<T>::size() const
+  {
+    return std::sqrt(squared_size());
+  }
+
+  template <class T>
   void Vec2<T>::normalize()
   {
     REQUIRE(size() != 0);
@@ -123,13 +123,13 @@ namespace G6037599
   }
 
   template <class T>
-  T Vec2<T>::dot(const Vec2<T>& t_other) const
+  T Vec2<T>::dot(const Vec2& t_other) const
   {
     return x*t_other.x + y*t_other.y;
   }
 
   template <class T>
-  T Vec2<T>::cross(const Vec2<T>& t_other) const
+  T Vec2<T>::cross(const Vec2& t_other) const
   {
     return x * t_other.y - y * t_other.x;
   }
@@ -148,7 +148,7 @@ namespace G6037599
   }
 
   template <class T>
-  double Vec2<T>::radian_angle_to(const Vec2<T>& t_other) const
+  double Vec2<T>::radian_angle_to(const Vec2& t_other) const
   {
     REQUIRE(size() != 0); REQUIRE(t_other.size() != 0);
     return acos(dot(t_other) / (size() * t_other.size()));
