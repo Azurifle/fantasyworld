@@ -5,7 +5,7 @@
 namespace G6037599
 {
   //___ static _______________________________________________________
-  void memory_pool_demo()
+  void demo_memory_pool()
   {
     puts(" === start test_memory_allocation ===============================");
     const auto START_BYTE_SIZE = 2;

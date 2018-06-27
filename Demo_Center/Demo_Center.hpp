@@ -10,7 +10,7 @@ namespace G6037599
     enum Enum
     {
       KEY_NO_PRESS, KEY_ESC = 27
-      , OPTION_1 = '1', OPTION_2, OPTION_3, OPTION_LAST
+      , OPTION_1 = '1', OPTION_2, OPTION_3, OPTION_4, OPTION_LAST
     };
 
     static void start();
@@ -26,18 +26,18 @@ namespace G6037599
       , bool t_actual, bool t_expected);
     static void show_test_case(const std::string& t_operator
       , const std::string& t_expected, bool t_condition);
+    static void print_centered_header(const std::string& t_header, char t_delim);
 
-    ~Demo_center() = default;
+    ~Demo_center() = default;    
   private:
-    static bool m_is_running_;
-
     static void disable_mouse_editing();
-    static void show_header();
+    static void show_menu();
     static bool choose_option();
     static int get_key();
     static void clear_2_nd_key_if_has();
     static void do_option(int t_option = OPTION_LAST);
-    static void do_option3();
+    static void demo_3_logger_n_stopwatch();
+    static void demo_5_matrix_test_unit();
     static void back_to_main_menu();
 
     Demo_center() = default;

@@ -22,9 +22,8 @@ namespace G6037599
   //___ private static _______________________________________________
   void Vec_test_units::show_header(const int t_vector_type)
   {
-    std::cout << "======================== Vector " << t_vector_type
-      << " int Test Unit ==========================" << std::endl
-      << std::endl;
+    Demo_center::print_centered_header(std::string("Vector ")
+      +std::to_string(t_vector_type)+" int Test Unit", '=');
   }
 
   void Vec_test_units::show(const char* t_name, const std::string& t_vec)
@@ -49,7 +48,7 @@ namespace G6037599
   void Vec_test_units::vec2_test_unit()
   {
     vec2_test_case("A vector of ones", Vec2<int>(1), Vec2<int>(1, 1));
-    vec2_test_case("A vector of zeros", Vec2<int>(0), Vec2<int>(0, 0));
+    vec2_test_case("A vector of zeros", Vec2<int>(), Vec2<int>(0, 0));
     Demo_center::press_to_continue();
 
     Vec2<int> v1(0, 9);
@@ -127,7 +126,7 @@ namespace G6037599
   void Vec_test_units::vec3_test_unit()
   {
     vec3_test_case("A vector of ones", Vec3<int>(1), Vec3<int>(1, 1, 1));
-    vec3_test_case("A vector of zeros", Vec3<int>(0), Vec3<int>(0, 0, 0));
+    vec3_test_case("A vector of zeros", Vec3<int>(), Vec3<int>(0, 0, 0));
     vec3_test_case("Up vector", Vec3<int>::UP, Vec3<int>(0, 1, 0));
     Demo_center::press_to_continue();
 
@@ -210,7 +209,7 @@ namespace G6037599
   void Vec_test_units::vec4_test_unit()
   {
     vec4_test_case("A vector of ones", Vec4<int>(1), Vec4<int>(1, 1, 1, 1));
-    vec4_test_case("A vector of zeros", Vec4<int>(0), Vec4<int>(0, 0, 0, 0));
+    vec4_test_case("A vector of zeros", Vec4<int>(), Vec4<int>(0, 0, 0, 0));
     vec4_test_case("Up vector", Vec4<int>::UP, Vec4<int>(0, 1, 0, 0));
     Demo_center::press_to_continue();
 

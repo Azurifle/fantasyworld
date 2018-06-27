@@ -6,7 +6,7 @@
 namespace G6037599
 {
   //___ static _______________________________________________________
-  void oop_demo()
+  void demo_oop()
   {
     Animal* animal = new Animal()
       , *dog = new Dog()

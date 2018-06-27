@@ -21,7 +21,7 @@ namespace G6037599
     int m_age_;
   };
 
-  void oop_demo();
+  void demo_oop();
 }//G6037599
 
 #endif //G6037599_ANIMAL_HPP

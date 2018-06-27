@@ -152,6 +152,7 @@
     <ClInclude Include="Demo_Center\Demo_Center.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Week_10\Mat4.hpp" />
     <ClInclude Include="Week_1\Animal.hpp" />
     <ClInclude Include="Week_1\Cat.hpp" />
     <ClInclude Include="Week_1\Dog.hpp" />
@@ -172,6 +173,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Week_10\Mat4.cpp" />
     <ClCompile Include="Week_1\Animal.cpp" />
     <ClCompile Include="Week_1\Cat.cpp" />
     <ClCompile Include="Week_1\Dog.cpp" />

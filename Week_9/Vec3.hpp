@@ -12,7 +12,7 @@ namespace G6037599
 
     T x, y, z;
 
-    explicit Vec3(T t_x_y);
+    explicit Vec3(T t_x_y = 0);
     ~Vec3() = default;
     Vec3(T t_x, T t_y, T t_z);
     Vec3(const Vec3<T>& t_to_copy) = default;

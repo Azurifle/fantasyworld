@@ -10,7 +10,7 @@ namespace G6037599
   public:
     T x, y;//if there is no setter constraint make it public
 
-    explicit Vec2(T t_x_y);
+    explicit Vec2(T t_x_y = 0);
     ~Vec2() = default;
     Vec2(T t_x, T t_y);
     Vec2(const Vec2& t_to_copy) = default;

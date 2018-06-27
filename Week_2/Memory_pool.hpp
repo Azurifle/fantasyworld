@@ -39,7 +39,7 @@ namespace G6037599
     void release();
   };
 
-  void memory_pool_demo();
+  void demo_memory_pool();
 }//G6037599
 
 #endif //G6037599_MEMORY_POOL_HPP

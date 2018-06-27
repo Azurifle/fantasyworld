@@ -90,6 +90,9 @@
     <ClInclude Include="Week_9\Vec4.hpp">
       <Filter>Header Files\Week_9</Filter>
     </ClInclude>
+    <ClInclude Include="Week_10\Mat4.hpp">
+      <Filter>Header Files\Week_10</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -130,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="Week_9\Vec4.cpp">
       <Filter>Source Files\Week_9</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_10\Mat4.cpp">
+      <Filter>Source Files\Week_10</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

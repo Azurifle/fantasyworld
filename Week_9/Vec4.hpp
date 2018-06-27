@@ -12,7 +12,7 @@ namespace G6037599
 
     T x, y, z, t;
 
-    explicit Vec4(T t_x_y);
+    explicit Vec4(T t_x_y = 0);
     ~Vec4() = default;
     Vec4(T t_x, T t_y, T t_z, T t_t);
     Vec4(const Vec4& t_to_copy) = default;
