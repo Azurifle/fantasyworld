@@ -1,6 +1,7 @@
 #ifndef G6037599_DEMO_CENTER_HPP
 #define G6037599_DEMO_CENTER_HPP
 #pragma once
+#include "Week_10/Mat4.hpp"
 
 namespace G6037599
 {
@@ -28,6 +29,8 @@ namespace G6037599
       , const std::string& t_expected, bool t_condition);
     static void print_centered_header(const std::string& t_header, char t_delim);
 
+    static std::string double_to_2_points_string(double t_double);
+
     ~Demo_center() = default;    
   private:
     static void disable_mouse_editing();
@@ -38,6 +41,8 @@ namespace G6037599
     static void do_option(int t_option = OPTION_LAST);
     static void demo_3_logger_n_stopwatch();
     static void demo_5_matrix_test_unit();
+    static void mat4_test_case(const std::string& t_operator, const Mat4& t_actual
+      , const Mat4& t_expected);
     static void back_to_main_menu();
 
     Demo_center() = default;

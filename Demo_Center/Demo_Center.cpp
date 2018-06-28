@@ -57,11 +57,8 @@ namespace G6037599
   void Demo_center::test_case(const std::string& t_operator, const double t_actual
     , const double t_expected)
   {
-    std::stringstream double_2_decimal_points;
-    double_2_decimal_points << std::fixed << std::setprecision(2)
-      << t_expected;
     const auto PRECISION = 0.01;
-    show_test_case(t_operator, double_2_decimal_points.str()
+    show_test_case(t_operator, double_to_2_points_string(t_expected)
       , abs(t_actual - t_expected) <= PRECISION);
   }
 
@@ -89,6 +86,14 @@ namespace G6037599
     std::cout << ' ' << t_header << ' ' 
       << std::setw(SPACE_AFTER-1) << std::setfill(t_delim) << t_delim << std::endl 
       << std::endl;
+  }
+
+  std::string Demo_center::double_to_2_points_string(const double t_double)
+  {
+    std::stringstream double_2_decimal_points;
+    double_2_decimal_points << std::fixed << std::setprecision(2)
+      << t_double;
+    return double_2_decimal_points.str();
   }
 
   // ___ private static ____________________________________________________
@@ -184,9 +189,15 @@ namespace G6037599
   {
     print_centered_header("Matrix Test Unit", '=');
 
-    puts("Matrix of zeros == Mat4(0)? : pass");
-    Mat4 mat;
-    std::cout << mat.to_string() << std::endl;
+    mat4_test_case("A matrix of zeros", Mat4(), Mat4(0));
+    mat4_test_case("An identity matrix", Mat4::identity(), Mat4(1));
+  }
+
+  void Demo_center::mat4_test_case(const std::string& t_operator
+    , const Mat4& t_actual, const Mat4& t_expected)
+  {
+    show_test_case(t_operator, "Mat4" + t_expected.to_string()
+      , t_actual == t_expected);
   }
 
   void Demo_center::back_to_main_menu()
