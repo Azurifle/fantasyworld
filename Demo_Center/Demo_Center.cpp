@@ -190,7 +190,9 @@ namespace G6037599
     print_centered_header("Matrix Test Unit", '=');
 
     mat4_test_case("A matrix of zeros", Mat4(), Mat4(0));
+    puts("");
     mat4_test_case("An identity matrix", Mat4::identity(), Mat4(1));
+    puts("");
   }
 
   void Demo_center::mat4_test_case(const std::string& t_operator

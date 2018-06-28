@@ -10,30 +10,77 @@ namespace G6037599
     return Mat4(1);
   }
 
-  Mat4 Mat4::get_translated(const Vec3<float>& t_translate)
+  Mat4 Mat4::translation(const Vec3<float>& t_translate)
   {
-    return {};
-  }//*****
+    Mat4 temp(1);
+    temp.m_mat_[0][T] = t_translate.x;
+    temp.m_mat_[1][T] = t_translate.y;
+    temp.m_mat_[2][T] = t_translate.z;
+    return temp;
+  }
 
-  Mat4 Mat4::get_rotated(const float t_radian_angle, const Vec3<float>& t_axis)
+  Mat4 Mat4::rotation(const float t_radian_angle, const Vec3<float>& t_axis)
   {
-    return {};
-  }//*****
+    Mat4 rotation(1);
+    const auto cos_angle = cos(t_radian_angle)
+      , sin_angle = sin(t_radian_angle);
 
-  Mat4 Mat4::get_scaled(const Vec3<float>& t_scale)
-  {
-    return {};
-  }//*****
+    if (t_axis.x)
+    {
+      Mat4 rot_x(1);
+      rot_x.m_mat_[1][Y] = cos_angle;
+      rot_x.m_mat_[1][Z] = -sin_angle;
+      rot_x.m_mat_[2][Y] = sin_angle;
+      rot_x.m_mat_[2][Z] = cos_angle;
+      rotation *= rot_x;
+    }
+    if (t_axis.y)
+    {
+      Mat4 rot_y(1);
+      rot_y.m_mat_[0][X] = cos_angle;
+      rot_y.m_mat_[0][Z] = sin_angle;
+      rot_y.m_mat_[2][X] = -sin_angle;
+      rot_y.m_mat_[2][Z] = cos_angle;
+      rotation *= rot_y;
+    }
+    if (t_axis.z)
+    {
+      Mat4 rot_z(1);
+      rot_z.m_mat_[0][X] = cos_angle;
+      rot_z.m_mat_[0][Y] = -sin_angle;
+      rot_z.m_mat_[1][X] = sin_angle;
+      rot_z.m_mat_[1][Y] = cos_angle;
+      rotation *= rot_z;
+    }
+    return rotation;
+  }
 
-  Mat4 Mat4::get_transposed(const Mat4& t_matrix)
+  Mat4 Mat4::scaling(const Vec3<float>& t_scale)
   {
-    return {};
-  }//*****
+    Mat4 temp;
+    temp.m_mat_[0][X] = t_scale.x;
+    temp.m_mat_[1][Y] = t_scale.y;
+    temp.m_mat_[2][Z] = t_scale.z;
+    return temp;
+  }
+
+  Mat4 Mat4::transpose(const Mat4& t_matrix)
+  {
+    Mat4 temp;
+    for (auto row = 0; row < SIZE; ++row)
+      for (auto col = 0; col < SIZE; ++col)
+      {
+        temp.m_mat_[row][col] = t_matrix.m_mat_[col][row];
+      }
+    return temp;
+  }
 
   Mat4 Mat4::inverse(const Mat4& t_matrix)
   {
-    return {};
-  }//*****
+    Mat4 temp;
+    inverse(temp, det(t_matrix.m_mat_), t_matrix.m_mat_);
+    return temp;
+  }
 
   // ___ constructor __________________________________________________________
   Mat4::Mat4()
@@ -211,27 +258,34 @@ namespace G6037599
 
   void Mat4::invert()
   {
-    float det = 0;
-    for (auto col = 0; col < SIZE; col++)
-    {
-      det += m_mat_[0][col] * ( 
-        m_mat_[1][(col + 1) % SIZE] * m_mat_[2][(col + 2) % SIZE] 
-        - m_mat_[1][(col + 2) % SIZE] * m_mat_[2][(col + 1) % SIZE] );
-    }
-
-    Mat4 temp;
-    for (auto row = 0; row < SIZE; row++) 
-    {
-      for (auto col = 0; col < SIZE; col++)
-      {
-        temp.m_mat_[row][col] = (
-          m_mat_[(col + 1) % SIZE][(row + 1) % SIZE] 
-            * m_mat_[(col + 2) % SIZE][(row + 2) % SIZE]
-          - m_mat_[(col + 1) % 3][(row + 2) % 3] 
-            * m_mat_[(col + 2) % 3][(row + 1) % 3]
-          ) / det;
-      }
-    }
-    *this = temp;
+    *this = inverse(*this);
   }
+
+  // ___ private static ___________________________________________________
+  float Mat4::det(const float (&t_mat)[SIZE][SIZE])
+  {
+    auto det = 0.0f;
+    for (auto col = 0; col < SIZE; ++col)
+    {
+      det += t_mat[0][col] * (
+        t_mat[1][(col + 1) % SIZE] * t_mat[2][(col + 2) % SIZE]
+        - t_mat[1][(col + 2) % SIZE] * t_mat[2][(col + 1) % SIZE]);
+    }
+    return det;
+  }
+
+  void Mat4::inverse(Mat4& t_in_out, const float t_det, const float(&t_mat)[SIZE][SIZE])
+  {
+    for (auto row = 0; row < SIZE; ++row)
+      for (auto col = 0; col < SIZE; ++col)
+      {
+        t_in_out.m_mat_[row][col] = (
+          t_mat[(col + 1) % SIZE][(row + 1) % SIZE]
+          * t_mat[(col + 2) % SIZE][(row + 2) % SIZE]
+          - t_mat[(col + 1) % 3][(row + 2) % 3]
+          * t_mat[(col + 2) % 3][(row + 1) % 3]
+          ) / t_det;
+      }
+  }
+
 }//G6037599

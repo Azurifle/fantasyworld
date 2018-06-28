@@ -12,10 +12,10 @@ namespace G6037599
     enum Enum { X, Y, Z, T, SIZE};
 
     static Mat4 identity();
-    static Mat4 get_translated(const Vec3<float>& t_translate);
-    static Mat4 get_rotated(float t_radian_angle, const Vec3<float>& t_axis);
-    static Mat4 get_scaled(const Vec3<float>& t_scale);
-    static Mat4 get_transposed(const Mat4& t_matrix);
+    static Mat4 translation(const Vec3<float>& t_translate);
+    static Mat4 rotation(float t_radian_angle, const Vec3<float>& t_axis);
+    static Mat4 scaling(const Vec3<float>& t_scale);
+    static Mat4 transpose(const Mat4& t_matrix);
     static Mat4 inverse(const Mat4& t_matrix);
 
     Mat4();
@@ -44,6 +44,9 @@ namespace G6037599
     void invert();
   private:
     float m_mat_[SIZE][SIZE]{};
+
+    static float det(const float(&t_mat)[SIZE][SIZE]);
+    static void inverse(Mat4 & t_in_out, float t_det, const float(&t_mat)[SIZE][SIZE]);
   };
 }//G6037599
 
