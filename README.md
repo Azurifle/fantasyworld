@@ -19,11 +19,11 @@ Backup of the latest working version of a main game engine project.
 #### 2. "Others" [:star:Latest Update]
 List of mini-projects that are not related to the main game engine project:
 
-1. Week 1 Object Oriented Programming.
-2. Week 2 Memory Manager.
-3. Week 7 Singleton Logger and High-Resolution Stopwatch.
-4. Week 9 Vec 2 - 4D <Template>.
-5. Week 10 Matrix 4x4 of float. **[:star:Latest Update]**
+    1. Week 1 Object Oriented Programming.
+    2. Week 2 Memory Manager.
+    3. Week 7 Singleton Logger and High-Resolution Stopwatch.
+    4. Week 9 Vec 2 - 4D <Template>.
+  5. Week 10 Matrix 4x4 of float. **[:star:Latest Update]**
 
 #### 3. "1.\_Fantasy\_World"
 The first version of the Fantasy World game. All monsters attack player via printing texts :laughing:.
