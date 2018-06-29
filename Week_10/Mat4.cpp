@@ -19,45 +19,29 @@ namespace G6037599
     return temp;
   }
 
-  Mat4 Mat4::rotation(const float t_radian_angle, const Vec3<float>& t_axis)
+  Mat4 Mat4::rotation(const float t_radian_angle, const Vec3<int>& t_axis)
   {
     Mat4 rotation(1);
-    const auto cos_angle = cos(t_radian_angle)
-      , sin_angle = sin(t_radian_angle);
 
-    if (t_axis.x)
+    switch(t_axis.x)
     {
-      Mat4 rot_x(1);
-      rot_x.m_mat_[1][Y] = cos_angle;
-      rot_x.m_mat_[1][Z] = -sin_angle;
-      rot_x.m_mat_[2][Y] = sin_angle;
-      rot_x.m_mat_[2][Z] = cos_angle;
-      rotation *= rot_x;
+    case 0: break; default: rotate(rotation, t_radian_angle, X);
     }
-    if (t_axis.y)
+    switch (t_axis.y)
     {
-      Mat4 rot_y(1);
-      rot_y.m_mat_[0][X] = cos_angle;
-      rot_y.m_mat_[0][Z] = sin_angle;
-      rot_y.m_mat_[2][X] = -sin_angle;
-      rot_y.m_mat_[2][Z] = cos_angle;
-      rotation *= rot_y;
+    case 0: break; default: rotate(rotation, t_radian_angle, Y);
     }
-    if (t_axis.z)
+    switch (t_axis.z)
     {
-      Mat4 rot_z(1);
-      rot_z.m_mat_[0][X] = cos_angle;
-      rot_z.m_mat_[0][Y] = -sin_angle;
-      rot_z.m_mat_[1][X] = sin_angle;
-      rot_z.m_mat_[1][Y] = cos_angle;
-      rotation *= rot_z;
+    case 0: break; default: rotate(rotation, t_radian_angle, Z);
     }
+
     return rotation;
   }
 
   Mat4 Mat4::scaling(const Vec3<float>& t_scale)
   {
-    Mat4 temp;
+    Mat4 temp(1);
     temp.m_mat_[0][X] = t_scale.x;
     temp.m_mat_[1][Y] = t_scale.y;
     temp.m_mat_[2][Z] = t_scale.z;
@@ -78,7 +62,7 @@ namespace G6037599
   Mat4 Mat4::inverse(const Mat4& t_matrix)
   {
     Mat4 temp;
-    inverse(temp, det(t_matrix.m_mat_), t_matrix.m_mat_);
+    inverse(temp, det(t_matrix), t_matrix.m_mat_);
     return temp;
   }
 
@@ -138,6 +122,22 @@ namespace G6037599
   }
 
   // ___ operators __________________________________________________________
+  bool Mat4::operator==(const Mat4& t_other) const
+  {
+    for (auto row = 0; row < SIZE; ++row)
+    {
+      for (auto col = 0; col < SIZE; ++col)
+      {
+        if (abs(m_mat_[row][col] - t_other.m_mat_[row][col]) 
+          > Demo_center::PRECISION)
+        {
+          return false;
+        }
+      }//col loop
+    }
+    return true;
+  }
+
   Mat4& Mat4::operator*=(const Mat4& t_other)
   {
     return *this = *this * t_other;
@@ -197,35 +197,22 @@ namespace G6037599
     return temp;
   }
 
-  Vec4<float> Mat4::operator*(const Vec4<float>& t_other) const
+  // ___ friend _________________________________________________________________
+  Vec4<float> operator*(const Mat4& t_left, const Vec4<float>& t_right)
   {
     Vec4<float> temp;
-    for (auto this_row = 0; this_row < SIZE; ++this_row)
+    for (auto row = 0; row < Mat4::SIZE; ++row)
     {
-      temp.x += m_mat_[this_row][X] * t_other.x;
-      temp.y += m_mat_[this_row][Y] * t_other.y;
-      temp.z += m_mat_[this_row][Z] * t_other.z;
-      temp.t += m_mat_[this_row][T] * t_other.t;
+      temp.x += t_left.m_mat_[row][Mat4::X] * t_right.x;
+      temp.y += t_left.m_mat_[row][Mat4::Y] * t_right.y;
+      temp.z += t_left.m_mat_[row][Mat4::Z] * t_right.z;
+      temp.t += t_left.m_mat_[row][Mat4::T] * t_right.t;
     }
     return temp;
   }
 
-  bool Mat4::operator==(const Mat4& t_other) const
-  {
-    for (auto row = 0; row < SIZE; ++row)
-    {
-      for (auto col = 0; col < SIZE; ++col)
-      {
-        if (m_mat_[row][col] != t_other.m_mat_[row][col])
-        {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  std::string Mat4::to_string() const
+  // ___ public _________________________________________________________________
+  std::string Mat4::to_string(const bool t_shows_float) const
   {
     std::string str;
     for (auto& row : m_mat_)
@@ -233,7 +220,8 @@ namespace G6037599
       str += '\n';
       for (auto& col : row)
       {
-        str += ' '+Demo_center::double_to_2_points_string(col);
+        const auto points = 2;
+        str += ' '+Demo_center::double_points_string(col, t_shows_float? points: 0);
       }
     }
     str += '\n';
@@ -261,22 +249,45 @@ namespace G6037599
     *this = inverse(*this);
   }
 
-  // ___ private static ___________________________________________________
-  float Mat4::det(const float (&t_mat)[SIZE][SIZE])
+  void Mat4::set(const Vec2<int>& t_pos, const float t_value)
   {
-    auto det = 0.0f;
+    m_mat_[t_pos.x][t_pos.y] = t_value;
+  }
+
+  // ___ private static ___________________________________________________
+  float Mat4::det(Mat4 t_mat)
+  {
+    /*auto det = 0.0f;
     for (auto col = 0; col < SIZE; ++col)
     {
       det += t_mat[0][col] * (
         t_mat[1][(col + 1) % SIZE] * t_mat[2][(col + 2) % SIZE]
         - t_mat[1][(col + 2) % SIZE] * t_mat[2][(col + 1) % SIZE]);
+      std::cout << det << std::endl;//fix det
+    }
+    return det;*/
+    auto det = 1.0f;
+    for (auto col = 0; col < SIZE; ++col)
+    {
+      det *= t_mat.m_mat_[col][col];
+      for (auto row = col + 1; row < SIZE; ++row)
+      {
+        const auto ratio = t_mat.m_mat_[row][col] / t_mat.m_mat_[col][col];
+        for (auto k = col; k < SIZE; k++)
+        {
+          t_mat.m_mat_[row][k] -= ratio * t_mat.m_mat_[col][k];
+        }
+      }//row loop
     }
     return det;
   }
 
   void Mat4::inverse(Mat4& t_in_out, const float t_det, const float(&t_mat)[SIZE][SIZE])
   {
+    REQUIRE(t_det != 0);
+
     for (auto row = 0; row < SIZE; ++row)
+    {
       for (auto col = 0; col < SIZE; ++col)
       {
         t_in_out.m_mat_[row][col] = (
@@ -286,6 +297,27 @@ namespace G6037599
           * t_mat[(col + 2) % 3][(row + 1) % 3]
           ) / t_det;
       }
+    }//row loop
+  }
+
+  void Mat4::rotate(Mat4& t_in_out, const float t_radian_angle, const int t_axis)
+  {
+    const auto cos_angle = cos(t_radian_angle)
+      , sin_angle = sin(t_radian_angle);
+
+    Mat4 rot(1);
+    rot.m_mat_[1][Y] = t_axis != Y ? cos_angle : 1;
+    rot.m_mat_[2][Y] = t_axis == X ? sin_angle : 0;
+    rot.m_mat_[1][Z] = -rot.m_mat_[2][Y];
+    rot.m_mat_[2][Z] = t_axis != Z ? cos_angle : 1;
+
+    rot.m_mat_[0][X] = t_axis != X ? cos_angle : 1;
+    rot.m_mat_[0][Z] = t_axis == Y ? sin_angle : 0;
+    rot.m_mat_[2][X] = -rot.m_mat_[0][Z];
+
+    rot.m_mat_[1][X] = t_axis == Z ? sin_angle : 0;
+    rot.m_mat_[0][Y] = -rot.m_mat_[1][X];
+    t_in_out *= rot;
   }
 
 }//G6037599

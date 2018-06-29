@@ -13,6 +13,7 @@ namespace G6037599
       KEY_NO_PRESS, KEY_ESC = 27
       , OPTION_1 = '1', OPTION_2, OPTION_3, OPTION_4, OPTION_LAST
     };
+    static const float PRECISION;
 
     static void start();
 
@@ -28,10 +29,9 @@ namespace G6037599
     static void show_test_case(const std::string& t_operator
       , const std::string& t_expected, bool t_condition);
     static void print_centered_header(const std::string& t_header, char t_delim);
+    static std::string double_points_string(double t_double, int t_points = 2);
 
-    static std::string double_to_2_points_string(double t_double);
-
-    ~Demo_center() = default;    
+    ~Demo_center() = default;
   private:
     static void disable_mouse_editing();
     static void show_menu();
@@ -40,9 +40,16 @@ namespace G6037599
     static void clear_2_nd_key_if_has();
     static void do_option(int t_option = OPTION_LAST);
     static void demo_3_logger_n_stopwatch();
-    static void demo_5_matrix_test_unit();
-    static void mat4_test_case(const std::string& t_operator, const Mat4& t_actual
-      , const Mat4& t_expected);
+    static void mat4_test_mutiplications(Mat4& mat);
+    static void mat4_test_transformations(Mat4& mat);
+    static void demo_5_mat4_test_unit();
+    static void mat4_test_case(const std::string& t_operator
+      , const Mat4& t_actual, const Mat4& t_expected
+      , bool t_shows_as_float = false);
+    static void vec3_f_test_case(const std::string& t_operator
+      , const Vec3<float>& t_actual, const Vec3<float>& t_expected);
+    static void vec4_f_test_case(const std::string& t_operator
+      , const Vec4<float>& t_actual, const Vec4<float>& t_expected);
     static void back_to_main_menu();
 
     Demo_center() = default;

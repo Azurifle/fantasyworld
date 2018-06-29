@@ -10,6 +10,8 @@
 namespace G6037599
 {
   // ___ static ___________________________________________________________
+  const float Demo_center::PRECISION = 0.01;
+
   void Demo_center::start()
   {
     static auto is_running = false;
@@ -57,8 +59,7 @@ namespace G6037599
   void Demo_center::test_case(const std::string& t_operator, const double t_actual
     , const double t_expected)
   {
-    const auto PRECISION = 0.01;
-    show_test_case(t_operator, double_to_2_points_string(t_expected)
+    show_test_case(t_operator, double_points_string(t_expected)
       , abs(t_actual - t_expected) <= PRECISION);
   }
 
@@ -88,12 +89,11 @@ namespace G6037599
       << std::endl;
   }
 
-  std::string Demo_center::double_to_2_points_string(const double t_double)
+  std::string Demo_center::double_points_string(const double t_double, const int t_points)
   {
-    std::stringstream double_2_decimal_points;
-    double_2_decimal_points << std::fixed << std::setprecision(2)
-      << t_double;
-    return double_2_decimal_points.str();
+    std::stringstream double_w_points;
+    double_w_points << std::fixed << std::setprecision(t_points) << t_double;
+    return double_w_points.str();
   }
 
   // ___ private static ____________________________________________________
@@ -121,7 +121,7 @@ namespace G6037599
     puts("");
     puts("               4. Week 9 Vec 2 - 4D <template>.");
     puts("");
-    puts("               5. Week 10 Matrix 4x4D of float.");
+    puts("               5. Week 10 Matrix 4x4 of float.");
     puts("");
     puts("         //////////////////////////////////////////////////////////////////");
     puts("");
@@ -173,7 +173,7 @@ namespace G6037599
     case OPTION_2: demo_memory_pool(); break;
     case OPTION_3: demo_3_logger_n_stopwatch(); break;
     case OPTION_4: Vec_test_units::run(); break;
-    default: demo_5_matrix_test_unit();
+    default: demo_5_mat4_test_unit();
     }
     back_to_main_menu();
   }
@@ -185,21 +185,86 @@ namespace G6037599
     Stopwatch::demo();
   }
 
-  void Demo_center::demo_5_matrix_test_unit()
+  void Demo_center::demo_5_mat4_test_unit()
   {
     print_centered_header("Matrix Test Unit", '=');
 
     mat4_test_case("A matrix of zeros", Mat4(), Mat4(0));
     puts("");
-    mat4_test_case("An identity matrix", Mat4::identity(), Mat4(1));
+    Mat4 mat(1);
+    mat4_test_case("An identity matrix", Mat4::identity(), mat);
+    press_to_continue();
+
+    mat4_test_transformations(mat);
+
+    const auto transpose_mat = Mat4::transpose(mat);
+    mat4_test_case("Mat4::transpose(mat)", Mat4::transpose(mat)
+      , transpose_mat, true);
     puts("");
+    press_to_continue();
+
+    mat4_test_mutiplications(mat);
   }
 
   void Demo_center::mat4_test_case(const std::string& t_operator
-    , const Mat4& t_actual, const Mat4& t_expected)
+    , const Mat4& t_actual, const Mat4& t_expected, const bool t_shows_as_float)
   {
-    show_test_case(t_operator, "Mat4" + t_expected.to_string()
+    //std::cout << "t_actual" << t_actual.to_string(true) << std::endl;//***
+    //std::cout << "t_expected" << t_expected.to_string(true) << std::endl;//***
+    show_test_case(t_operator, "Mat4" + t_expected.to_string(t_shows_as_float)
       , t_actual == t_expected);
+  }
+
+  void Demo_center::mat4_test_transformations(Mat4& t_mat)
+  {
+    const Vec2<int> translate_x(0, Mat4::T);
+    t_mat.set(translate_x, -1.0f);
+    mat4_test_case("X-translation by -1 matrix"
+      , Mat4::translation(Vec3<float>(-1, 0, 0)), t_mat);
+    puts("");
+
+    t_mat.set(translate_x, 0);
+    const auto scaling_mat = Mat4::scaling(Vec3<float>(3, 3, 3));
+    mat4_test_case("Scaling by 3 matrix", scaling_mat, t_mat *= scaling_mat);
+    puts("");
+
+    t_mat = Mat4(1);
+    const auto rotation_mat = Mat4::rotation(3.14f / 4, Vec3<int>(0, 1, 1));
+    mat4_test_case("Y-Z-rotation by PI/4 matrix", rotation_mat, t_mat *= rotation_mat, true);
+    press_to_continue(); 
+  }
+
+  void Demo_center::mat4_test_mutiplications(Mat4& t_mat)
+  {
+    t_mat.set(Vec2<int>(0, 1), 20);
+    puts(" ----------- mat ------------------");
+    std::cout << t_mat.to_string(true) << std::endl;
+    mat4_test_case("mat * mat^-1", t_mat*Mat4::inverse(t_mat), Mat4::identity());
+    puts("");
+    mat4_test_case("mat * 2", t_mat * 2, t_mat *= 2);
+    puts("");
+    vec3_f_test_case("mat * vec3f(2.5, 3.4, 4.3)"
+      , t_mat * Vec3<float>(2.5f, 3.4f, 4.3f), Vec3<float>());
+    std::cout << (t_mat * Vec3<float>(2.5f, 3.4f, 4.3f)).to_string() << std::endl;//***
+    puts("");
+    vec4_f_test_case("mat * vec4f(3.4, 2.5, 5.2, 4.3)"
+      , t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f), Vec4<float>());
+    std::cout << (t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f)).to_string() << std::endl;//***
+    press_to_continue();
+  }
+
+  void Demo_center::vec3_f_test_case(const std::string& t_operator, const Vec3<float>& t_actual,
+    const Vec3<float>& t_expected)
+  {
+    show_test_case(t_operator, "Vec3f" + t_expected.to_string()
+      , abs(t_actual.squared_size() - t_expected.squared_size()) <= PRECISION);
+  }
+
+  void Demo_center::vec4_f_test_case(const std::string& t_operator, const Vec4<float>& t_actual,
+    const Vec4<float>& t_expected)
+  {
+    show_test_case(t_operator, "Vec4f" + t_expected.to_string()
+      , abs(t_actual.squared_size() - t_expected.squared_size()) <= PRECISION);
   }
 
   void Demo_center::back_to_main_menu()

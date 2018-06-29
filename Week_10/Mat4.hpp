@@ -3,6 +3,7 @@
 #pragma once
 #include "Week_9/Vec3.hpp"
 #include "Week_9/Vec4.hpp"
+#include "Week_9/Vec2.hpp"
 
 namespace G6037599
 {
@@ -13,7 +14,7 @@ namespace G6037599
 
     static Mat4 identity();
     static Mat4 translation(const Vec3<float>& t_translate);
-    static Mat4 rotation(float t_radian_angle, const Vec3<float>& t_axis);
+    static Mat4 rotation(float t_radian_angle, const Vec3<int>& t_axis);
     static Mat4 scaling(const Vec3<float>& t_scale);
     static Mat4 transpose(const Mat4& t_matrix);
     static Mat4 inverse(const Mat4& t_matrix);
@@ -26,27 +27,31 @@ namespace G6037599
     ~Mat4() = default;
     Mat4(const Mat4& t_to_copy) = default;
     Mat4(Mat4&& t_to_move) noexcept = default;
-
     Mat4& operator = (const Mat4& t_to_copy) = default;
     Mat4& operator = (Mat4&& t_to_move) noexcept = default;
+
+    bool operator == (const Mat4& t_other) const;
     Mat4& operator *= (const Mat4& t_other);
     Mat4& operator *= (float t_scalar);
     Mat4 operator * (const Mat4& t_other) const;
     Mat4 operator * (float t_scalar) const;
     Vec3<float> operator * (const Vec3<float>& t_other) const;
-    Vec4<float> operator * (const Vec4<float>& t_other) const;
-    bool operator == (const Mat4& t_other) const;
 
-    std::string to_string() const;
+    friend Vec4<float> operator * (const Mat4& t_left, const Vec4<float>& t_right);
+
+    std::string to_string(bool t_shows_float = false) const;
     Vec3<float> get_multiplied(const Vec3<float>& t_other) const;
     Vec4<float> get_multiplied(const Vec4<float>& t_other) const;
     void multiply(const Mat4& t_other);
     void invert();
+    void set(const Vec2<int>& t_pos, float t_value);
   private:
     float m_mat_[SIZE][SIZE]{};
 
-    static float det(const float(&t_mat)[SIZE][SIZE]);
+    static float det(Mat4 t_mat);
+    //static float det(const float(&t_mat)[SIZE][SIZE]);
     static void inverse(Mat4 & t_in_out, float t_det, const float(&t_mat)[SIZE][SIZE]);
+    static void rotate(Mat4& t_in_out, float t_radian_angle, int t_axis);
   };
 }//G6037599
 

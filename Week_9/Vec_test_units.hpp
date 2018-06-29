@@ -21,7 +21,8 @@ namespace G6037599
     static void test_sizes(double t_size, double t_squared_size);
 
     static void vec2_test_unit();
-    static void vec2_test_case(const std::string& t_operator, const Vec2<int>& t_actual, const Vec2<int>& t_expected);
+    static void vec2_test_case(const std::string& t_operator
+      , const Vec2<int>& t_actual, const Vec2<int>& t_expected);
     static void vec2_test_copy(const Vec2<int>& t_v1, Vec2<int>& t_v2);
     static void vec2_test_basic_operators(const Vec2<int>& t_v1, const Vec2<int>& t_v2);
     static void vec2_test_vector_operators(Vec2<int>& t_v1, const Vec2<int>& t_v2);
@@ -29,7 +30,8 @@ namespace G6037599
     static void vec2_test_boolean_operators(const Vec2<int>& t_v1, const Vec2<int>& t_v2);
 
     static void vec3_test_unit();
-    static void vec3_test_case(const std::string& t_operator, const Vec3<int>& t_actual, const Vec3<int>& t_expected);
+    static void vec3_test_case(const std::string& t_operator
+      , const Vec3<int>& t_actual, const Vec3<int>& t_expected);
     static void vec3_test_copy(const Vec3<int>& t_v1, Vec3<int>& t_v2);
     static void vec3_test_basic_operators(const Vec3<int>& t_v1, const Vec3<int>& t_v2);
     static void vec3_test_vector_operators(Vec3<int>& t_v1, const Vec3<int>& t_v2);
@@ -37,7 +39,8 @@ namespace G6037599
     static void vec3_test_boolean_operators(const Vec3<int>& t_v1, const Vec3<int>& t_v2);
 
     static void vec4_test_unit();
-    static void vec4_test_case(const std::string& t_operator, const Vec4<int>& t_actual, const Vec4<int>& t_expected);
+    static void vec4_test_case(const std::string& t_operator
+      , const Vec4<int>& t_actual, const Vec4<int>& t_expected);
     static void vec4_test_copy(const Vec4<int>& t_v1, Vec4<int>& t_v2);
     static void vec4_test_basic_operators(const Vec4<int>& t_v1, const Vec4<int>& t_v2);
     static void vec4_test_vector_operators(Vec4<int>& t_v1, const Vec4<int>& t_v2);
