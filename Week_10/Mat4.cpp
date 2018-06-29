@@ -61,9 +61,22 @@ namespace G6037599
 
   Mat4 Mat4::inverse(const Mat4& t_matrix)
   {
-    Mat4 temp;
-    inverse(temp, det(t_matrix), t_matrix.m_mat_);
-    return temp;
+    //adapt from https://www.quora.com/How-do-I-make-a-C++-program-to-get-the-inverse-of-a-matrix-100-X-100
+
+    Mat4 left(t_matrix), right(1);
+
+    for (auto i = 0; i < SIZE; ++i)
+    {
+      make_left_reduced_row(t_matrix, left, right, i);
+        
+      for (auto row = 0; row < SIZE; ++row)
+      {
+        if (row == i) continue;
+
+        make_left_reduced_echelon(left, right, i, row, left.m_mat_[row][i]);
+      }
+    }
+    return right;
   }
 
   // ___ constructor __________________________________________________________
@@ -254,52 +267,6 @@ namespace G6037599
     m_mat_[t_pos.x][t_pos.y] = t_value;
   }
 
-  // ___ private static ___________________________________________________
-  float Mat4::det(Mat4 t_mat)
-  {
-    /*auto det = 0.0f;
-    for (auto col = 0; col < SIZE; ++col)
-    {
-      det += t_mat[0][col] * (
-        t_mat[1][(col + 1) % SIZE] * t_mat[2][(col + 2) % SIZE]
-        - t_mat[1][(col + 2) % SIZE] * t_mat[2][(col + 1) % SIZE]);
-      std::cout << det << std::endl;//fix det
-    }
-    return det;*/
-    auto det = 1.0f;
-    for (auto col = 0; col < SIZE; ++col)
-    {
-      det *= t_mat.m_mat_[col][col];
-      for (auto row = col + 1; row < SIZE; ++row)
-      {
-        const auto ratio = t_mat.m_mat_[row][col] / t_mat.m_mat_[col][col];
-        for (auto k = col; k < SIZE; k++)
-        {
-          t_mat.m_mat_[row][k] -= ratio * t_mat.m_mat_[col][k];
-        }
-      }//row loop
-    }
-    return det;
-  }
-
-  void Mat4::inverse(Mat4& t_in_out, const float t_det, const float(&t_mat)[SIZE][SIZE])
-  {
-    REQUIRE(t_det != 0);
-
-    for (auto row = 0; row < SIZE; ++row)
-    {
-      for (auto col = 0; col < SIZE; ++col)
-      {
-        t_in_out.m_mat_[row][col] = (
-          t_mat[(col + 1) % SIZE][(row + 1) % SIZE]
-          * t_mat[(col + 2) % SIZE][(row + 2) % SIZE]
-          - t_mat[(col + 1) % 3][(row + 2) % 3]
-          * t_mat[(col + 2) % 3][(row + 1) % 3]
-          ) / t_det;
-      }
-    }//row loop
-  }
-
   void Mat4::rotate(Mat4& t_in_out, const float t_radian_angle, const int t_axis)
   {
     const auto cos_angle = cos(t_radian_angle)
@@ -318,6 +285,30 @@ namespace G6037599
     rot.m_mat_[1][X] = t_axis == Z ? sin_angle : 0;
     rot.m_mat_[0][Y] = -rot.m_mat_[1][X];
     t_in_out *= rot;
+  }
+
+  void Mat4::make_left_reduced_row(const Mat4& t_left, Mat4& t_out_left, Mat4& t_out_right, const int t_row)
+  {
+    make_up_triangle_1(t_out_left, t_row);
+    t_out_right.m_mat_[t_row][t_row] /= t_left.m_mat_[t_row][t_row];
+  }
+
+  void Mat4::make_up_triangle_1(Mat4& t_in_out, const int t_row)
+  {
+    for (auto col = t_row; col < SIZE; ++col)
+    {
+      t_in_out.m_mat_[t_row][col] = 1;
+    }
+  }
+
+  void Mat4::make_left_reduced_echelon(Mat4& t_left, Mat4& t_right, const int t_i
+    , const int t_row, const float t_left_diagonal)
+  {
+    for (auto col = 0; col < SIZE; ++col)
+    {
+      t_left.m_mat_[t_row][col] -= t_left_diagonal * t_left.m_mat_[t_i][col];
+      t_right.m_mat_[t_row][col] -= t_left_diagonal * t_right.m_mat_[t_i][col];
+    }
   }
 
 }//G6037599

@@ -201,6 +201,9 @@ namespace G6037599
     mat4_test_case("Mat4::transpose(mat)", Mat4::transpose(mat)
       , transpose_mat, true);
     puts("");
+    auto inverse(mat);
+    inverse.invert();
+    mat4_test_case("Mat4::inverse(mat)", Mat4::inverse(mat), inverse);
     press_to_continue();
 
     mat4_test_mutiplications(mat);
@@ -209,8 +212,6 @@ namespace G6037599
   void Demo_center::mat4_test_case(const std::string& t_operator
     , const Mat4& t_actual, const Mat4& t_expected, const bool t_shows_as_float)
   {
-    //std::cout << "t_actual" << t_actual.to_string(true) << std::endl;//***
-    //std::cout << "t_expected" << t_expected.to_string(true) << std::endl;//***
     show_test_case(t_operator, "Mat4" + t_expected.to_string(t_shows_as_float)
       , t_actual == t_expected);
   }
@@ -236,35 +237,47 @@ namespace G6037599
 
   void Demo_center::mat4_test_mutiplications(Mat4& t_mat)
   {
-    t_mat.set(Vec2<int>(0, 1), 20);
-    puts(" ----------- mat ------------------");
-    std::cout << t_mat.to_string(true) << std::endl;
-    mat4_test_case("mat * mat^-1", t_mat*Mat4::inverse(t_mat), Mat4::identity());
+    auto temp(t_mat);
+    temp *= 2;
+    mat4_test_case("mat * 2", t_mat * 2, temp);
     puts("");
-    mat4_test_case("mat * 2", t_mat * 2, t_mat *= 2);
-    puts("");
+
     vec3_f_test_case("mat * vec3f(2.5, 3.4, 4.3)"
-      , t_mat * Vec3<float>(2.5f, 3.4f, 4.3f), Vec3<float>());
-    std::cout << (t_mat * Vec3<float>(2.5f, 3.4f, 4.3f)).to_string() << std::endl;//***
+      , t_mat * Vec3<float>(2.5f, 3.4f, 4.3f), Vec3<float>(1.77, 2.4, 6.08));
     puts("");
+
     vec4_f_test_case("mat * vec4f(3.4, 2.5, 5.2, 4.3)"
-      , t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f), Vec4<float>());
-    std::cout << (t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f)).to_string() << std::endl;//***
+      , t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f), Vec4<float>(2.4, 1.77, 7.35, 4.3));
+    puts("");
+
+    mat4_test_case("mat * Identity", t_mat * Mat4::identity(), t_mat);
     press_to_continue();
   }
 
-  void Demo_center::vec3_f_test_case(const std::string& t_operator, const Vec3<float>& t_actual,
-    const Vec3<float>& t_expected)
+  void Demo_center::vec3_f_test_case(const std::string& t_operator
+    , const Vec3<float>& t_actual, const Vec3<float>& t_expected)
   {
-    show_test_case(t_operator, "Vec3f" + t_expected.to_string()
-      , abs(t_actual.squared_size() - t_expected.squared_size()) <= PRECISION);
+    const auto EXPECTED("Vec3f(" + double_points_string(t_expected.x) 
+      + "," + double_points_string(t_expected.y) 
+      + "," + double_points_string(t_expected.z) + ")");
+    const auto CONDITION = abs(t_actual.x - t_expected.x) <= PRECISION
+      && abs(t_actual.y - t_expected.y) <= PRECISION
+      && abs(t_actual.z - t_expected.z) <= PRECISION;
+    show_test_case(t_operator, EXPECTED, CONDITION);
   }
 
   void Demo_center::vec4_f_test_case(const std::string& t_operator, const Vec4<float>& t_actual,
     const Vec4<float>& t_expected)
   {
-    show_test_case(t_operator, "Vec4f" + t_expected.to_string()
-      , abs(t_actual.squared_size() - t_expected.squared_size()) <= PRECISION);
+    const auto EXPECTED("Vec4f(" + double_points_string(t_expected.x)
+      + "," + double_points_string(t_expected.y)
+      + "," + double_points_string(t_expected.z)
+      + "," + double_points_string(t_expected.t) + ")");
+    const auto CONDITION = abs(t_actual.x - t_expected.x) <= PRECISION
+      && abs(t_actual.y - t_expected.y) <= PRECISION
+      && abs(t_actual.z - t_expected.z) <= PRECISION
+      && abs(t_actual.t - t_expected.t) <= PRECISION;
+    show_test_case(t_operator, EXPECTED, CONDITION);
   }
 
   void Demo_center::back_to_main_menu()

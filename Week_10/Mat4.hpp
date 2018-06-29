@@ -48,10 +48,12 @@ namespace G6037599
   private:
     float m_mat_[SIZE][SIZE]{};
 
-    static float det(Mat4 t_mat);
-    //static float det(const float(&t_mat)[SIZE][SIZE]);
-    static void inverse(Mat4 & t_in_out, float t_det, const float(&t_mat)[SIZE][SIZE]);
     static void rotate(Mat4& t_in_out, float t_radian_angle, int t_axis);
+    static void make_left_reduced_row(const Mat4& t_left
+      , Mat4& t_out_left, Mat4& t_out_right, int t_row);
+    static void make_up_triangle_1(Mat4& t_in_out, int t_row);
+    static void make_left_reduced_echelon(Mat4& t_left, Mat4& t_right
+      , int t_i, int t_row, float t_left_diagonal);
   };
 }//G6037599
 

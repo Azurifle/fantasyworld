@@ -40,8 +40,8 @@ namespace G6037599
     static void clear_2_nd_key_if_has();
     static void do_option(int t_option = OPTION_LAST);
     static void demo_3_logger_n_stopwatch();
-    static void mat4_test_mutiplications(Mat4& mat);
-    static void mat4_test_transformations(Mat4& mat);
+    static void mat4_test_mutiplications(Mat4& t_mat);
+    static void mat4_test_transformations(Mat4& t_mat);
     static void demo_5_mat4_test_unit();
     static void mat4_test_case(const std::string& t_operator
       , const Mat4& t_actual, const Mat4& t_expected
