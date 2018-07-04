@@ -203,11 +203,13 @@ namespace G6037599
     mat4_test_transformations(mat);
 
     const auto transpose_mat = Mat4::transpose(mat);
-    mat4_test_case("Mat4::transpose(mat)", Mat4::transpose(mat)
-      , transpose_mat, true);
+    mat4_test_case("Mat4::transpose(mat)", Mat4::transpose(mat), transpose_mat
+      , true);
     puts("");
     mat4_test_case("(mat^-1)^-1", Mat4::inverse(Mat4::inverse(mat)), mat, true);
-    mat4_test_case("mat * mat^-1", mat * Mat4::inverse(mat), Mat4::identity(), true);
+    puts("");
+    mat4_test_case("mat * mat^-1", mat * Mat4::inverse(mat), Mat4::identity()
+      , true);
     press_to_continue();
 
     mat4_test_mutiplications(mat);
@@ -222,7 +224,7 @@ namespace G6037599
 
   void Demo_center::mat4_test_transformations(Mat4& t_mat)
   {
-    const Vec2<int> translate_x(0, Mat4::T);
+    const Vec2<int> translate_x(Mat4::T, 0);
     t_mat.set(translate_x, -1.0f);
     mat4_test_case("X-translation by -1 matrix"
       , Mat4::translation(Vec3<float>(-1, 0, 0)), t_mat);
@@ -247,11 +249,11 @@ namespace G6037599
     puts("");
 
     vec3_f_test_case("mat * vec3f(2.5, 3.4, 4.3)"
-      , t_mat * Vec3<float>(2.5f, 3.4f, 4.3f), Vec3<float>(1.77f, 2.4f, 6.08f));
+      , t_mat * Vec3<float>(2.5f, 3.4f, 4.3f), Vec3<float>(1.77f, 1.99f, 8.6f));
     puts("");
 
     vec4_f_test_case("mat * vec4f(3.4, 2.5, 5.2, 4.3)"
-      , t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f), Vec4<float>(2.4f, 1.77f, 7.35f, 4.3f));
+      , t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f), Vec4<float>(2.41f, 1.46f, 10.4f, 4.3f));
     puts("");
 
     mat4_test_case("mat * Identity", t_mat * Mat4::identity(), t_mat, true);

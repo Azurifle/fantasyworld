@@ -21,22 +21,29 @@ namespace G6037599
 
   Mat4 Mat4::rotation(const float t_radian_angle, const Vec3<int>& t_axis)
   {
-    Mat4 rotation(1);
+    //adapt from http://www.songho.ca/opengl/gl_matrix.html
 
-    switch(t_axis.x)//how to interprete t_axis w/o switch or if http://www.songho.ca/opengl/gl_matrix.html?
-    {
-    case 0: break; default: rotate(rotation, t_radian_angle, X);
-    }
-    switch (t_axis.y)
-    {
-    case 0: break; default: rotate(rotation, t_radian_angle, Y);
-    }
-    switch (t_axis.z)
-    {
-    case 0: break; default: rotate(rotation, t_radian_angle, Z);
-    }
+    Mat4 rot(1);
+    const auto C = cos(t_radian_angle), S = sin(t_radian_angle)
+      , ONE_MINUS_C = 1 - C
+      , XY_1_MINUS_C = t_axis.x*t_axis.y*ONE_MINUS_C
+      , XZ_1_MINUS_C = t_axis.x*t_axis.z*ONE_MINUS_C
+      , YZ_1_MINUS_C = t_axis.y*t_axis.z*ONE_MINUS_C
+      , Z_S = t_axis.z*S, Y_S = t_axis.y*S, X_S = t_axis.x*S;
 
-    return rotation;
+    rot.m_mat_[0][X] = t_axis.x*t_axis.x*ONE_MINUS_C + C;
+    rot.set(Vec2<int>(Y, 0), XY_1_MINUS_C - Z_S);
+    rot.m_mat_[0][Z] = XZ_1_MINUS_C + Y_S;
+
+    rot.m_mat_[1][X] = XY_1_MINUS_C + Z_S;
+    rot.m_mat_[1][Y] = t_axis.y*t_axis.y*ONE_MINUS_C + C;
+    rot.m_mat_[1][Z] = YZ_1_MINUS_C - X_S;
+
+    rot.m_mat_[2][X] = XZ_1_MINUS_C - Y_S;
+    rot.m_mat_[2][Y] = YZ_1_MINUS_C + X_S;
+    rot.m_mat_[2][Z] = t_axis.z*t_axis.z*ONE_MINUS_C + C;
+
+    return rot;
   }
 
   Mat4 Mat4::scaling(const Vec3<float>& t_scale)
@@ -52,33 +59,137 @@ namespace G6037599
   {
     Mat4 temp;
     for (auto row = 0; row < SIZE; ++row)
+    {
       for (auto col = 0; col < SIZE; ++col)
       {
-        temp.m_mat_[row][col] = t_matrix.m_mat_[col][row];
+        temp.set(Vec2<int>(col, row), t_matrix.m_mat_[col][row]);
       }
+    }
     return temp;
   }
 
-  Mat4 Mat4::inverse(const Mat4& t_matrix)
+  Mat4 Mat4::inverse(const Mat4& t_m)
   {
-    //adapt from https://www.quora.com/How-do-I-make-a-C++-program-to-get-the-inverse-of-a-matrix-100-X-100
-    //copy code from lecture note
-    Mat4 left(t_matrix), right(1);
+    Mat4 inv;
+    inv.m_mat_[0][X] = t_m.m_mat_[1][Y] * t_m.m_mat_[2][Z] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[1][Y] * t_m.m_mat_[2][T] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[2][Y] * t_m.m_mat_[1][Z] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[2][Y] * t_m.m_mat_[1][T] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[3][Y] * t_m.m_mat_[1][Z] * t_m.m_mat_[2][T] -
+      t_m.m_mat_[3][Y] * t_m.m_mat_[1][T] * t_m.m_mat_[2][Z];
 
-    for (auto i = 0; i < SIZE; ++i)
-    {
-      make_left_reduced_row(t_matrix, left, right, i);
-        
-      for (auto row = 0; row < SIZE; ++row)
-      {
-        if (row == i) continue;
+    inv.m_mat_[1][X] = -t_m.m_mat_[1][X] * t_m.m_mat_[2][Z] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[1][X] * t_m.m_mat_[2][T] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[1][Z] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[1][T] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[1][Z] * t_m.m_mat_[2][T] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[1][T] * t_m.m_mat_[2][Z];
 
-        make_left_reduced_echelon(left, right, i, row, left.m_mat_[row][i]);
-      }
+    inv.m_mat_[2][X] = t_m.m_mat_[1][X] * t_m.m_mat_[2][Y] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[1][X] * t_m.m_mat_[2][T] * t_m.m_mat_[3][Y] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[1][Y] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[1][T] * t_m.m_mat_[3][Y] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[1][Y] * t_m.m_mat_[2][T] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[1][T] * t_m.m_mat_[2][Y];
 
-      //std::cout << "Left" << left.to_string() << "Right" << right.to_string();//****
-    }
-    return right;
+    inv.m_mat_[3][X] = -t_m.m_mat_[1][X] * t_m.m_mat_[2][Y] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[1][X] * t_m.m_mat_[2][Z] * t_m.m_mat_[3][Y] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[1][Y] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[1][Z] * t_m.m_mat_[3][Y] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[1][Y] * t_m.m_mat_[2][Z] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[1][Z] * t_m.m_mat_[2][Y];
+
+    inv.m_mat_[0][Y] = -t_m.m_mat_[0][Y] * t_m.m_mat_[2][Z] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[0][Y] * t_m.m_mat_[2][T] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[2][Y] * t_m.m_mat_[0][Z] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[2][Y] * t_m.m_mat_[0][T] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[3][Y] * t_m.m_mat_[0][Z] * t_m.m_mat_[2][T] +
+      t_m.m_mat_[3][Y] * t_m.m_mat_[0][T] * t_m.m_mat_[2][Z];
+
+    inv.m_mat_[1][Y] = t_m.m_mat_[0][X] * t_m.m_mat_[2][Z] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[0][X] * t_m.m_mat_[2][T] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][T] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[2][T] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][T] * t_m.m_mat_[2][Z];
+
+    inv.m_mat_[2][Y] = -t_m.m_mat_[0][X] * t_m.m_mat_[2][Y] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[0][X] * t_m.m_mat_[2][T] * t_m.m_mat_[3][Y] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][T] * t_m.m_mat_[3][Y] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[2][T] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][T] * t_m.m_mat_[2][Y];
+
+    inv.m_mat_[3][Y] = t_m.m_mat_[0][X] * t_m.m_mat_[2][Y] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[0][X] * t_m.m_mat_[2][Z] * t_m.m_mat_[3][Y] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[3][Y] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[2][Z] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[2][Y];
+
+    inv.m_mat_[0][Z] = t_m.m_mat_[0][Y] * t_m.m_mat_[1][Z] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[0][Y] * t_m.m_mat_[1][T] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[1][Y] * t_m.m_mat_[0][Z] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[1][Y] * t_m.m_mat_[0][T] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[3][Y] * t_m.m_mat_[0][Z] * t_m.m_mat_[1][T] -
+      t_m.m_mat_[3][Y] * t_m.m_mat_[0][T] * t_m.m_mat_[1][Z];
+
+    inv.m_mat_[1][Z] = -t_m.m_mat_[0][X] * t_m.m_mat_[1][Z] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[0][X] * t_m.m_mat_[1][T] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][T] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[1][T] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][T] * t_m.m_mat_[1][Z];
+
+    inv.m_mat_[2][Z] = t_m.m_mat_[0][X] * t_m.m_mat_[1][Y] * t_m.m_mat_[3][T] -
+      t_m.m_mat_[0][X] * t_m.m_mat_[1][T] * t_m.m_mat_[3][Y] -
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[3][T] +
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][T] * t_m.m_mat_[3][Y] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[1][T] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][T] * t_m.m_mat_[1][Y];
+
+    inv.m_mat_[3][Z] = -t_m.m_mat_[0][X] * t_m.m_mat_[1][Y] * t_m.m_mat_[3][Z] +
+      t_m.m_mat_[0][X] * t_m.m_mat_[1][Z] * t_m.m_mat_[3][Y] +
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[3][Z] -
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[3][Y] -
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[1][Z] +
+      t_m.m_mat_[3][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[1][Y];
+
+    inv.m_mat_[0][T] = -t_m.m_mat_[0][Y] * t_m.m_mat_[1][Z] * t_m.m_mat_[2][T] +
+      t_m.m_mat_[0][Y] * t_m.m_mat_[1][T] * t_m.m_mat_[2][Z] +
+      t_m.m_mat_[1][Y] * t_m.m_mat_[0][Z] * t_m.m_mat_[2][T] -
+      t_m.m_mat_[1][Y] * t_m.m_mat_[0][T] * t_m.m_mat_[2][Z] -
+      t_m.m_mat_[2][Y] * t_m.m_mat_[0][Z] * t_m.m_mat_[1][T] +
+      t_m.m_mat_[2][Y] * t_m.m_mat_[0][T] * t_m.m_mat_[1][Z];
+
+    inv.m_mat_[1][T] = t_m.m_mat_[0][X] * t_m.m_mat_[1][Z] * t_m.m_mat_[2][T] -
+      t_m.m_mat_[0][X] * t_m.m_mat_[1][T] * t_m.m_mat_[2][Z] -
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[2][T] +
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][T] * t_m.m_mat_[2][Z] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[1][T] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][T] * t_m.m_mat_[1][Z];
+
+    inv.m_mat_[2][T] = -t_m.m_mat_[0][X] * t_m.m_mat_[1][Y] * t_m.m_mat_[2][T] +
+      t_m.m_mat_[0][X] * t_m.m_mat_[1][T] * t_m.m_mat_[2][Y] +
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[2][T] -
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][T] * t_m.m_mat_[2][Y] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[1][T] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][T] * t_m.m_mat_[1][Y];
+
+    inv.m_mat_[3][T] = t_m.m_mat_[0][X] * t_m.m_mat_[1][Y] * t_m.m_mat_[2][Z] -
+      t_m.m_mat_[0][X] * t_m.m_mat_[1][Z] * t_m.m_mat_[2][Y] -
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[2][Z] +
+      t_m.m_mat_[1][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[2][Y] +
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][Y] * t_m.m_mat_[1][Z] -
+      t_m.m_mat_[2][X] * t_m.m_mat_[0][Z] * t_m.m_mat_[1][Y];
+
+    auto det = t_m.m_mat_[0][X] * inv.m_mat_[0][X] 
+      + t_m.m_mat_[0][Y] * inv.m_mat_[1][X] 
+      + t_m.m_mat_[0][Z] * inv.m_mat_[2][X] 
+      + t_m.m_mat_[0][T] * inv.m_mat_[3][X];
+    det = 1.0f / det;
+    inv *= det;
+    return inv;
   }
 
   // ___ constructor __________________________________________________________
@@ -266,51 +377,7 @@ namespace G6037599
 
   void Mat4::set(const Vec2<int>& t_pos, const float t_value)
   {
-    m_mat_[t_pos.x][t_pos.y] = t_value;
-  }
-
-  void Mat4::rotate(Mat4& t_in_out, const float t_radian_angle, const int t_axis)
-  {
-    const auto cos_angle = cos(t_radian_angle)
-      , sin_angle = sin(t_radian_angle);
-
-    Mat4 rot(1);
-    rot.m_mat_[1][Y] = t_axis != Y ? cos_angle : 1;
-    rot.m_mat_[2][Y] = t_axis == X ? sin_angle : 0;
-    rot.m_mat_[1][Z] = -rot.m_mat_[2][Y];
-    rot.m_mat_[2][Z] = t_axis != Z ? cos_angle : 1;
-
-    rot.m_mat_[0][X] = t_axis != X ? cos_angle : 1;
-    rot.m_mat_[0][Z] = t_axis == Y ? sin_angle : 0;
-    rot.m_mat_[2][X] = -rot.m_mat_[0][Z];
-
-    rot.m_mat_[1][X] = t_axis == Z ? sin_angle : 0;
-    rot.m_mat_[0][Y] = -rot.m_mat_[1][X];
-    t_in_out *= rot;
-  }
-
-  void Mat4::make_left_reduced_row(const Mat4& t_left, Mat4& t_out_left, Mat4& t_out_right, const int t_row)
-  {
-    make_up_triangle_1(t_out_left, t_row);
-    t_out_right.m_mat_[t_row][t_row] /= t_left.m_mat_[t_row][t_row];
-  }
-
-  void Mat4::make_up_triangle_1(Mat4& t_in_out, const int t_row)
-  {
-    for (auto col = t_row; col < SIZE; ++col)
-    {
-      t_in_out.m_mat_[t_row][col] = 1;
-    }
-  }
-
-  void Mat4::make_left_reduced_echelon(Mat4& t_left, Mat4& t_right, const int t_i
-    , const int t_row, const float t_left_diagonal)
-  {
-    for (auto col = 0; col < SIZE; ++col)
-    {
-      t_left.m_mat_[t_row][col] -= t_left_diagonal * t_left.m_mat_[t_i][col];
-      t_right.m_mat_[t_row][col] -= t_left_diagonal * t_right.m_mat_[t_i][col];
-    }
+    m_mat_[t_pos.y][t_pos.x] = t_value;
   }
 
 }//G6037599
