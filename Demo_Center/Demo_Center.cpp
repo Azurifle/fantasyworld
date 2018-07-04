@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "Demo_Center.hpp"
-#include "Week_1/Dog.hpp"
-#include "Week_2/Memory_pool.hpp"
-#include "Week_7/Logger.hpp"
-#include "Week_7/Stopwatch.hpp"
-#include "Week_9/Vec_test_units.hpp"
+#include "Week_01/Dog.hpp"
+#include "Week_02/Memory_pool.hpp"
+#include "Week_07/Logger.hpp"
+#include "Week_07/Stopwatch.hpp"
+#include "Week_09/Vec_test_units.hpp"
 #include "Week_10/Mat4.hpp"
 
 namespace G6037599
 {
   // ___ static ___________________________________________________________
-  const float Demo_center::PRECISION = 0.01;
+  const float Demo_center::PRECISION = 0.01f;
 
   void Demo_center::start()
   {
@@ -123,6 +123,8 @@ namespace G6037599
     puts("");
     puts("               5. Week 10 Matrix 4x4 of float.");
     puts("");
+    puts("               6. Week 11 GLFW.");
+    puts("");
     puts("         //////////////////////////////////////////////////////////////////");
     puts("");
     puts("");
@@ -173,11 +175,13 @@ namespace G6037599
     case OPTION_2: demo_memory_pool(); break;
     case OPTION_3: demo_3_logger_n_stopwatch(); break;
     case OPTION_4: Vec_test_units::run(); break;
-    default: demo_5_mat4_test_unit();
+    case OPTION_5: demo_5_mat4_test_unit(); break;
+    default: demo_6_glfw();
     }
     back_to_main_menu();
   }
 
+  // ___ demo_3_logger_n_stopwatch ____________________________________________________
   void Demo_center::demo_3_logger_n_stopwatch()
   {
     logger_demo();
@@ -185,6 +189,7 @@ namespace G6037599
     Stopwatch::demo();
   }
 
+  // ___ demo_5_mat4_test_unit ____________________________________________________
   void Demo_center::demo_5_mat4_test_unit()
   {
     print_centered_header("Matrix Test Unit", '=');
@@ -201,9 +206,8 @@ namespace G6037599
     mat4_test_case("Mat4::transpose(mat)", Mat4::transpose(mat)
       , transpose_mat, true);
     puts("");
-    auto inverse(mat);
-    inverse.invert();
-    mat4_test_case("Mat4::inverse(mat)", Mat4::inverse(mat), inverse);
+    mat4_test_case("(mat^-1)^-1", Mat4::inverse(Mat4::inverse(mat)), mat, true);
+    mat4_test_case("mat * mat^-1", mat * Mat4::inverse(mat), Mat4::identity(), true);
     press_to_continue();
 
     mat4_test_mutiplications(mat);
@@ -239,18 +243,18 @@ namespace G6037599
   {
     auto temp(t_mat);
     temp *= 2;
-    mat4_test_case("mat * 2", t_mat * 2, temp);
+    mat4_test_case("mat * 2", t_mat * 2, temp, true);
     puts("");
 
     vec3_f_test_case("mat * vec3f(2.5, 3.4, 4.3)"
-      , t_mat * Vec3<float>(2.5f, 3.4f, 4.3f), Vec3<float>(1.77, 2.4, 6.08));
+      , t_mat * Vec3<float>(2.5f, 3.4f, 4.3f), Vec3<float>(1.77f, 2.4f, 6.08f));
     puts("");
 
     vec4_f_test_case("mat * vec4f(3.4, 2.5, 5.2, 4.3)"
-      , t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f), Vec4<float>(2.4, 1.77, 7.35, 4.3));
+      , t_mat * Vec4<float>(3.4f, 2.5f, 5.2f, 4.3f), Vec4<float>(2.4f, 1.77f, 7.35f, 4.3f));
     puts("");
 
-    mat4_test_case("mat * Identity", t_mat * Mat4::identity(), t_mat);
+    mat4_test_case("mat * Identity", t_mat * Mat4::identity(), t_mat, true);
     press_to_continue();
   }
 
@@ -280,6 +284,68 @@ namespace G6037599
     show_test_case(t_operator, EXPECTED, CONDITION);
   }
 
+  // ___ demo_6_glfw ____________________________________________________
+  void Demo_center::demo_6_glfw()
+  {
+    if(!glfwInit())
+    {
+      glfwTerminate();
+      return;
+    }
+
+    const auto WINDOW_WIDTH = 640, WINDOW_HEIGHT = 480;
+    const auto WINDOW = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "My Game", nullptr, nullptr);
+    if (!WINDOW)
+    {
+      glfwTerminate();
+      return;
+    }
+
+    glfwMakeContextCurrent(WINDOW);
+
+    const auto ROTATE_SPEED = 0.1f;
+    auto rotation = 0.0f;
+    while (!glfwWindowShouldClose(WINDOW))
+    {
+      glClear(GL_COLOR_BUFFER_BIT);
+      glClearColor(0, 0, 1, 1);
+
+      draw_triangle();
+
+      glfwSwapBuffers(WINDOW);
+      glfwPollEvents();
+
+      rotation += ROTATE_SPEED;
+    }//game loop
+    glfwTerminate();
+  }
+
+  void key_callback(GLFWwindow* t_window, const int t_key
+    , const int t_scan_code, const int t_action)
+  {
+    if(t_key == GLFW_KEY_E && t_action == GLFW_PRESS)
+    {
+      std::cout << "I press E" << std::endl;
+    }
+  }
+
+  void Demo_center::draw_triangle()
+  {
+    glBegin(GL_TRIANGLES);
+      paint_pos(-1, 0, 1);
+      paint_pos(0, 1, 1, 0, 1);
+      paint_pos(1, 0, 0, 1, 0);
+    glEnd();
+  }
+
+  void Demo_center::paint_pos(const float t_x, const float t_y
+    , const float t_red, const float t_green, const float t_blue)
+  {
+    glColor3f(t_red, t_green, t_blue);
+    glVertex3f(t_x, t_y, 0);
+  }
+
+  // ___ back_to_main_menu ____________________________________________________
   void Demo_center::back_to_main_menu()
   {
     std::cout << std::endl

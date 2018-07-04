@@ -23,7 +23,7 @@ namespace G6037599
   {
     Mat4 rotation(1);
 
-    switch(t_axis.x)
+    switch(t_axis.x)//how to interprete t_axis w/o switch or if http://www.songho.ca/opengl/gl_matrix.html?
     {
     case 0: break; default: rotate(rotation, t_radian_angle, X);
     }
@@ -62,7 +62,7 @@ namespace G6037599
   Mat4 Mat4::inverse(const Mat4& t_matrix)
   {
     //adapt from https://www.quora.com/How-do-I-make-a-C++-program-to-get-the-inverse-of-a-matrix-100-X-100
-
+    //copy code from lecture note
     Mat4 left(t_matrix), right(1);
 
     for (auto i = 0; i < SIZE; ++i)
@@ -75,6 +75,8 @@ namespace G6037599
 
         make_left_reduced_echelon(left, right, i, row, left.m_mat_[row][i]);
       }
+
+      //std::cout << "Left" << left.to_string() << "Right" << right.to_string();//****
     }
     return right;
   }

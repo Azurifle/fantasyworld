@@ -1,9 +1,9 @@
 #ifndef G6037599_MAT4_HPP
 #define G6037599_MAT4_HPP
 #pragma once
-#include "Week_9/Vec3.hpp"
-#include "Week_9/Vec4.hpp"
-#include "Week_9/Vec2.hpp"
+#include "Week_09/Vec3.hpp"
+#include "Week_09/Vec4.hpp"
+#include "Week_09/Vec2.hpp"
 
 namespace G6037599
 {

@@ -1,6 +1,8 @@
 #ifndef G6037599_DEMO_CENTER_HPP
 #define G6037599_DEMO_CENTER_HPP
 #pragma once
+#include "Week_09/Vec3.hpp"
+#include "Week_09/Vec4.hpp"
 #include "Week_10/Mat4.hpp"
 
 namespace G6037599
@@ -11,7 +13,7 @@ namespace G6037599
     enum Enum
     {
       KEY_NO_PRESS, KEY_ESC = 27
-      , OPTION_1 = '1', OPTION_2, OPTION_3, OPTION_4, OPTION_LAST
+      , OPTION_1 = '1', OPTION_2, OPTION_3, OPTION_4, OPTION_5, OPTION_LAST
     };
     static const float PRECISION;
 
@@ -42,6 +44,7 @@ namespace G6037599
     static void demo_3_logger_n_stopwatch();
     static void mat4_test_mutiplications(Mat4& t_mat);
     static void mat4_test_transformations(Mat4& t_mat);
+
     static void demo_5_mat4_test_unit();
     static void mat4_test_case(const std::string& t_operator
       , const Mat4& t_actual, const Mat4& t_expected
@@ -50,6 +53,11 @@ namespace G6037599
       , const Vec3<float>& t_actual, const Vec3<float>& t_expected);
     static void vec4_f_test_case(const std::string& t_operator
       , const Vec4<float>& t_actual, const Vec4<float>& t_expected);
+
+    static void demo_6_glfw();
+    static void draw_triangle();
+    static void paint_pos(float t_x, float t_y, float t_red = 0, float t_green = 0, float t_blue = 0);
+
     static void back_to_main_menu();
 
     Demo_center() = default;
