@@ -70,6 +70,8 @@ namespace G6037599
 
   Mat4 Mat4::inverse(const Mat4& t_m)
   {
+    //adapt from https://d.pr/n/h8W2Mk
+
     Mat4 inv;
     inv.m_mat_[0][X] = t_m.m_mat_[1][Y] * t_m.m_mat_[2][Z] * t_m.m_mat_[3][T] -
       t_m.m_mat_[1][Y] * t_m.m_mat_[2][T] * t_m.m_mat_[3][Z] -

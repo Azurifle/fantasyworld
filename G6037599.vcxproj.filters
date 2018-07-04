@@ -69,9 +69,6 @@
     <ClInclude Include="Week_10\Mat4.hpp">
       <Filter>Header Files\Week_10</Filter>
     </ClInclude>
-    <ClInclude Include="Triangle.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Week_01\Animal.hpp">
       <Filter>Header Files\Week_01</Filter>
     </ClInclude>
@@ -102,6 +99,9 @@
     <ClInclude Include="Week_09\Vec4.hpp">
       <Filter>Header Files\Week_09</Filter>
     </ClInclude>
+    <ClInclude Include="Demo_Center\Test_units.hpp">
+      <Filter>Header Files\Demo_Center</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -115,9 +115,6 @@
     </ClCompile>
     <ClCompile Include="Week_10\Mat4.cpp">
       <Filter>Source Files\Week_10</Filter>
-    </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Week_01\Animal.cpp">
       <Filter>Source Files\Week_01</Filter>
@@ -148,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="Week_09\Vec4.cpp">
       <Filter>Source Files\Week_09</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Center\Test_units.cpp">
+      <Filter>Source Files\Demo_Center</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
