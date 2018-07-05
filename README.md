@@ -21,10 +21,11 @@ List of mini-projects that are not related to the main game engine project:
 
     1. Week 01 Object Oriented Programming.
     2. Week 02 Memory Manager.
-    3. Week 07 Singleton Logger and High-Resolution Stopwatch.
-    4. Week 09 Vec 2 - 4D <Template>.
-    5. Week 10 Matrix 4x4 of float.
-  6. Week 11 GLFW Screen Saver. **[:star:Latest Update]**
+    3. Week 07 Singleton Logger.
+    4. Week 07 High-Resolution Stopwatch.
+    5. Week 09 Vec 2 - 4D <Template>.
+    6. Week 10 Matrix 4x4 of float.
+  7. Week 11 GLFW Screen Saver. **[:star:Latest Update]**
 
 #### 3. "1.\_Fantasy\_World"
 The first version of the Fantasy World game. All monsters attack player via printing texts :laughing:.
