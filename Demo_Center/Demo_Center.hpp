@@ -8,14 +8,12 @@ namespace G6037599
   public:
     enum Enum
     {
-      KEY_NO_PRESS, KEY_ESC = 27
-      , OPTION_1 = '1', OPTION_2, OPTION_3, OPTION_4, OPTION_5, OPTION_LAST
-      , DEFAULT_DOUBLE_POINTS = 2
+      KEY_NO_PRESS, KEY_ESC = 27, DEFAULT_DOUBLE_POINTS = 2
     };
     static const float PRECISION;
 
-    static void start();
-
+    static void disable_mouse_editing();
+    static int get_key();
     static int wait_key();
     static void press_to_continue();
     static void print_centered_header(const std::string& t_header, char t_delim);
@@ -24,20 +22,7 @@ namespace G6037599
 
     ~Demo_center() = default;
   private:
-    static void disable_mouse_editing();
-    static int get_key();
     static void clear_2_nd_key_if_has();
-
-    static void show_menu();
-    static bool choose_option();
-    static void do_option(int t_option = OPTION_LAST);
-    static void demo_3_logger_n_stopwatch();
-    
-    static void demo_6_glfw();
-    static void draw_triangle();
-    static void paint_pos(float t_x, float t_y, float t_red = 0, float t_green = 0, float t_blue = 0);
-
-    static void back_to_main_menu();
 
     Demo_center() = default;
     Demo_center(const Demo_center& t_to_copy) = default;

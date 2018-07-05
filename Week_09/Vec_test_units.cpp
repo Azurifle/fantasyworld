@@ -25,6 +25,7 @@ namespace G6037599
   {
     Demo_center::print_centered_header(std::string("Vector ")
       +std::to_string(t_vector_type)+" int Test Unit", '=');
+    puts("");
   }
 
   void Vec_test_units::show(const char* t_name, const std::string& t_vec)

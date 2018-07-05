@@ -102,6 +102,15 @@
     <ClInclude Include="Demo_Center\Test_units.hpp">
       <Filter>Header Files\Demo_Center</Filter>
     </ClInclude>
+    <ClInclude Include="Demo_Center\Demo_list_menu.hpp">
+      <Filter>Header Files\Demo_Center</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_11\Screen_saver.hpp">
+      <Filter>Header Files\Week_11</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_11\Triangle.hpp">
+      <Filter>Header Files\Week_11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -148,6 +157,15 @@
     </ClCompile>
     <ClCompile Include="Demo_Center\Test_units.cpp">
       <Filter>Source Files\Demo_Center</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Center\Demo_list_menu.cpp">
+      <Filter>Source Files\Demo_Center</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_11\Screen_saver.cpp">
+      <Filter>Source Files\WeeK_11</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_11\Triangle.cpp">
+      <Filter>Source Files\WeeK_11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

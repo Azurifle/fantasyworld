@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Demo_Center\Demo_list_menu.hpp" />
     <ClInclude Include="Demo_Center\Demo_Center.hpp" />
     <ClInclude Include="Demo_Center\Test_units.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -170,8 +171,11 @@
     <ClInclude Include="Week_09\Vec4.hpp" />
     <ClInclude Include="Week_09\Vec_test_units.hpp" />
     <ClInclude Include="Week_10\Mat4.hpp" />
+    <ClInclude Include="Week_11\Screen_saver.hpp" />
+    <ClInclude Include="Week_11\Triangle.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Demo_Center\Demo_list_menu.cpp" />
     <ClCompile Include="Demo_Center\Demo_Center.cpp" />
     <ClCompile Include="Demo_Center\Test_units.cpp" />
     <ClCompile Include="G6037599.cpp" />
@@ -192,6 +196,8 @@
     <ClCompile Include="Week_09\Vec4.cpp" />
     <ClCompile Include="Week_09\Vec_test_units.cpp" />
     <ClCompile Include="Week_10\Mat4.cpp" />
+    <ClCompile Include="Week_11\Screen_saver.cpp" />
+    <ClCompile Include="Week_11\Triangle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
