@@ -8,7 +8,14 @@ namespace G6037599
   class Triangle final
   {
   public:
-    Triangle();
+    Vec3<float> pos{};
+    Vec3<float> rotation{};
+    Vec3<float> scale{};
+    float t, speed;
+
+    explicit Triangle(const Vec3<float>& t_pos = Vec3<float>(0)
+      , const Vec3<float>& t_rotation = Vec3<float>(0)
+      , const Vec3<float>& t_scale = Vec3<float>(1));
     ~Triangle() = default;
     Triangle(const Triangle& t_to_copy) = default;
     Triangle(Triangle&& t_to_move) noexcept = default;
@@ -17,9 +24,7 @@ namespace G6037599
 
     void draw();
   private:
-    Vec3<float> m_translate_{};
-    Vec3<float> m_rotate_{};
-    Vec3<float> m_scale_{};
+    static void paint_pos(const Vec3<float>& t_pos, const Vec3<float>& t_rgb);
   };
 }//G6037599
 

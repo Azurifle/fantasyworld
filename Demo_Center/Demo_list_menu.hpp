@@ -13,8 +13,6 @@ namespace G6037599
     };
 
     static void start();
-
-    ~Demo_list_menu() = default;
   private:
     static void show_menu();
     static void show_option(char t_option, const char* t_name);
@@ -24,6 +22,7 @@ namespace G6037599
     static void back_to_main_menu();
 
     Demo_list_menu() = default;
+    ~Demo_list_menu() = default;
     Demo_list_menu(const Demo_list_menu& t_to_copy) = default;
     Demo_list_menu(Demo_list_menu&& t_to_move) noexcept = default;
     Demo_list_menu& operator = (const Demo_list_menu& t_to_copy) = default;

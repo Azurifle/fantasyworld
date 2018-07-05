@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Screen_saver.hpp"
+#include "Triangle.hpp"
 
 namespace G6037599
 {
@@ -12,12 +13,18 @@ namespace G6037599
 
     const auto WINDOW = glfw_window();
 
+    Triangle tri1(Vec3<float>(-0.5f, 0, 0));
+    Triangle tri2(Vec3<float>(0.5f, 0, 0));
+    const auto SCALE = Vec3<float>(0.5f);
+    tri1.scale = SCALE;
+    tri2.scale = SCALE;
     while (!glfwWindowShouldClose(WINDOW))
     {
       glClear(GL_COLOR_BUFFER_BIT);//render BG
-      glClearColor(0, 0, 1, 1);//change BG color
+      glClearColor(0, 0, 0, 1);//change BG color
 
-      //draw_triangle();
+      tri1.draw();
+      tri2.draw();
 
       glfwSwapBuffers(WINDOW);
       glfwPollEvents();//clear inputs
@@ -55,12 +62,6 @@ namespace G6037599
     {
       std::cout << "I pressed E" << std::endl;
     }
-  }
-
-  void Screen_saver::paint_pos(const Vec3<float>& t_pos, const Vec3<float>& t_rgb)
-  {
-    glColor3f(t_rgb.x, t_rgb.y, t_rgb.z);
-    glVertex3f(t_pos.x, t_pos.y, t_pos.z);
   }
 
 }//G6037599
