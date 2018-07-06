@@ -1,28 +1,29 @@
 #include "stdafx.h"
 #include "Triangle.hpp"
+#include "Demo_Center/Demo_Center.hpp"
 
 namespace G6037599
 {
   // ___ constructor __________________________________________________________
-  Triangle::Triangle(const Vec3<float>& t_pos, const Vec3<float>& t_rotation
-    , const Vec3<float>& t_scale)
-    : pos(t_pos), rotation(t_rotation), scale(t_scale), t(0), speed(0.1f) {}
+  Triangle::Triangle(const Vec3<float>& t_pos, const Vec3<float>& t_scale
+    , const float t_degree_angular_velocity) : pos(t_pos), scale(t_scale)
+    , degree_angular_velocity(t_degree_angular_velocity), m_x_degree_(0) {}
 
-  void Triangle::draw()
+  void Triangle::render()
   {
+    m_x_degree_ += degree_angular_velocity * Demo_center::delta_seconds();
     glPushMatrix();
       glTranslatef(pos.x, pos.y, pos.z);
-      glRotatef(t, rotation.x, rotation.y, rotation.z);
+      glRotatef(m_x_degree_, 1, 0, 0);
       glScalef(scale.x, scale.y, scale.z);
 
       glBegin(GL_TRIANGLES);
-        paint_pos(Vec3<float>(-1, 0, 0), Vec3<float>(1, 0, 0));
-        paint_pos(Vec3<float>(0, 1, 0), Vec3<float>(1, 0, 1));
-        paint_pos(Vec3<float>(1, 0, 0), Vec3<float>(0, 1, 0));
+        const auto WHITE = Vec3<float>(1, 1, 1);
+        paint_pos(Vec3<float>(-1, 0, 0), WHITE);
+        glVertex3f(0, 1, 0);
+        glVertex3f(1, 0, 0);
       glEnd();
     glPopMatrix();
-
-    t += speed;
   }
 
   // ___ private static ______________________________________________________

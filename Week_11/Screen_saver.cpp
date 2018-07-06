@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Screen_saver.hpp"
 #include "Triangle.hpp"
+#include "Demo_Center/Demo_Center.hpp"
 
 namespace G6037599
 {
@@ -13,18 +14,18 @@ namespace G6037599
 
     const auto WINDOW = glfw_window();
 
-    Triangle tri1(Vec3<float>(-0.5f, 0, 0));
-    Triangle tri2(Vec3<float>(0.5f, 0, 0));
     const auto SCALE = Vec3<float>(0.5f);
-    tri1.scale = SCALE;
-    tri2.scale = SCALE;
+    Triangle tri1(Vec3<float>(-0.5f, 0, 0), SCALE);
+    Triangle tri2(Vec3<float>(0.5f, 0, 0), SCALE);
+
     while (!glfwWindowShouldClose(WINDOW))
     {
+      Demo_center::reset_delta_seconds();
       glClear(GL_COLOR_BUFFER_BIT);//render BG
       glClearColor(0, 0, 0, 1);//change BG color
 
-      tri1.draw();
-      tri2.draw();
+      tri1.render();
+      tri2.render();
 
       glfwSwapBuffers(WINDOW);
       glfwPollEvents();//clear inputs

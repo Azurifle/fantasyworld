@@ -25,9 +25,6 @@
     <Filter Include="Source Files\Week_10">
       <UniqueIdentifier>{feb4c5dd-6540-4e68-b91e-c4dc4c5fc673}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\WeeK_11">
-      <UniqueIdentifier>{8c9206fd-506e-4c82-b482-0d90cc0cab1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Week_11">
       <UniqueIdentifier>{19b4c3db-fefb-416a-b6ed-6965fb8dbdaa}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,9 @@
     </Filter>
     <Filter Include="Source Files\Week_09">
       <UniqueIdentifier>{8c75fbfb-77bf-41da-b18d-81a0acb36e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_11">
+      <UniqueIdentifier>{8c9206fd-506e-4c82-b482-0d90cc0cab1c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,10 +162,10 @@
       <Filter>Source Files\Demo_Center</Filter>
     </ClCompile>
     <ClCompile Include="Week_11\Screen_saver.cpp">
-      <Filter>Source Files\WeeK_11</Filter>
+      <Filter>Source Files\Week_11</Filter>
     </ClCompile>
     <ClCompile Include="Week_11\Triangle.cpp">
-      <Filter>Source Files\WeeK_11</Filter>
+      <Filter>Source Files\Week_11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

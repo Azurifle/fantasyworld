@@ -56,7 +56,23 @@ namespace G6037599
     return double_w_points.str();
   }
 
+  void Demo_center::reset_delta_seconds()
+  {
+    static auto time_now = Clock::now();
+
+    const auto TIME_THEN = time_now;
+    time_now = Clock::now();
+    m_delta_seconds_ = time_now - TIME_THEN;
+  }
+
+  float Demo_center::delta_seconds()
+  {
+    return m_delta_seconds_.count();
+  }
+
   // ___ private static ________________________________________________
+  Demo_center::Float_seconds Demo_center::m_delta_seconds_{};
+
   void Demo_center::clear_2_nd_key_if_has()
   {
     switch (_kbhit())

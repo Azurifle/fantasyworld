@@ -1,6 +1,7 @@
 #ifndef G6037599_DEMO_CENTER_HPP
 #define G6037599_DEMO_CENTER_HPP
 #pragma once
+
 namespace G6037599
 {
   class Demo_center final
@@ -20,8 +21,16 @@ namespace G6037599
     static std::string double_points_string(double t_double
       , int t_points = DEFAULT_DOUBLE_POINTS);
 
+    static void reset_delta_seconds();
+    static float delta_seconds();
+
     ~Demo_center() = default;
   private:
+    using Clock = std::chrono::high_resolution_clock;
+    using Float_seconds = std::chrono::duration<float>;
+
+    static Float_seconds m_delta_seconds_;
+
     static void clear_2_nd_key_if_has();
 
     Demo_center() = default;
