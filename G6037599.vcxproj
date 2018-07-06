@@ -173,6 +173,7 @@
     <ClInclude Include="Week_10\Mat4.hpp" />
     <ClInclude Include="Week_11\Delta_time.hpp" />
     <ClInclude Include="Week_11\Screen_saver.hpp" />
+    <ClInclude Include="Week_11\Star.hpp" />
     <ClInclude Include="Week_11\Triangle.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +200,7 @@
     <ClCompile Include="Week_10\Mat4.cpp" />
     <ClCompile Include="Week_11\Delta_time.cpp" />
     <ClCompile Include="Week_11\Screen_saver.cpp" />
+    <ClCompile Include="Week_11\Star.cpp" />
     <ClCompile Include="Week_11\Triangle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

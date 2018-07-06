@@ -1,6 +1,7 @@
 #ifndef G6037599_DEMO_CENTER_HPP
 #define G6037599_DEMO_CENTER_HPP
 #pragma once
+#include "Week_09/Vec3.hpp"
 
 namespace G6037599
 {
@@ -12,6 +13,7 @@ namespace G6037599
       KEY_NO_PRESS, KEY_ESC = 27, DEFAULT_DOUBLE_POINTS = 2
     };
     static const float PRECISION;
+    static const Vec3<float> WHITE;
 
     static void disable_mouse_editing();
     static int get_key();
@@ -20,6 +22,8 @@ namespace G6037599
     static void print_centered_header(const std::string& t_header, char t_delim);
     static std::string double_points_string(double t_double
       , int t_points = DEFAULT_DOUBLE_POINTS);
+
+    static void paint_pos(const Vec3<float>& t_pos, const Vec3<float>& t_rgb);
 
     ~Demo_center() = default;
   private:

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Screen_saver.hpp"
-#include "Triangle.hpp"
+#include "Star.hpp"
 
 namespace G6037599
 {
@@ -65,17 +65,14 @@ namespace G6037599
   // ___ private constructor ___________________________________________________
   Screen_saver::Screen_saver()
   {
-    m_triangles_.resize(2);
-    m_triangles_[0].pos.x = -0.5f;
-    m_triangles_[1].pos.x = 0.5f;
-    m_triangles_[1].scale = m_triangles_[0].scale = Vec3<float>(0.5f);
+    const auto STARS = 1;//25
+    m_stars_.resize(STARS);
   }
 
   // ___ private ________________________________________________________________
   void Screen_saver::update()
   {
     m_delta_time_.reset();
-    m_triangles_[0].update(m_delta_time_.float_seconds());
-    m_triangles_[1].update(m_delta_time_.float_seconds());
+    m_stars_[0].update(m_delta_time_.float_seconds());
   }
 }//G6037599

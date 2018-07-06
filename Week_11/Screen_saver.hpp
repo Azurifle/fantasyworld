@@ -5,7 +5,7 @@
 
 namespace G6037599
 {
-  class Triangle;
+  class Star;
 
   class Screen_saver final
   {
@@ -19,7 +19,7 @@ namespace G6037599
     static void render_background();
 
     Delta_time m_delta_time_;
-    std::vector<Triangle> m_triangles_{};
+    std::vector<Star> m_stars_{};
 
     Screen_saver();
     ~Screen_saver() = default;

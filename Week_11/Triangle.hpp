@@ -9,11 +9,11 @@ namespace G6037599
   {
   public:
     Vec3<float> pos{}, scale{};
-    float degrees_per_sec;
+    float z_degree, rotate_speed;
 
     explicit Triangle(const Vec3<float>& t_pos = Vec3<float>(0)
       , const Vec3<float>& t_scale = Vec3<float>(1)
-      , float t_degrees_per_sec = 180);
+      , float t_z_degree = 0, float t_rotate_speed = 180);
     ~Triangle() = default;
     Triangle(const Triangle& t_to_copy) = default;
     Triangle(Triangle&& t_to_move) noexcept = default;
@@ -22,9 +22,9 @@ namespace G6037599
 
     void update(float t_delta_seconds);
   private:
-    float m_x_degrees_;
+    float m_x_degree_;
 
-    static void paint_pos(const Vec3<float>& t_pos, const Vec3<float>& t_rgb);
+    void draw() const;
   };
 }//G6037599
 

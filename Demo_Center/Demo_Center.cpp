@@ -5,6 +5,7 @@ namespace G6037599
 {
   // ___ static ___________________________________________________________
   const float Demo_center::PRECISION = 0.01f;
+  const Vec3<float> Demo_center::WHITE = Vec3<float>(1);
 
   void Demo_center::disable_mouse_editing()
   {
@@ -54,6 +55,12 @@ namespace G6037599
     std::stringstream double_w_points;
     double_w_points << std::fixed << std::setprecision(t_points) << t_double;
     return double_w_points.str();
+  }
+
+  void Demo_center::paint_pos(const Vec3<float>& t_pos, const Vec3<float>& t_rgb)
+  {
+    glColor3f(t_rgb.x, t_rgb.y, t_rgb.z);
+    glVertex3f(t_pos.x, t_pos.y, t_pos.z);
   }
 
   // ___ private static ________________________________________________
