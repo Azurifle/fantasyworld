@@ -1,5 +1,5 @@
-#ifndef G6037599_SCREEN_SAVER_MENU_HPP
-#define G6037599_SCREEN_SAVER_MENU_HPP
+#ifndef G6037599_SCREEN_SAVER_HPP
+#define G6037599_SCREEN_SAVER_HPP
 #pragma once
 #include "Delta_time.hpp"
 
@@ -32,4 +32,4 @@ namespace G6037599
   };
 }//G6037599
 
-#endif //G6037599_SCREEN_SAVER_MENU_HPP
+#endif //G6037599_SCREEN_SAVER_HPP
