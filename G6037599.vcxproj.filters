@@ -13,23 +13,47 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\1._Fantasy_Game">
-      <UniqueIdentifier>{dc1e16d6-99b0-4467-bd1c-da2bd9b5bd83}</UniqueIdentifier>
+    <Filter Include="Header Files\Demo_Center">
+      <UniqueIdentifier>{d003312d-c644-43d3-8c30-b17d20bd248c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\1._Fantasy_Game">
-      <UniqueIdentifier>{8966ded5-ad1e-4724-a284-67a16654cfc4}</UniqueIdentifier>
+    <Filter Include="Source Files\Demo_Center">
+      <UniqueIdentifier>{649dda88-f4a5-44c2-bf35-e329c5047589}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\2._Car_Game">
-      <UniqueIdentifier>{07cef202-bd1b-4eba-956f-70ed3d71f756}</UniqueIdentifier>
+    <Filter Include="Header Files\Week_10">
+      <UniqueIdentifier>{ddfc4e74-076e-49d7-be4a-29a5af2efbbb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\2._Car_Game">
-      <UniqueIdentifier>{2a8dbb20-6fad-414a-8957-f82bd190cb61}</UniqueIdentifier>
+    <Filter Include="Source Files\Week_10">
+      <UniqueIdentifier>{feb4c5dd-6540-4e68-b91e-c4dc4c5fc673}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\0._Game_Engine">
-      <UniqueIdentifier>{9e747537-2fef-42fa-806b-18a7a78b0954}</UniqueIdentifier>
+    <Filter Include="Header Files\Week_11">
+      <UniqueIdentifier>{19b4c3db-fefb-416a-b6ed-6965fb8dbdaa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\0._Game_Engine">
-      <UniqueIdentifier>{07e7bf94-3526-4b1b-ba1a-219fe3c43fb9}</UniqueIdentifier>
+    <Filter Include="Header Files\Week_01">
+      <UniqueIdentifier>{5cf0321b-f655-4c08-bc9a-977cd60cff17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Week_02">
+      <UniqueIdentifier>{bfdcdaad-9519-4f9e-98ee-17384be4a76e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Week_07">
+      <UniqueIdentifier>{ae5f51b7-27e4-431e-ac15-26bb21721eef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Week_09">
+      <UniqueIdentifier>{979a018d-40e1-405f-96e3-44c0988c8061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_01">
+      <UniqueIdentifier>{76b1a8b8-de05-4037-bdac-77b6ee08e830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_02">
+      <UniqueIdentifier>{7024851d-7f61-4462-a065-f9cfd010567b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_07">
+      <UniqueIdentifier>{3acece29-7ec1-4919-839a-cf355859589d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_09">
+      <UniqueIdentifier>{8c75fbfb-77bf-41da-b18d-81a0acb36e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Week_11">
+      <UniqueIdentifier>{8c9206fd-506e-4c82-b482-0d90cc0cab1c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,53 +63,59 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Console.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Demo_Center\Demo_Center.hpp">
+      <Filter>Header Files\Demo_Center</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Hp_bar.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_10\Mat4.hpp">
+      <Filter>Header Files\Week_10</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Map.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_01\Animal.hpp">
+      <Filter>Header Files\Week_01</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Spawn_point.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_01\Cat.hpp">
+      <Filter>Header Files\Week_01</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Spawn_to.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_01\Dog.hpp">
+      <Filter>Header Files\Week_01</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Status_panel.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_02\Memory_pool.hpp">
+      <Filter>Header Files\Week_02</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Tile_data.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_07\Logger.hpp">
+      <Filter>Header Files\Week_07</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Timer.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_07\Stopwatch.hpp">
+      <Filter>Header Files\Week_07</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Type_data.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_09\Vec_test_units.hpp">
+      <Filter>Header Files\Week_09</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Unit.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Week_09\Vec2.hpp">
+      <Filter>Header Files\Week_09</Filter>
     </ClInclude>
-    <ClInclude Include="2._Car_Game\Car_game.hpp">
-      <Filter>Header Files\2._Car_Game</Filter>
+    <ClInclude Include="Week_09\Vec3.hpp">
+      <Filter>Header Files\Week_09</Filter>
     </ClInclude>
-    <ClInclude Include="0._Game_Engine\Grid.hpp">
-      <Filter>Header Files\0._Game_Engine</Filter>
+    <ClInclude Include="Week_09\Vec4.hpp">
+      <Filter>Header Files\Week_09</Filter>
     </ClInclude>
-    <ClInclude Include="0._Game_Engine\Game_engine.hpp">
-      <Filter>Header Files\0._Game_Engine</Filter>
+    <ClInclude Include="Demo_Center\Test_units.hpp">
+      <Filter>Header Files\Demo_Center</Filter>
     </ClInclude>
-    <ClInclude Include="1._Fantasy_Game\Fantasy_game.hpp">
-      <Filter>Header Files\1._Fantasy_Game</Filter>
+    <ClInclude Include="Demo_Center\Demo_list_menu.hpp">
+      <Filter>Header Files\Demo_Center</Filter>
     </ClInclude>
-    <ClInclude Include="0._Game_Engine\json.hpp">
-      <Filter>Header Files\0._Game_Engine</Filter>
+    <ClInclude Include="Week_11\Screen_saver.hpp">
+      <Filter>Header Files\Week_11</Filter>
     </ClInclude>
-    <ClInclude Include="2._Car_Game\Car.hpp">
-      <Filter>Header Files\2._Car_Game</Filter>
+    <ClInclude Include="Week_11\Triangle.hpp">
+      <Filter>Header Files\Week_11</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_11\Delta_time.hpp">
+      <Filter>Header Files\Week_11</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_11\Star.hpp">
+      <Filter>Header Files\Week_11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -95,47 +125,59 @@
     <ClCompile Include="G6037599.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Console.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Demo_Center\Demo_Center.cpp">
+      <Filter>Source Files\Demo_Center</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Hp_bar.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Week_10\Mat4.cpp">
+      <Filter>Source Files\Week_10</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Map.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Week_01\Animal.cpp">
+      <Filter>Source Files\Week_01</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Spawn_point.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Week_01\Cat.cpp">
+      <Filter>Source Files\Week_01</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Status_panel.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Week_01\Dog.cpp">
+      <Filter>Source Files\Week_01</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Tile_data.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Week_02\Memory_pool.cpp">
+      <Filter>Source Files\Week_02</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Timer.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Week_07\Logger.cpp">
+      <Filter>Source Files\Week_07</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Type_data.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Week_07\Stopwatch.cpp">
+      <Filter>Source Files\Week_07</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Unit.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Week_09\Vec_test_units.cpp">
+      <Filter>Source Files\Week_09</Filter>
     </ClCompile>
-    <ClCompile Include="2._Car_Game\Car_game.cpp">
-      <Filter>Source Files\2._Car_Game</Filter>
+    <ClCompile Include="Week_09\Vec2.cpp">
+      <Filter>Source Files\Week_09</Filter>
     </ClCompile>
-    <ClCompile Include="0._Game_Engine\Grid.cpp">
-      <Filter>Source Files\0._Game_Engine</Filter>
+    <ClCompile Include="Week_09\Vec3.cpp">
+      <Filter>Source Files\Week_09</Filter>
     </ClCompile>
-    <ClCompile Include="0._Game_Engine\Game_engine.cpp">
-      <Filter>Source Files\0._Game_Engine</Filter>
+    <ClCompile Include="Week_09\Vec4.cpp">
+      <Filter>Source Files\Week_09</Filter>
     </ClCompile>
-    <ClCompile Include="1._Fantasy_Game\Fantasy_game.cpp">
-      <Filter>Source Files\1._Fantasy_Game</Filter>
+    <ClCompile Include="Demo_Center\Test_units.cpp">
+      <Filter>Source Files\Demo_Center</Filter>
     </ClCompile>
-    <ClCompile Include="2._Car_Game\Car.cpp">
-      <Filter>Source Files\2._Car_Game</Filter>
+    <ClCompile Include="Demo_Center\Demo_list_menu.cpp">
+      <Filter>Source Files\Demo_Center</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_11\Screen_saver.cpp">
+      <Filter>Source Files\Week_11</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_11\Triangle.cpp">
+      <Filter>Source Files\Week_11</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_11\Delta_time.cpp">
+      <Filter>Source Files\Week_11</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_11\Star.cpp">
+      <Filter>Source Files\Week_11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
