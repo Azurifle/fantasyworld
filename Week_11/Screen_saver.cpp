@@ -32,8 +32,8 @@ namespace G6037599
     case GLFW_FALSE: glfwTerminate(); PROMISE(false); default:;
     }
 
-    const auto WINDOW_WIDTH = 640, WINDOW_HEIGHT = 480;
-    const auto WINDOW = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Screen Saver: Air Galley"
+    const auto WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;//640x480
+    const auto WINDOW = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Screen Saver: Blinking Star"
       , nullptr, nullptr);
 
     if (!WINDOW)

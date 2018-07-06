@@ -9,7 +9,7 @@ namespace G6037599
     : m_pos_(t_start_pos), m_end_pos_(t_end_pos), m_rotate_speed_(t_rotate_speed)
       , m_z_degrees_(0)
   {
-    static const auto START_SCALE = 0.01f;//0.08f
+    static const auto START_SCALE = 0.5f;//0.01f - 0.08f
     m_scale_ = Vec3<float>(START_SCALE);
 
     static const auto INNER_RADIUS = Vec3<float>(0, 0.7f, 0)
