@@ -1,20 +1,20 @@
 #include "stdafx.h"
 #include "Triangle.hpp"
-#include "Demo_Center/Demo_Center.hpp"
 
 namespace G6037599
 {
   // ___ constructor __________________________________________________________
   Triangle::Triangle(const Vec3<float>& t_pos, const Vec3<float>& t_scale
-    , const float t_degree_angular_velocity) : pos(t_pos), scale(t_scale)
-    , degree_angular_velocity(t_degree_angular_velocity), m_x_degree_(0) {}
+    , const float t_degrees_per_sec) : pos(t_pos), scale(t_scale)
+    , degrees_per_sec(t_degrees_per_sec), m_x_degrees_(0) {}
 
-  void Triangle::render()
+  void Triangle::update(const float t_delta_seconds)
   {
-    m_x_degree_ += degree_angular_velocity * Demo_center::delta_seconds();
+    m_x_degrees_ += degrees_per_sec * t_delta_seconds;
+
     glPushMatrix();
       glTranslatef(pos.x, pos.y, pos.z);
-      glRotatef(m_x_degree_, 1, 0, 0);
+      glRotatef(m_x_degrees_, 1, 0, 0);
       glScalef(scale.x, scale.y, scale.z);
 
       glBegin(GL_TRIANGLES);

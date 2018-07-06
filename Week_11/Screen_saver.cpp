@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Screen_saver.hpp"
 #include "Triangle.hpp"
-#include "Demo_Center/Demo_Center.hpp"
 
 namespace G6037599
 {
@@ -13,20 +12,10 @@ namespace G6037599
     is_running = true;
 
     const auto WINDOW = glfw_window();
-
-    const auto SCALE = Vec3<float>(0.5f);
-    Triangle tri1(Vec3<float>(-0.5f, 0, 0), SCALE);
-    Triangle tri2(Vec3<float>(0.5f, 0, 0), SCALE);
-
     while (!glfwWindowShouldClose(WINDOW))
     {
-      Demo_center::reset_delta_seconds();
-      glClear(GL_COLOR_BUFFER_BIT);//render BG
-      glClearColor(0, 0, 0, 1);//change BG color
-
-      tri1.render();
-      tri2.render();
-
+      render_background();
+      m_instance_.update();
       glfwSwapBuffers(WINDOW);
       glfwPollEvents();//clear inputs
     }
@@ -34,6 +23,8 @@ namespace G6037599
   }
 
   // ___ private static ______________________________________________________
+  Screen_saver Screen_saver::m_instance_{};
+
   GLFWwindow* Screen_saver::glfw_window()
   {
     switch (glfwInit())
@@ -59,10 +50,32 @@ namespace G6037599
   void Screen_saver::key_callback(GLFWwindow* t_window, const int t_key
     , const int t_scan_code, const int t_action, const int t_mods)
   {
-    if (t_key == GLFW_KEY_E && t_action == GLFW_PRESS)
+    if (t_key == GLFW_KEY_E && t_action == GLFW_REPEAT)
     {
       std::cout << "I pressed E" << std::endl;
     }
   }
 
+  void Screen_saver::render_background()
+  {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0, 0, 0, 1);//change BG color
+  }
+
+  // ___ private constructor ___________________________________________________
+  Screen_saver::Screen_saver()
+  {
+    m_triangles_.resize(2);
+    m_triangles_[0].pos.x = -0.5f;
+    m_triangles_[1].pos.x = 0.5f;
+    m_triangles_[1].scale = m_triangles_[0].scale = Vec3<float>(0.5f);
+  }
+
+  // ___ private ________________________________________________________________
+  void Screen_saver::update()
+  {
+    m_delta_time_.reset();
+    m_triangles_[0].update(m_delta_time_.float_seconds());
+    m_triangles_[1].update(m_delta_time_.float_seconds());
+  }
 }//G6037599

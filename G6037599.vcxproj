@@ -171,6 +171,7 @@
     <ClInclude Include="Week_09\Vec4.hpp" />
     <ClInclude Include="Week_09\Vec_test_units.hpp" />
     <ClInclude Include="Week_10\Mat4.hpp" />
+    <ClInclude Include="Week_11\Delta_time.hpp" />
     <ClInclude Include="Week_11\Screen_saver.hpp" />
     <ClInclude Include="Week_11\Triangle.hpp" />
   </ItemGroup>
@@ -196,6 +197,7 @@
     <ClCompile Include="Week_09\Vec4.cpp" />
     <ClCompile Include="Week_09\Vec_test_units.cpp" />
     <ClCompile Include="Week_10\Mat4.cpp" />
+    <ClCompile Include="Week_11\Delta_time.cpp" />
     <ClCompile Include="Week_11\Screen_saver.cpp" />
     <ClCompile Include="Week_11\Triangle.cpp" />
   </ItemGroup>
