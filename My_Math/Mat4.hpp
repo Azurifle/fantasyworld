@@ -1,9 +1,9 @@
 #ifndef G6037599_MAT4_HPP
 #define G6037599_MAT4_HPP
 #pragma once
-#include "Week_09/Vec3.hpp"
-#include "Week_09/Vec4.hpp"
-#include "Week_09/Vec2.hpp"
+#include "Vec3.hpp"
+#include "Vec4.hpp"
+#include "Vec2.hpp"
 
 namespace G6037599
 {
@@ -17,7 +17,7 @@ namespace G6037599
     static Mat4 rotation(float t_radian_angle, const Vec3<int>& t_axis);
     static Mat4 scaling(const Vec3<float>& t_scale);
     static Mat4 transpose(const Mat4& t_matrix);
-    static Mat4 inverse(const Mat4& t_matrix);
+    static Mat4 inverse(const Mat4& t_m);
 
     Mat4();
     explicit Mat4(float t_diagonal);

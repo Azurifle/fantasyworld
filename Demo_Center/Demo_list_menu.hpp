@@ -9,7 +9,7 @@ namespace G6037599
   public:
     enum Enum
     {
-      OPTION_1 = '1', OPTION_2, OPTION_3, OPTION_4, OPTION_5, OPTION_6, OPTION_7, OPTION_LAST
+      OPTION_1 = '1', OPTION_LAST
     };
 
     static void start();
@@ -18,7 +18,6 @@ namespace G6037599
     static void show_option(char t_option, const char* t_name);
     static bool choose_option();
     static void do_option(int t_option = OPTION_LAST);
-    static void math_testing();
     static void back_to_main_menu();
 
     Demo_list_menu() = default;

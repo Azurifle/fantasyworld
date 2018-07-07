@@ -10,13 +10,9 @@ namespace G6037599
   class Screen_saver final
   {
   public:
-    static void run();
+    static void start();
   private:
     static Screen_saver m_instance_;
-
-    static GLFWwindow* glfw_window();
-    static void key_callback(GLFWwindow* t_window, int t_key, int t_scan_code, int t_action, int t_mods);
-    static void render_background();
 
     Delta_time m_delta_time_;
     std::vector<Star> m_stars_{};
