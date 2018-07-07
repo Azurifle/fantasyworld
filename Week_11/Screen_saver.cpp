@@ -20,6 +20,7 @@ namespace G6037599
       glfwPollEvents();//clear inputs
     }
     glfwTerminate();
+    is_running = false;
   }
 
   // ___ private static ______________________________________________________
