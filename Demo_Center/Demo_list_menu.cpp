@@ -47,7 +47,6 @@ namespace G6037599
     show_option(OPTION_4, "07 High-Resolution Stopwatch");
     show_option(OPTION_5, "09 Vec 2 - 4D <template>");
     show_option(OPTION_6, "10 Matrix 4x4 of float");
-    show_option(OPTION_7, "11 Math testing");
     show_option(OPTION_LAST, "11 GLFW Screen Saver");
 
     puts("         //////////////////////////////////////////////////////////////////");
@@ -91,43 +90,9 @@ namespace G6037599
     case OPTION_4: Stopwatch::demo(); break;
     case OPTION_5: Vec_test_units::run(); break;
     case OPTION_6: Test_units::mat4_test_unit(); break;
-    case OPTION_7: Screen_saver::run(); break;
-    default: math_testing();
+    default: Screen_saver::run();
     }
     back_to_main_menu();
-  }
-
-  void Demo_list_menu::math_testing()
-  {
-    //initialize glfw system
-    if (!glfwInit()) {
-      glfwTerminate(); PROMISE(false);
-    }
-
-    //create window
-    const auto WINDOW = glfwCreateWindow(640, 480, "My Game", nullptr, nullptr);
-    if (!WINDOW) {
-      glfwTerminate(); PROMISE(false);
-    }
-
-    //make context to window
-    glfwMakeContextCurrent(WINDOW);
-
-    //initialize glew system
-    const auto RESULT = glewInit();
-    if (RESULT != GLEW_OK) {
-      std::cout << "GLEW error: " << glewGetErrorString(RESULT) << std::endl;
-      Demo_center::wait_key(); 
-      glfwTerminate(); 
-      PROMISE(false);
-    }
-
-    //find version of glew
-    const auto gl_version = glGetString(GL_VERSION);
-    std::cout << "GL version: " << gl_version << std::endl;
-
-    const auto SHADER_VERSION = glGetString(GL_SHADING_LANGUAGE_VERSION);
-    std::cout << "GLSL version: " << SHADER_VERSION << std::endl;
   }
 
   void Demo_list_menu::back_to_main_menu()
