@@ -30,22 +30,19 @@ namespace G6037599
     static void show_glew_versions();
     static void test_depth_n_alpha_bend();
     static void render_background();
-    static void add_to_shader_source(const char*const& t_vertex_shader_code
-      , const char*const& t_fragment_shader_code
-      , GLuint& t_vertex_shader_id, GLuint& t_fragment_shader_id);
-    static void step3_compile_codes(GLuint t_vertex_shader_id, GLuint t_fragment_shader_id);
-    static void set_vertex_pointer(std::vector<GLint> t_vram_location);
-    static void enable_value_processing(std::vector<GLint> t_vram_location);
+    static void step2_load_shader_codes(const std::vector<GLuint>& t_shader_program_ids);
+    static void step4_check_compilation(GLuint t_shader_program_id);
+    static void step7_check_linking(GLuint t_m_program_id);
+    static void set_vertex_pointer(const std::vector<GLint>& t_vram_location);
+    static void show_shader_error(GLuint t_shader_id, std::string t_text, bool t_is_program = true);
+    static void enable_value_processing(const std::vector<GLint>& t_vram_location);
 
     void init_glfw_system(const std::string& t_title);
     void key_callback(GLFWwindow* t_window, int t_key, int t_scancode, int t_action, int t_mods);
     void init_shader_program();
     void init_mesh();
     void init_texture();
-    void step2_load_shader(const char*const& t_vertex_shader_code
-      , const char*const& t_fragment_shader_code
-      , GLuint& t_vertex_shader_id, GLuint& t_fragment_shader_id);
-    void step4_attach_codes_to_program(GLuint t_vertex_shader_id, GLuint t_fragment_shader_id) const;
+    void step1_create_shader_program(std::vector<GLuint>& t_shader_ids);
     void create_vertices_in_cpu_ram();
     void move_vertices_to_vram();
     void get_variables(std::vector<GLint>& t_vram_location);
