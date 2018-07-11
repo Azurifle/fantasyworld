@@ -17,7 +17,7 @@ namespace G6037599
     static void show_menu();
     static void show_option(char t_option, const char* t_name);
     static bool choose_option();
-    static void do_option(int t_option = OPTION_LAST);
+    static void do_option();
     static void back_to_main_menu();
 
     Demo_list_menu() = default;

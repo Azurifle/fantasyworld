@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "Mat4.hpp"
 #include "Demo_Center/Demo_Center.hpp"
 
@@ -194,6 +194,33 @@ namespace G6037599
     return inv;
   }
 
+  Mat4 Mat4::ortho(const float t_left, const float t_right
+    , const float t_bottom, const float t_top, const float t_near, const float t_far)
+  {
+    Mat4 result(1);
+    result.m_mat_[0][X] = 2.0f / (t_right - t_left);
+    result.m_mat_[1][Y] = 2.0f / (t_top - t_bottom);
+    result.m_mat_[2][Z] = 2.0f / (t_near - t_far);
+    result.m_mat_[0][T] = (t_left + t_right) / (t_left - t_right);
+    result.m_mat_[1][T] = (t_bottom + t_top) / (t_bottom - t_top);
+    result.m_mat_[2][T] = (t_far + t_near) / (t_far - t_near);
+    return result;
+  }
+
+  Mat4 Mat4::perspective(const float t_fov, const float t_aspect_ratio
+    , const float t_near, const float t_far)
+  {
+    Mat4 result(1);
+    const auto TO_RADIAN = 1.0f / 180.0f * 3.14f;
+    result.m_mat_[1][Y] = 1.0f / tan(0.5f * t_fov * TO_RADIAN);
+    result.m_mat_[0][X] = result.m_mat_[1][Y] / t_aspect_ratio;
+
+    result.m_mat_[2][Z] = (t_near + t_far) / (t_near - t_far);
+    result.m_mat_[3][Z] = -1;
+    result.m_mat_[2][T] = 2.0f * t_near * t_far / (t_near - t_far);
+    return result;
+  }
+
   // ___ constructor __________________________________________________________
   Mat4::Mat4()
   {
@@ -382,4 +409,16 @@ namespace G6037599
     m_mat_[t_pos.y][t_pos.x] = t_value;
   }
 
+  const float* Mat4::to_array() const
+  {
+    const auto array = new float[SIZE*SIZE];
+    for(auto row = 0; row < SIZE; ++row)
+    {
+      for (auto col = 0; col < SIZE; ++col)
+      {
+        array[row * SIZE + col] = m_mat_[row][col];
+      }
+    }
+    return array;
+  }
 }//G6037599

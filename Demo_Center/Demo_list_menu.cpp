@@ -1,7 +1,7 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "Demo_list_menu.hpp"
 #include "Demo_Center.hpp"
-#include "Week_12/Screen_saver.hpp"
+#include "Week_12/App.hpp"
 
 namespace G6037599
 {
@@ -13,7 +13,7 @@ namespace G6037599
     is_running = true;
 
     Demo_center::disable_mouse_editing();
-
+    
     while (true)
     {
       show_menu();
@@ -56,7 +56,9 @@ namespace G6037599
       const auto OPTION = Demo_center::get_key();
       if (OPTION_1 <= OPTION && OPTION <= OPTION_LAST)
       {
-        do_option(OPTION);
+        system("CLS");
+        do_option();
+        back_to_main_menu();
         return true;
       }
 
@@ -67,14 +69,10 @@ namespace G6037599
     }
   }
 
-  void Demo_list_menu::do_option(const int t_option)
+  void Demo_list_menu::do_option()
   {
-    system("CLS");
-    switch (t_option)
-    {
-    default: Screen_saver::start();
-    }
-    back_to_main_menu();
+    App app(640, 480, "My Game");
+    app.run();
   }
 
   void Demo_list_menu::back_to_main_menu()

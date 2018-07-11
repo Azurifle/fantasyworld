@@ -18,6 +18,8 @@ namespace G6037599
     static Mat4 scaling(const Vec3<float>& t_scale);
     static Mat4 transpose(const Mat4& t_matrix);
     static Mat4 inverse(const Mat4& t_m);
+    static Mat4 ortho(float t_left, float t_right, float t_bottom, float t_top, float t_near, float t_far);
+    static Mat4 perspective(float t_fov, float t_aspect_ratio, float t_near, float t_far);
 
     Mat4();
     explicit Mat4(float t_diagonal);
@@ -45,6 +47,7 @@ namespace G6037599
     void multiply(const Mat4& t_other);
     void invert();
     void set(const Vec2<int>& t_pos, float t_value);
+    const float* to_array() const;
   private:
     float m_mat_[SIZE][SIZE]{};
   };

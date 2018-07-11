@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "Triangle.hpp"
 #include "Demo_Center/Demo_Center.hpp"
 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "Vec4.hpp"
 
 namespace G6037599

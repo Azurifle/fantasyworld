@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "Demo_Center.hpp"
 
 namespace G6037599
