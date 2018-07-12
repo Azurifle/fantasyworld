@@ -43,6 +43,8 @@ namespace G6037599
     while (!glfwWindowShouldClose(m_window_))
     {
       render_background();
+      glViewport(0, 0, m_width_, m_height_);
+      glUseProgram(m_program_id_);//shader step 8.
       switch (m_is_active_) { case true: render_objects(); default:; }
       glfwSwapBuffers(m_window_);
       glfwPollEvents();//clear inputs
@@ -217,7 +219,6 @@ namespace G6037599
 
     glLinkProgram(m_program_id_);
     step7_check_linking(m_program_id_);
-    //glUseProgram(m_program_id_);
   }
 
   void App::init_mesh()
@@ -293,13 +294,13 @@ namespace G6037599
 
   void App::render_objects() const
   {
-    glViewport(0, 0, m_width_, m_height_);
-    glUseProgram(m_program_id_);
     glBindTexture(GL_TEXTURE_2D, m_texture_id_);
 
     Mat4 MVP;
-    model_view_projection(MVP);
-    glUniformMatrix4fv(m_mvp_location_, 1, GL_FALSE, MVP.to_array());
+    model_view_projection(MVP);//how to separate view projection & model?
+    const auto MVP_ARRAY = MVP.to_array();
+    glUniformMatrix4fv(m_mvp_location_, 1, GL_FALSE, MVP_ARRAY);
+    delete[] MVP_ARRAY;
 
     glBindVertexArray(m_vertex_array_id_);
     glDrawArrays(GL_TRIANGLES, 0, 3);
