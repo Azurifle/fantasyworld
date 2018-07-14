@@ -66,6 +66,12 @@
     <ClInclude Include="Week_12\Vertex.hpp">
       <Filter>Header Files\Week_12</Filter>
     </ClInclude>
+    <ClInclude Include="Week_12\Shader.hpp">
+      <Filter>Header Files\Week_12</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_12\Mesh.hpp">
+      <Filter>Header Files\Week_12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -100,6 +106,12 @@
     </ClCompile>
     <ClCompile Include="Week_12\Vertex.cpp">
       <Filter>Source Files\Week_12</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_12\Shader.cpp">
+      <Filter>Source Files\Week_12</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_12\Mesh.cpp">
+      <Filter>Header Files\Week_12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

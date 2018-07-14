@@ -83,7 +83,7 @@ namespace G6037599
 
   void App::step2_load_shader_codes(const std::vector<GLuint>& t_shader_ids)
   {
-    static auto VERTEX_SHADER_CODE =
+    static const std::string VERTEX_SHADER_CODE =
       "uniform mat4 MVP; \n"	//MVP is Model View Projection
       "attribute vec3 vPos; \n"
       "attribute vec3 vCol; \n"
@@ -106,8 +106,10 @@ namespace G6037599
       "    gl_FragColor = texture2D( texture, texCoord);\n"
       "} \n";
 
-    glShaderSource(t_shader_ids[0], 1, &VERTEX_SHADER_CODE, nullptr);
-    glShaderSource(t_shader_ids[1], 1, &FRAGMENT_SHADER_CODE, nullptr);
+    auto a = VERTEX_SHADER_CODE.c_str(), b = FRAGMENT_SHADER_CODE.c_str();
+
+    glShaderSource(t_shader_ids[0], 1, &a, nullptr);
+    glShaderSource(t_shader_ids[1], 1, &b, nullptr);
   }
 
   void App::step4_check_compilation(const GLuint t_shader_id)
