@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Week_12">
       <UniqueIdentifier>{0ef21a1a-7c1a-4329-b410-a40e46edf87e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Week_13">
+      <UniqueIdentifier>{c41db1d4-4823-4000-bf4e-1be1798b6544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Week_13">
+      <UniqueIdentifier>{add95828-4928-4297-a761-41c935e75c9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
