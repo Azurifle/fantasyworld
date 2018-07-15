@@ -7,18 +7,15 @@ namespace G6037599
   class Demo_list_menu final
   {
   public:
-    enum Enum
-    {
-      OPTION_1 = '1', OPTION_LAST
-    };
-
     static void start();
   private:
     static void show_menu();
-    static void show_option(char t_option, const char* t_name);
-    static bool choose_option();
-    static void do_option();
-    static void back_to_main_menu();
+
+    static void run_app();
+    static void check_load_sound_error(ALuint t_buffer);
+    static void check_play_sound(ALenum t_error);
+
+    static void press_to_exit();
 
     Demo_list_menu() = default;
     ~Demo_list_menu() = default;
