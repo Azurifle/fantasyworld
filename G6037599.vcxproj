@@ -97,7 +97,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Thirdparty\glfw-3.2.1.bin.WIN32\lib-vc2015;$(ProjectDir)Thirdparty\glew-2.1.0\lib\Release\Win32;$(ProjectDir)Thirdparty\alut\lib;$(ProjectDir)Thirdparty\OpenAL-1.1-SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Thirdparty\glfw-3.2.1.bin.WIN32\lib-vc2015;$(ProjectDir)Thirdparty\glew-2.1.0\lib;$(ProjectDir)Thirdparty\alut\lib;$(ProjectDir)Thirdparty\OpenAL-1.1-SDK\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;alut32.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -132,7 +132,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Thirdparty\glfw-3.2.1.bin.WIN32\lib-vc2015;$(ProjectDir)Thirdparty\glew-2.1.0\lib\Release\Win32;$(ProjectDir)Thirdparty\alut\lib;$(ProjectDir)Thirdparty\OpenAL-1.1-SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Thirdparty\glfw-3.2.1.bin.WIN32\lib-vc2015;$(ProjectDir)Thirdparty\glew-2.1.0\lib;$(ProjectDir)Thirdparty\alut\lib;$(ProjectDir)Thirdparty\OpenAL-1.1-SDK\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;alut32.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

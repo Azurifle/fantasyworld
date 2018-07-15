@@ -7,7 +7,7 @@
 
 namespace G6037599
 {
-  //adapt from https://github.com/redeian/FirstGLFW
+  //adapt from https://github.com/redeian/FirstGLFW/tree/master/FirstGLFW
 
   // ___ (de)constructors ________________________________________________
   App::App(const int t_width, const int t_height, const std::string& t_title) 
@@ -240,7 +240,7 @@ namespace G6037599
     glBindTexture(GL_TEXTURE_2D, m_texture_id_);
 
     int img_width, img_height, components;
-    const auto TEXTURE_IMG = stbi_load("texture.png", &img_width, &img_height, &components, 0);
+    const auto TEXTURE_IMG = stbi_load("Week_12/texture.png", &img_width, &img_height, &components, 0);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, img_width, img_height,
       0, GL_RGBA, GL_UNSIGNED_BYTE, TEXTURE_IMG);
@@ -310,7 +310,7 @@ namespace G6037599
 
   void App::model_view_projection(Mat4& t_out_mvp) const
   {
-    const auto ANGLE = static_cast<float>(round(glfwGetTime()))
+    const auto ANGLE = static_cast<float>(glfwGetTime())
       , RATIO = m_width_ / static_cast<float>(m_height_);
     const auto ROTATE_MAT = Mat4::rotation(ANGLE, Vec3<int>(0, 0, 1))
       , MODEL_MAT = Mat4::translation(Vec3<float>(0)) * ROTATE_MAT * Mat4::scaling(Vec3<float>(1))

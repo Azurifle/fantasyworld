@@ -42,7 +42,7 @@ namespace G6037599
     alSourcePlay(source);//on other process
     check_play_sound(alGetError());
 
-    App app(640, 480, "My Game");
+    App app(640, 480, "Rendering a Triangle!!");
     app.run();
 
     /*ALint status;
@@ -54,7 +54,10 @@ namespace G6037599
     } while (status == AL_PLAYING);*/
 
     switch (alutExit())
-    { case false: fprintf(stderr, "%s\n", alutGetErrorString(alutGetError())); PROMISE(false); default:; }
+    { 
+      case false: fprintf(stderr, "%s\n", alutGetErrorString(alutGetError())); 
+        PROMISE(false); default:;
+    }
   }
 
   void Demo_list_menu::check_load_sound_error(const ALuint t_buffer)
