@@ -31,27 +31,27 @@ namespace G6037599
 
   void Demo_list_menu::run_app()
   {
-    //App app(640, 480, "My Game");
-    //app.run();
-
     alutInit(nullptr, nullptr);
 
-    //const auto BUFFER = alutCreateBufferFromFile();
-    //check_load_sound_error(BUFFER);
+    const auto BUFFER = alutCreateBufferFromFile("Week_13/Winning.wav");//only .wav
+    check_load_sound_error(BUFFER);
 
     ALuint source;
     alGenSources(1, &source);
-    alSourcei(source, AL_BUFFER, alutCreateBufferHelloWorld());//attach the buffer to it //BUFFER
-    alSourcePlay(source);
+    alSourcei(source, AL_BUFFER, BUFFER);//attach the buffer to it
+    alSourcePlay(source);//on other process
     check_play_sound(alGetError());
 
-    ALint status;
+    App app(640, 480, "My Game");
+    app.run();
+
+    /*ALint status;
     do
     {
       static const auto CHECK_SECONDS = 1.5f;//0.1f
       alutSleep(CHECK_SECONDS);
       alGetSourcei(source, AL_SOURCE_STATE, &status);
-    } while (status == AL_PLAYING);
+    } while (status == AL_PLAYING);*/
 
     switch (alutExit())
     { case false: fprintf(stderr, "%s\n", alutGetErrorString(alutGetError())); PROMISE(false); default:; }
