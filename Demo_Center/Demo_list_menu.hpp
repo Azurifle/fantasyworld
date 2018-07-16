@@ -10,11 +10,7 @@ namespace G6037599
     static void start();
   private:
     static void show_menu();
-
     static void run_app();
-    static void check_load_sound_error(ALuint t_buffer);
-    static void check_play_sound(ALenum t_error);
-
     static void press_to_exit();
 
     Demo_list_menu() = default;

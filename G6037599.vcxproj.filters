@@ -78,6 +78,9 @@
     <ClInclude Include="Week_12\Mesh.hpp">
       <Filter>Header Files\Week_12</Filter>
     </ClInclude>
+    <ClInclude Include="Week_13\Audio_manager.hpp">
+      <Filter>Header Files\Week_13</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="Week_12\Mesh.cpp">
       <Filter>Header Files\Week_12</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_13\Audio_manager.cpp">
+      <Filter>Source Files\Week_13</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

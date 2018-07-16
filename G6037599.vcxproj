@@ -168,6 +168,7 @@
     <ClInclude Include="Week_12\Shader.hpp" />
     <ClInclude Include="Week_12\Triangle.hpp" />
     <ClInclude Include="Week_12\Vertex.hpp" />
+    <ClInclude Include="Week_13\Audio_manager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demo_Center\Demo_list_menu.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Week_12\Shader.cpp" />
     <ClCompile Include="Week_12\Triangle.cpp" />
     <ClCompile Include="Week_12\Vertex.cpp" />
+    <ClCompile Include="Week_13\Audio_manager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

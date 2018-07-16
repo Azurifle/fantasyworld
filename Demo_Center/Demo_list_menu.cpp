@@ -2,6 +2,7 @@
 #include "Demo_list_menu.hpp"
 #include "Demo_Center.hpp"
 #include "Week_12/App.hpp"
+#include "Week_13/Audio_manager.hpp"
 
 namespace G6037599
 {
@@ -31,55 +32,13 @@ namespace G6037599
 
   void Demo_list_menu::run_app()
   {
-    alutInit(nullptr, nullptr);
-
-    const auto BUFFER = alutCreateBufferFromFile("Week_13/Winning.wav");//only .wav
-    check_load_sound_error(BUFFER);
-
-    ALuint source;
-    alGenSources(1, &source);
-    alSourcei(source, AL_BUFFER, BUFFER);//attach the buffer to it
-    alSourcePlay(source);//on other process
-    check_play_sound(alGetError());
+    const auto BGM = Audio_manager::load_or_get_audio("BGM", "Week_13/Winning.wav");
+    Audio_manager::play(BGM);
 
     App app(640, 480, "Rendering a Triangle!!");
     app.run();
 
-    /*ALint status;
-    do
-    {
-      static const auto CHECK_SECONDS = 1.5f;//0.1f
-      alutSleep(CHECK_SECONDS);
-      alGetSourcei(source, AL_SOURCE_STATE, &status);
-    } while (status == AL_PLAYING);*/
-
-    switch (alutExit())
-    { 
-      case false: fprintf(stderr, "%s\n", alutGetErrorString(alutGetError())); 
-        PROMISE(false); default:;
-    }
-  }
-
-  void Demo_list_menu::check_load_sound_error(const ALuint t_buffer)
-  {
-    switch (t_buffer) 
-    { 
-      case AL_NONE: break; 
-      default: return; 
-    }
-
-    fprintf(stderr, "Error loading file: '%s'\n", alutGetErrorString(alutGetError()));
-    alutExit();
-    PROMISE(false);
-  }
-
-  void Demo_list_menu::check_play_sound(const ALenum t_error)
-  {
-    switch (t_error) { case ALUT_ERROR_NO_ERROR: return; default:; }
-
-    fprintf(stderr, "%s\n", alGetString(t_error));
-    alutExit(); 
-    PROMISE(false);
+    Audio_manager::stop(BGM);
   }
 
   void Demo_list_menu::press_to_exit()
