@@ -3,28 +3,19 @@
 
 namespace G6037599
 {
-  //___ static __________________________________________________________________________________________
-  Audio Audio_manager::load_or_get_audio(const std::string& t_ref_name, const std::string& t_file_path)
+  //___ public __________________________________________________________________________________
+
+  Audio Audio_manager::load_or_get_audio(const std::string& t_wav_file_path)
   {
     static Audio_manager instance;
 
-    const auto FOUND_AUDIO = instance.m_audio_collection_.find(t_ref_name);
-    if (FOUND_AUDIO != instance.m_audio_collection_.end()) 
+    const auto FOUND_AUDIO = instance.m_audio_collection_.find(t_wav_file_path);
+    if (FOUND_AUDIO != instance.m_audio_collection_.end())
     {
       return FOUND_AUDIO->second;
     }
 
-    REQUIRE(!t_file_path.empty());
-    const auto AL_BUFFER_ID = alutCreateBufferFromFile(t_file_path.c_str());
-    check_load_sound_error(AL_BUFFER_ID);
-
-    ALuint audio_source_id;
-    alGenSources(1, &audio_source_id);
-    alSourcei(audio_source_id, AL_BUFFER, AL_BUFFER_ID);//attach the buffer to it
-
-    instance.m_audio_collection_[t_ref_name] = audio_source_id;
-
-    return audio_source_id;
+    return load(t_wav_file_path, instance.m_audio_collection_);
   }
 
   void Audio_manager::play(const Audio t_audio)
@@ -45,18 +36,36 @@ namespace G6037599
     check_play_sound(alGetError());
   }
 
-  //___ deconstructor ___________________________________________________________________________________
+  //___ deconstructor ____________________________________________________________________________
+
   Audio_manager::~Audio_manager()
   {
     switch (alutExit())
     {
     case false: fprintf(stderr, "%s\n", alutGetErrorString(alutGetError()));
-    PROMISE(false); default:;
+      PROMISE(false); default:;
     }
     puts("Audio_manager destroyed.");
   }
 
-  //___ private static ___________________________________________________________________________________
+  //___ private __________________________________________________________________________________
+
+  Audio Audio_manager::load(const std::string& t_wav_file_path
+    , std::map<std::string, Audio>& t_audio_collection)
+  {
+    REQUIRE(!t_wav_file_path.empty());
+    const auto AL_BUFFER_ID = alutCreateBufferFromFile(t_wav_file_path.c_str());
+    check_load_sound_error(AL_BUFFER_ID);
+
+    ALuint audio_source_id;
+    alGenSources(1, &audio_source_id);
+    alSourcei(audio_source_id, AL_BUFFER, AL_BUFFER_ID);//attach the buffer to it
+
+    t_audio_collection[t_wav_file_path] = audio_source_id;
+
+    return audio_source_id;
+  }
+
   void Audio_manager::check_load_sound_error(const ALuint t_buffer)
   {
     switch (t_buffer)
@@ -79,10 +88,11 @@ namespace G6037599
     PROMISE(false);
   }
 
-  //___ private constructor _______________________________________________________________________________
+  //___ private constructor ______________________________________________________________________
+
   Audio_manager::Audio_manager()
   {
     alutInit(nullptr, nullptr);
     puts("Audio_manager initialized.");
   }
-}//G6037599
+  }//G6037599

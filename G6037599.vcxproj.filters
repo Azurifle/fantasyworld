@@ -81,6 +81,15 @@
     <ClInclude Include="Week_13\Audio_manager.hpp">
       <Filter>Header Files\Week_13</Filter>
     </ClInclude>
+    <ClInclude Include="Week_12\Renderer.hpp">
+      <Filter>Header Files\Week_12</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_12\Mesh_renderer.hpp">
+      <Filter>Header Files\Week_12</Filter>
+    </ClInclude>
+    <ClInclude Include="Week_12\Texture_manager.hpp">
+      <Filter>Header Files\Week_12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -119,11 +128,20 @@
     <ClCompile Include="Week_12\Shader.cpp">
       <Filter>Source Files\Week_12</Filter>
     </ClCompile>
-    <ClCompile Include="Week_12\Mesh.cpp">
-      <Filter>Header Files\Week_12</Filter>
-    </ClCompile>
     <ClCompile Include="Week_13\Audio_manager.cpp">
       <Filter>Source Files\Week_13</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_12\Mesh.cpp">
+      <Filter>Source Files\Week_12</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_12\Renderer.cpp">
+      <Filter>Source Files\Week_12</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_12\Mesh_renderer.cpp">
+      <Filter>Source Files\Week_12</Filter>
+    </ClCompile>
+    <ClCompile Include="Week_12\Texture_manager.cpp">
+      <Filter>Source Files\Week_12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -32,7 +32,7 @@ namespace G6037599
 
   void Demo_list_menu::run_app()
   {
-    const auto BGM = Audio_manager::load_or_get_audio("BGM", "Week_13/Winning.wav");
+    const auto BGM = Audio_manager::load_or_get_audio("Week_13/Winning.wav");
     Audio_manager::play(BGM);
 
     App app(640, 480, "Rendering a Triangle!!");

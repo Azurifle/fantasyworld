@@ -1,9 +1,10 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "Shader.hpp"
 
 namespace G6037599
 {
-  // ___ public static ______________________________________________________________________________________________
+  // ___ constructor ___________________________________________________________________________________________
+
   GLuint Shader::create(const std::string& t_vertex_shader_code, const std::string& t_fragment_shader_code)
   {
     std::vector<GLuint> shader_ids;
@@ -25,7 +26,8 @@ namespace G6037599
     return shader_ids[PROGRAM];
   }
 
-  // ___ public static _____________________________________________________________________________________________
+  // ___ private static _______________________________________________________________________________________
+
   void Shader::step1_create_shader_program(std::vector<GLuint>& t_shader_ids)
   {
     t_shader_ids.push_back(glCreateProgram());

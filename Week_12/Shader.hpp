@@ -15,7 +15,7 @@ namespace G6037599
     static void step4_check_compilation(GLuint t_shader_program_id);
     static void step7_check_linking(GLuint t_m_program_id);
     static void show_shader_error(GLuint t_shader_id, std::string t_text, bool t_is_program = true);
-    
+
     Shader() = default;
     ~Shader() = default;
     Shader(const Shader& t_to_copy) = default;

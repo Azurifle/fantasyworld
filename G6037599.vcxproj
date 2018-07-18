@@ -165,7 +165,10 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Week_12\App.hpp" />
     <ClInclude Include="Week_12\Mesh.hpp" />
+    <ClInclude Include="Week_12\Mesh_renderer.hpp" />
+    <ClInclude Include="Week_12\Renderer.hpp" />
     <ClInclude Include="Week_12\Shader.hpp" />
+    <ClInclude Include="Week_12\Texture_manager.hpp" />
     <ClInclude Include="Week_12\Triangle.hpp" />
     <ClInclude Include="Week_12\Vertex.hpp" />
     <ClInclude Include="Week_13\Audio_manager.hpp" />
@@ -186,7 +189,10 @@
     </ClCompile>
     <ClCompile Include="Week_12\App.cpp" />
     <ClCompile Include="Week_12\Mesh.cpp" />
+    <ClCompile Include="Week_12\Mesh_renderer.cpp" />
+    <ClCompile Include="Week_12\Renderer.cpp" />
     <ClCompile Include="Week_12\Shader.cpp" />
+    <ClCompile Include="Week_12\Texture_manager.cpp" />
     <ClCompile Include="Week_12\Triangle.cpp" />
     <ClCompile Include="Week_12\Vertex.cpp" />
     <ClCompile Include="Week_13\Audio_manager.cpp" />

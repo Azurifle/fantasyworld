@@ -2,14 +2,17 @@
 #include "App.hpp"
 #include "Vertex.hpp"
 #include "My_Math/Mat4.hpp"
-#define STB_IMAGE_IMPLEMENTATION
-#include "Thirdparty/stb_image.h"//no include guard
+#include "Shader.hpp"
+#include "Renderer.hpp"
+#include "Mesh.hpp"
+#include "Texture_manager.hpp"
 
 namespace G6037599
 {
   //adapt from https://github.com/redeian/FirstGLFW/tree/master/FirstGLFW
 
   // ___ (de)constructors ________________________________________________
+
   App::App(const int t_width, const int t_height, const std::string& t_title) 
     : m_width_(t_width), m_height_(t_height), m_is_active_(true)
   {
@@ -26,9 +29,40 @@ namespace G6037599
     show_glew_versions();
     test_depth_n_alpha_bend();
 
-    init_shader_program();
-    init_mesh();
-    init_texture();
+    static const std::string VERTEX_SHADER_CODE =
+      "uniform mat4 MVP; \n"	//MVP is Model View Projection
+      "attribute vec3 vPos; \n"
+      "attribute vec3 vCol; \n"
+      "attribute vec2 vTex; \n"
+      "varying vec3 color; \n"
+      "varying vec2 texCoord; \n"
+      "void main() \n "
+      "{ \n"
+      "   gl_Position = MVP * vec4(vPos, 1.0); \n"
+      "   color = vCol; \n"
+      "   texCoord = vTex; \n"
+      "} \n"
+
+      , FRAGMENT_SHADER_CODE = //color & texture
+      "uniform sampler2D texture; \n"
+      "varying vec3 color; \n"
+      "varying vec2 texCoord; \n"
+      "void main() \n"
+      "{ \n"
+      "    gl_FragColor = texture2D( texture, texCoord);\n"
+      "} \n";
+
+    Renderer::use_shader(Shader::create(VERTEX_SHADER_CODE, FRAGMENT_SHADER_CODE));//load_or_get(t_folder_path)
+    Texture_manager::load_or_get(TEXTURE_PATH);
+
+    const auto GREEN = Vec3<float>(0, 1, 0), BLUE = Vec3<float>(0, 0, 1)
+      , RED = Vec3<float>(1, 0, 0);
+    Mesh mesh{};
+    mesh.add_vertex(Vec3<float>(0.6f, -0.4f, 0), BLUE, Vec2<float>(0, 1));
+    mesh.add_vertex(Vec3<float>(-0.6f, -0.4f, 0), GREEN, Vec2<float>(0, 0));
+    mesh.add_vertex(Vec3<float>(0, 0.6f, 0), RED, Vec2<float>(1, 1));
+
+    m_mesh_renderer_ = Mesh_renderer(mesh);
   }
 
   App::~App()
@@ -38,20 +72,23 @@ namespace G6037599
   }
 
   // ___ public ________________________________________________
+
   void App::run() const
   {
     while (!glfwWindowShouldClose(m_window_))
     {
-      render_background();
-      glViewport(0, 0, m_width_, m_height_);
-      glUseProgram(m_program_id_);//shader step 8.
+      render_background();//Renderer::render_background(t_rgb);********
+      glViewport(0, 0, m_width_, m_height_);//Renderer::set_projection(Renderer::PERSPECTIVE); in constructor
       switch (m_is_active_) { case true: render_objects(); default:; }
       glfwSwapBuffers(m_window_);
       glfwPollEvents();//clear inputs
     }
   }
 
-  // ___ private static ________________________________________________
+  // ___ private ________________________________________________
+
+  const std::string App::TEXTURE_PATH = "Week_12/texture.png";
+
   void App::key_callback_static(GLFWwindow* t_window, const int t_key
     , const int t_scancode, const int t_action, const int t_mods)
   {
@@ -81,99 +118,6 @@ namespace G6037599
     glClearColor(BG_BLUE_GREEN.x, BG_BLUE_GREEN.y, BG_BLUE_GREEN.z, 1);
   }
 
-  void App::step2_load_shader_codes(const std::vector<GLuint>& t_shader_ids)
-  {
-    static const std::string VERTEX_SHADER_CODE =
-      "uniform mat4 MVP; \n"	//MVP is Model View Projection
-      "attribute vec3 vPos; \n"
-      "attribute vec3 vCol; \n"
-      "attribute vec2 vTex; \n"
-      "varying vec3 color; \n"
-      "varying vec2 texCoord; \n"
-      "void main() \n "
-      "{ \n"
-      "   gl_Position = MVP * vec4(vPos, 1.0); \n"
-      "   color = vCol; \n"
-      "   texCoord = vTex; \n"
-      "} \n"
-
-      , FRAGMENT_SHADER_CODE = //color & texture
-      "uniform sampler2D texture; \n"
-      "varying vec3 color; \n"
-      "varying vec2 texCoord; \n"
-      "void main() \n"
-      "{ \n"
-      "    gl_FragColor = texture2D( texture, texCoord);\n"
-      "} \n";
-
-    auto a = VERTEX_SHADER_CODE.c_str(), b = FRAGMENT_SHADER_CODE.c_str();
-
-    glShaderSource(t_shader_ids[0], 1, &a, nullptr);
-    glShaderSource(t_shader_ids[1], 1, &b, nullptr);
-  }
-
-  void App::step4_check_compilation(const GLuint t_shader_id)
-  {
-    GLint result;
-    glGetShaderiv(t_shader_id, GL_COMPILE_STATUS, &result);
-    switch (result) { case GL_TRUE: return; default:; }
-    show_shader_error(t_shader_id, "Compilation", false);
-  }
-
-  void App::step7_check_linking(const GLuint t_m_program_id)
-  {
-    GLint link_status, validate_status;
-
-    glGetProgramiv(t_m_program_id, GL_LINK_STATUS, &link_status);
-    switch (link_status) 
-    {
-    case GL_FALSE: show_shader_error(t_m_program_id, "Linking"); default:;
-    }
-
-    glValidateProgram(t_m_program_id);
-    glGetProgramiv(t_m_program_id, GL_VALIDATE_STATUS, &validate_status);
-    switch (validate_status)
-    {
-    case GL_FALSE: show_shader_error(t_m_program_id, "Validation"); default:;
-    }
-
-    std::cout << "Link: " << link_status 
-      << ", Validate: " << validate_status << std::endl;
-  }
-
-  void App::set_vertex_pointer(const std::vector<GLint>& t_vram_locations)
-  {
-    enum Enum
-    {
-      POS, COLOR, TEXTURE, TEXTURE_XY = 2, XYZ_RGB
-      , XYZ_RGB_SIZE = sizeof(float) * XYZ_RGB
-    };
-    glVertexAttribPointer(t_vram_locations[POS], XYZ_RGB, GL_FLOAT, GL_FALSE
-      , sizeof(Vertex), nullptr);
-    glVertexAttribPointer(t_vram_locations[COLOR], XYZ_RGB, GL_FLOAT, GL_FALSE
-      , sizeof(Vertex), reinterpret_cast<void*>(XYZ_RGB_SIZE));
-    glVertexAttribPointer(t_vram_locations[TEXTURE], TEXTURE_XY, GL_FLOAT, GL_FALSE
-      , sizeof(Vertex), reinterpret_cast<void*>(XYZ_RGB_SIZE * TEXTURE_XY));
-  }
-
-  void App::show_shader_error(const GLuint t_shader_id
-    , const std::string t_text, const bool t_is_program)
-  {
-    std::cout << "Shader " << t_text << " FAILED" << std::endl;
-    const auto MESSAGE_LENGTH = 256;
-    GLchar messages[MESSAGE_LENGTH];
-    switch (t_is_program) 
-    { 
-      case false: glGetShaderInfoLog(t_shader_id, sizeof messages, nullptr, &messages[0]); 
-        break;
-      default: glGetProgramInfoLog(t_shader_id, sizeof messages, nullptr, &messages[0]);
-    }
-    std::cout << messages;
-    glfwTerminate();
-    PROMISE(false);
-  }
-
-  // ___ private ___________________________________________________________
   void App::init_glfw_system(const std::string& t_title)
   {
     switch (glfwInit())
@@ -203,109 +147,24 @@ namespace G6037599
     }
   }
 
-  void App::init_shader_program() 
-  {
-    std::vector<GLuint> shader_ids;
-    step1_create_shader_program(shader_ids);
-    step2_load_shader_codes(shader_ids);
-
-    enum Enum { VERTEX, FRAGMENT };
-    glCompileShader(shader_ids[VERTEX]);
-    glCompileShader(shader_ids[FRAGMENT]);
-
-    step4_check_compilation(shader_ids[VERTEX]);
-    step4_check_compilation(shader_ids[FRAGMENT]);
-
-    glAttachShader(m_program_id_, shader_ids[VERTEX]);
-    glAttachShader(m_program_id_, shader_ids[FRAGMENT]);
-
-    glLinkProgram(m_program_id_);
-    step7_check_linking(m_program_id_);
-  }
-
-  void App::init_mesh()
-  {
-    create_vertices_in_cpu_ram();
-    move_vertices_to_vram();
-
-    std::vector<GLint> vram_locations;
-    get_variables(vram_locations);
-    enable_value_processing(vram_locations);
-    set_vertex_pointer(vram_locations);
-  }
-
-  void App::init_texture()
-  {
-    glGenTextures(1, &m_texture_id_);
-    glBindTexture(GL_TEXTURE_2D, m_texture_id_);
-
-    int img_width, img_height, components;
-    const auto TEXTURE_IMG = stbi_load("Week_12/texture.png", &img_width, &img_height, &components, 0);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, img_width, img_height,
-      0, GL_RGBA, GL_UNSIGNED_BYTE, TEXTURE_IMG);
-
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  }
-
-  void App::step1_create_shader_program(std::vector<GLuint>& t_shader_ids)
-  {
-    m_program_id_ = glCreateProgram();
-    t_shader_ids.push_back(glCreateShader(GL_VERTEX_SHADER));
-    t_shader_ids.push_back(glCreateShader(GL_FRAGMENT_SHADER));
-  }
-
-  void App::create_vertices_in_cpu_ram()
-  {
-    const auto GREEN = Vec3<float>(0, 1, 0), BLUE = Vec3<float>(0, 0, 1)
-               , RED = Vec3<float>(1, 0, 0);
-    m_vertices_.push_back(Vertex(Vec3<float>(-0.6f, -0.4f, 0), GREEN, Vec2<float>(0, 0)));
-    m_vertices_.push_back(Vertex(Vec3<float>(0.6f, -0.4f, 0), BLUE, Vec2<float>(0, 1)));
-    m_vertices_.push_back(Vertex(Vec3<float>(0, 0.6f, 0), RED, Vec2<float>(1, 1)));
-  }
-
-  void App::move_vertices_to_vram()
-  {
-    glGenVertexArrays(1, &m_vertex_array_id_);
-    glBindVertexArray(m_vertex_array_id_);
-
-    GLuint buffer_id;
-    glGenBuffers(1, &buffer_id);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
-    glBufferData(GL_ARRAY_BUFFER, m_vertices_.size() * sizeof(Vertex)
-      , m_vertices_.data(), GL_STATIC_DRAW);
-  }
-
-  void App::get_variables(std::vector<GLint>& t_vram_locations)
-  {
-    m_mvp_location_ = glGetUniformLocation(m_program_id_, "MVP");
-    t_vram_locations.push_back(glGetAttribLocation(m_program_id_, "vPos"));
-    t_vram_locations.push_back(glGetAttribLocation(m_program_id_, "vCol"));
-    t_vram_locations.push_back(glGetAttribLocation(m_program_id_, "vTex"));
-  }
-
-  void App::enable_value_processing(const std::vector<GLint>& t_vram_locations)
-  {
-    for (auto i : t_vram_locations)
-    {
-      glEnableVertexAttribArray(i);
-    }
-  }
-
   void App::render_objects() const
   {
-    glBindTexture(GL_TEXTURE_2D, m_texture_id_);
+    Renderer::use_texture(Texture_manager::load_or_get(TEXTURE_PATH));
 
+    //Renderer::push_matrix (m_matrices_.push_back())
     Mat4 MVP;
-    model_view_projection(MVP);//how to separate view projection & model?
-    const auto MVP_ARRAY = MVP.to_array();
-    glUniformMatrix4fv(m_mvp_location_, 1, GL_FALSE, MVP_ARRAY);
-    delete[] MVP_ARRAY;
 
-    glBindVertexArray(m_vertex_array_id_);
+    //Renderer::rotate(Vec3<float>(0, 0, 1));
+    model_view_projection(MVP);
+    
+    //Renderer::draw_mesh(m_mesh_renderer_);
+    const auto MVP_ARRAY = MVP.to_array();
+    glUniformMatrix4fv(m_mesh_renderer_.mvp_location(), 1, GL_FALSE, MVP_ARRAY);
+    glBindVertexArray(m_mesh_renderer_.id());
     glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    //Renderer::pop_matrix (m_matrices_.pop_back())
+    delete[] MVP_ARRAY;
   }
 
   void App::model_view_projection(Mat4& t_out_mvp) const
@@ -314,7 +173,7 @@ namespace G6037599
       , RATIO = m_width_ / static_cast<float>(m_height_);
     const auto ROTATE_MAT = Mat4::rotation(ANGLE, Vec3<int>(0, 0, 1))
       , MODEL_MAT = Mat4::translation(Vec3<float>(0)) * ROTATE_MAT * Mat4::scaling(Vec3<float>(1))
-      , VIEW_PROJECTION = Mat4::ortho(-RATIO, RATIO, -1, 1, 1, -1);
+      , VIEW_PROJECTION = Mat4::ortho(-RATIO, RATIO, -1, 1, 1, -1);//Renderer::set_projection(Renderer::PERSPECTIVE); in App constructor
     t_out_mvp = MODEL_MAT * VIEW_PROJECTION;
   }
 
